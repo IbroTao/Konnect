@@ -199,6 +199,51 @@ const dislikePost = async (req, res) => {
         $push: { dislikes: userId },
         isDisliked: true,
       });
+      res.status(200).json(post);
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const addComments = async (req, res) => {
+  const { _id } = req.user;
+  const { comment, postId } = req.body;
+  try {
+    const post = await Posts.findById(postId);
+    let alreadyComment = post.comments.find(
+      (userId) => userId.toString() === _id.toString()
+    );
+
+    if (alreadyComment) {
+      const updatedComment = await Posts.updateOne(
+        {
+          comments: { $elemMatch: alreadyComment },
+        },
+        {
+          $set: { "comments.$.comment": comment },
+        },
+        {
+          new: true,
+        }
+      );
+      res.status(200).json(updatedComment);
+    } else {
+      const updatedComment = await Posts.findByIdAndUpdate(
+        postId,
+        {
+          $push: {
+            comments: {
+              comment: comment,
+              commenter: _id,
+            },
+          },
+        },
+        {
+          new: true,
+        }
+      );
+      res.status(200).json(updatedComment);
     }
   } catch (error) {
     throw new Error(error);
@@ -213,4 +258,5 @@ module.exports = {
   getAllPosts,
   likePost,
   dislikePost,
+  addComments,
 };

@@ -5,20 +5,23 @@ const postSchema = new mongoose.Schema(
     caption: {
       type: String,
       required: true,
+      minlength: 10,
+      maxlength: 150,
     },
     image: {
       type: String,
     },
-    comments: {
-      text: {
-        type: String,
+    comments: [
+      {
+        comment: {
+          type: String,
+        },
+        commenter: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "users",
+        },
       },
-      ids: Array,
-      commenter: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "users",
-      },
-    },
+    ],
     likes: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -33,10 +36,6 @@ const postSchema = new mongoose.Schema(
     postedBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "users",
-    },
-    isApproved: {
-      type: Boolean,
-      default: false,
     },
     isLiked: {
       type: Boolean,

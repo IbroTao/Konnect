@@ -48,4 +48,39 @@ const groupMessagesSchema = new mongoose.Schema(
 
 const GroupMessages = mongoose.model("group_msg", groupMessagesSchema);
 
+const groupPostsSchema = new mongoose.Schema({
+  image: {
+    type: String,
+  },
+  caption: {
+    type: String,
+    required: true,
+    minlength: 10,
+    maxlength: 100,
+  },
+  isLiked: {
+    type: Boolean,
+    default: false,
+  },
+  isDisliked: {
+    type: Boolean,
+    default: false,
+  },
+  isApproved: {
+    type: Boolean,
+    default: false,
+  },
+  comments: [
+    {
+      comment: {
+        type: String,
+      },
+      commenter: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users",
+      },
+    },
+  ],
+});
+
 module.exports = { Groups, GroupMessages };
