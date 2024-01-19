@@ -1,5 +1,6 @@
 const { hashSync, compareSync } = require("bcryptjs");
 const { sendVerificationEmail } = require("../utils/sendVerificationEmail");
+const { generateToken } = require("../configs/generateToken");
 const { Users } = require("../models/user.models");
 const crypto = require("crypto");
 
@@ -32,7 +33,7 @@ const signupUser = async (req, res) => {
   }
 };
 
-const verifyEmailAndSignIn = async (req, res) => {
+const verifyAndSignupUser = async (req, res) => {
   const { verificationToken, email } = req.body;
   const user = await Users.findOne({ email });
   try {
@@ -57,18 +58,51 @@ const verifyEmailAndSignIn = async (req, res) => {
 
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
-  if (!email || !password) {
-    res.status(400).json({ message: "Please provide email and password" });
-  }
-
-  const user = await Users.findOne({ email });
-  if (!user) {
-    res.status(404).json({ message: "User not found! try logging in" });
-  }
-
-  const comparePassword = compareSync(password, user.password);
   try {
+    if (!email || !password) {
+      res.status(400).json({ message: "Please provide email and password" });
+    }
+
+    const user = await Users.findOne({ email });
+    if (!user) {
+      res.status(404).json({ message: "User not found! try logging in" });
+    }
+
+    const comparePassword = compareSync(password, user.password);
+    if (!comparePassword) {
+      res.status(400).json({ message: "Incorrect password" });
+    }
+
+    if (!user.isVerified) {
+      res.status(400).json({ message: "Please verify your email" });
+    }
+
+    const token = generateToken(user._id);
+    res.cookie("token", token, {
+      httpOnly: true,
+      maxAge: 120 * 60 * 60 * 1000,
+    });
+    res.status(200).json({ message: "User logged in!", user });
   } catch (error) {
     throw new Error(error);
   }
+};
+
+const logoutUser = async (req, res) => {
+  try {
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: true,
+    });
+    return res.status(204);
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+module.exports = {
+  signupUser,
+  loginUser,
+  verifyAndSignupUser,
+  logoutUser,
 };
