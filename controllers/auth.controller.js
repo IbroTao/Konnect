@@ -1,12 +1,12 @@
-const { hashSync } = require("bcryptjs");
+const { hashSync, compareSync } = require("bcryptjs");
 const { sendVerificationEmail } = require("../utils/sendVerificationEmail");
 const { Users } = require("../models/user.models");
 const crypto = require("crypto");
 
 const signupUser = async (req, res) => {
+  const { email, password, username, mobile } = req.body;
+  const findUser = await Users.findOne({ email });
   try {
-    const { email, password, username, mobile } = req.body;
-    const findUser = await Users.findOne({ email });
     if (findUser)
       return res.status(400).json({ message: "User already signed up!" });
 
@@ -33,10 +33,9 @@ const signupUser = async (req, res) => {
 };
 
 const verifyEmailAndSignIn = async (req, res) => {
+  const { verificationToken, email } = req.body;
+  const user = await Users.findOne({ email });
   try {
-    const { verificationToken, email } = req.body;
-    const user = await Users.findOne({ email });
-
     if (!user) {
       res.status(404).json({ message: "User not found!" });
     }
@@ -46,11 +45,29 @@ const verifyEmailAndSignIn = async (req, res) => {
     }
 
     user.isVerified = true;
-    user.verified = Date.now();
+    user.verifiedAt = Date.now();
     user.verificationToken = null;
 
     const verifiedUser = await user.save();
-    res.status(200).json({ message: "User signed in" });
+    res.status(200).json({ message: "User signed in", user: verifiedUser });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    res.status(400).json({ message: "Please provide email and password" });
+  }
+
+  const user = await Users.findOne({ email });
+  if (!user) {
+    res.status(404).json({ message: "User not found! try logging in" });
+  }
+
+  const comparePassword = compareSync(password, user.password);
+  try {
   } catch (error) {
     throw new Error(error);
   }
