@@ -16,6 +16,7 @@ const signupUser = async (req, res) => {
     const user = await Users.create({
       username,
       email,
+      mobile,
       password: hashSync(password, 10),
       verificationToken,
     });

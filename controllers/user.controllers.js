@@ -25,7 +25,7 @@ const updateUserDetails = async (req, res) => {
 
 const sendResetPasswordTokenViaEmail = async (req, res) => {
   const { email } = req.body;
-  const user = await Users.findOne({ email });
+  const user = await Users.findOne({ email }).select(["-password"]);
   if (!user) {
     res.status(404).json({ message: "User not found!" });
   }
@@ -95,10 +95,10 @@ const updatePassword = async (req, res) => {
 };
 
 const deleteUser = async (req, res) => {
-  const { id } = req.params;
-  validateMongoId(id);
+  const { _id } = req.user;
+  validateMongoId(_id);
   try {
-    const user = await Users.findByIdAndDelete(id);
+    const user = await Users.findByIdAndDelete(_id);
     if (!user) {
       res.status(404).json({ message: "User not found!" });
     }
