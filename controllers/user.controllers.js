@@ -1,4 +1,5 @@
 const { Users } = require("../models/user.models");
+const { compareSync, hashSync } = require("bcryptjs");
 const {
   sendPasswordResetTokenEmail,
 } = require("../utils/sendPasswordResetEmail");
@@ -59,7 +60,7 @@ const updatePasswordViaEmail = async (req, res) => {
       res.status(400).json({ message: "Token expired" });
     }
 
-    user.password = password;
+    user.password = hashSync(password, 10);
     user.passwordResetToken = null;
     user.passwordResetTokenExpiresAt = null;
     const newUser = await user.save();
@@ -75,7 +76,43 @@ const updatePassword = async (req, res) => {
   validateMongoId(_id);
   try {
     const { oldPassword, newPassword } = req.body;
+    const user = await Users.findOne({ _id });
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+    }
+
+    const verifyPassword = compareSync(user.password, oldPassword);
+    if (!verifyPassword) {
+      res.status(400).json({ message: "Wrong Password! Failed to update" });
+    }
+
+    user.password = hashSync(newPassword, 10);
+    await user.save();
+    res.status(200).json({ message: "Password updated" });
   } catch (error) {
     throw new Error(error);
   }
+};
+
+const deleteUser = async (req, res) => {
+  const { id } = req.params;
+  validateMongoId(id);
+  try {
+    const user = await Users.findByIdAndDelete(id);
+    if (!user) {
+      res.status(404).json({ message: "User not found!" });
+    }
+
+    res.status(200).json({ message: "User deleted" });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+module.exports = {
+  updateUserDetails,
+  deleteUser,
+  updatePassword,
+  updatePasswordViaEmail,
+  sendPasswordResetTokenEmail,
 };
