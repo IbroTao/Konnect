@@ -21,6 +21,9 @@ const userSchema = new mongoose.Schema(
       required: true,
       select: false,
     },
+    image: {
+      type: String,
+    },
     isBlocked: {
       type: Boolean,
       default: false,
@@ -34,8 +37,9 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      default: "user",
+      default: "users",
     },
+    groups: Array,
     refreshToken: {
       type: String,
     },
