@@ -15,6 +15,10 @@ const groupSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "users",
     },
+    role: {
+      type: String,
+      default: "user"
+    },
     admin: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "users",
