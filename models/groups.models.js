@@ -17,7 +17,7 @@ const groupSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      default: "user"
+      default: "user",
     },
     admin: {
       type: mongoose.Schema.Types.ObjectId,
@@ -71,9 +71,9 @@ const groupPostsSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    isDisliked: {
-      type: Boolean,
-      default: false,
+    likes: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
     },
     isApproved: {
       type: Boolean,

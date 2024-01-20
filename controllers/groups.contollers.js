@@ -171,8 +171,8 @@ const editPost = async (req, res) => {
       return res.status(400).json({ error: "Post failed to updated" });
     }
 
-    if(!post.isApproved) {
-      return res.status(404).json({error: "Post has not been approved"});
+    if (!post.isApproved) {
+      return res.status(404).json({ error: "Post has not been approved" });
     }
 
     res.status(200).json({ message: "Post updated", post });
@@ -190,8 +190,8 @@ const deletePost = async (req, res) => {
       return res.status(400).json({ error: "Post failed to be deleted" });
     }
 
-    if(!post.isApproved) {
-      return res.status(404).json({error: "Post has not been approved"});
+    if (!post.isApproved) {
+      return res.status(404).json({ error: "Post has not been approved" });
     }
 
     res.status(200).json({ message: "Post deleted" });
@@ -209,8 +209,8 @@ const getSinglePost = async (req, res) => {
       res.status(404).json({ error: "Post not found" });
     }
 
-    if(!post.isApproved) {
-      return res.status(404).json({error: "Post has not been approved"});
+    if (!post.isApproved) {
+      return res.status(404).json({ error: "Post has not been approved" });
     }
 
     res.status(200).json({ post });
@@ -219,71 +219,138 @@ const getSinglePost = async (req, res) => {
   }
 };
 
-const getAllPosts = async(req, res) => {
-  try{
+const getAllPosts = async (req, res) => {
+  try {
     const posts = await GroupPosts.find().sort({
-      createdAt: "desc"
+      createdAt: "desc",
     });
-    if(!posts) {
-      return res.status(404).json({error: "Posts not found"});
+    if (!posts) {
+      return res.status(404).json({ error: "Posts not found" });
     }
 
-    if(!posts.isApproved) {
-      return res.status(404).json({error: "Post has not been approved"});
+    if (!posts.isApproved) {
+      return res.status(404).json({ error: "Post has not been approved" });
     }
 
-    res.status(200).json({posts})
-  }catch(error){
+    res.status(200).json({ posts });
+  } catch (error) {
     throw new Error(error);
   }
-}
+};
 
-const approvePost = async(req, res) => {
-  const {id} = req.params;
+const approvePost = async (req, res) => {
+  const { id } = req.params;
   validateMongoId(id);
-  try{
-    
-    const post = await GroupPosts.findByIdAndUpdate(id, {
-      isApproved: true
-    }, {
-      new: true
-    });
-    if(!post) {
-      return res.status(404).json({message: "Post not found"});
+  try {
+    const post = await GroupPosts.findByIdAndUpdate(
+      id,
+      {
+        isApproved: true,
+      },
+      {
+        new: true,
+      }
+    );
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
     }
 
-    res.status(200).json({mesage: "Post has been approved"})
-  }catch(error){
+    res.status(200).json({ mesage: "Post has been approved" });
+  } catch (error) {
     throw new Error(error);
   }
-}
+};
 
-const likePost = async(req, res) => {
-  const {postId} = req.body;
+const likePost = async (req, res) => {
+  const { postId } = req.body;
   validateMongoId(postId);
-  const {_id} = req.user
-  try{
-    const user = await Users.findById(_id);
-    if (!user) {
-      res.status(404).json({message: "User not found"});
-    }
-
+  try {
     const post = await GroupPosts.findById(postId);
-    if(!post) {
-      return res.status(404).json({error: "Post not found"});
+    if (!post) {
+      return res.status(404).json({ error: "Post not found" });
     }
 
-    if(!post.isApproved) {
-      return res.status(404).json({error: "Post has not been approved"});
+    if (!post.isApproved) {
+      return res.status(404).json({ error: "Post has not been approved" });
     }
 
-    const isLiked = post.isLiked;
-    const isDisliked = post.
-    
-  }catch(error){
+    const userId = req.user._id;
+    const isLiked = post.likes.find(
+      (Id) => Id.toString() === userId.toString()
+    );
+
+    if (isLiked) {
+      const post = await GroupPosts.findByIdAndUpdate(
+        postId,
+        {
+          $pull: { likes: userId },
+          isLiked: false,
+        },
+        {
+          new: true,
+        }
+      );
+      res.status(200).json({ post, totalLikes: post.length });
+    } else {
+      const post = await GroupPosts.findByIdAndUpdate(
+        postId,
+        {
+          $push: { likes: userId },
+          isLiked: true,
+        },
+        {
+          new: true,
+        }
+      );
+      res.status(200).json({ post, totalLikes: post.length });
+    }
+  } catch (error) {
     throw new Error(error);
   }
-}
+};
+
+const addComments = async (req, res) => {
+  const { _id } = req.user;
+  const { postId, comment } = req.body;
+  try {
+    const post = await GroupPosts.findById(postId);
+    let alreadyComment = post.comments.find(
+      (userId) => userId.toString() === _id.toString()
+    );
+    if (alreadyComment) {
+      const comment = await GroupPosts.updateOne(
+        {
+          comments: { $elemMatch: alreadyComment },
+        },
+        {
+          $set: { "comments.$.comment": comment },
+        },
+        {
+          new: true,
+        }
+      );
+      res.status(200).json({ comment });
+    } else {
+      const comment = await GroupPosts.findByIdAndUpdate(
+        postId,
+        {
+          $push: {
+            comments: {
+              comment: comment,
+              commenter: _id,
+            },
+          },
+        },
+        {
+          new: true,
+        }
+      );
+      res.status(200).json({ comment });
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 module.exports = {
   createGroup,
@@ -296,5 +363,7 @@ module.exports = {
   deletePost,
   getSinglePost,
   getAllPosts,
-  approvePost
+  approvePost,
+  likePost,
+  addComments,
 };
