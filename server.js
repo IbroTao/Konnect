@@ -2,9 +2,20 @@ const express = require("express");
 const app = express();
 
 const { mongoConnection } = require("./configs/mongo.configs");
+const authRouter = require("./routes/auth.routes");
+const userRouter = require("./routes/user.routes");
+const chatRouter = require("./routes/chats.routes");
+const postRouter = require("./routes/posts.routes");
+const groupRouter = require("./route/groups.routes");
 
 app.use(express.json());
 app.use(express.urlencoded());
+
+app.use("/api/auth", authRouter);
+app.use("/api/user", userRouter);
+app.use("/api/chats", chatRouter);
+app.use("/api/posts", postRouter);
+app.use("/api/groups", groupRouter);
 
 const port = process.env.PORT;
 
