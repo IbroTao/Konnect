@@ -401,7 +401,11 @@ const getGroupMessages = async (req, res) => {
   const { _id } = req.user;
   validateMongoId(_id);
   try {
-    const memberMessages = await GroupMessages.find({});
+    const memberMessages = await GroupMessages.find({
+      $or: [{ sender: _id }, { recipient: _id }],
+    }).populate("sender recipient", "username");
+
+    res.status(200).json({ memberMessages });
   } catch (error) {
     throw new Error(error);
   }
@@ -423,4 +427,7 @@ module.exports = {
   addComments,
   getUserGroups,
   suspendMembers,
+  getGroupMembers,
+  sendMessage,
+  getGroupMessages,
 };
