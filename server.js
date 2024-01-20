@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 
 const { mongoConnection } = require("./configs/mongo.configs");
+const { errorHandler } = require("./middlewares/errorHandler");
+const { notFound } = require("./middlewares/notFound");
 const authRouter = require("./routes/auth.routes");
 const userRouter = require("./routes/user.routes");
 const chatRouter = require("./routes/chats.routes");
@@ -10,6 +12,9 @@ const groupRouter = require("./route/groups.routes");
 
 app.use(express.json());
 app.use(express.urlencoded());
+
+app.use(notFound);
+app.use(errorHandler);
 
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
