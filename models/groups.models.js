@@ -79,6 +79,10 @@ const groupPostsSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isSuspended: {
+      type: Boolean,
+      default: false,
+    },
     comments: [
       {
         comment: {

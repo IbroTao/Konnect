@@ -76,7 +76,7 @@ const joinGroup = async (req, res) => {
       res.status(404).json({ message: "User not found or deleted" });
     }
     user.groups = [group._id];
-    const newUser = await user.save();
+    await user.save();
     res.status(201).json({
       message: `${user.username} has joined ${group.name} successfully`,
     });
@@ -352,6 +352,25 @@ const addComments = async (req, res) => {
   }
 };
 
+const suspendMembers = async (req, res) => {
+  const { id } = req.user;
+  try {
+  } catch (error) {}
+};
+
+const getGroupMembers = async (req, res) => {
+  const { id } = req.params;
+  validateMongoId(id);
+  try {
+    const group = await Groups.findById(id).select([]);
+    if (!group) {
+      res.status(404).json({ error: "Group not found" });
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 module.exports = {
   createGroup,
   editGroupDetails,
@@ -366,4 +385,5 @@ module.exports = {
   approvePost,
   likePost,
   addComments,
+  getUserGroups,
 };

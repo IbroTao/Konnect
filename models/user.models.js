@@ -28,12 +28,16 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isBlocked: {
+      type: Boolean,
+      default: false,
+    },
     verifiedAt: {
       type: Date,
     },
     role: {
       type: String,
-      default: "users",
+      default: "user",
     },
     groups: Array,
     refreshToken: {
