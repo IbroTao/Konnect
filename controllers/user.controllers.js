@@ -135,6 +135,52 @@ const getAllUsers = async (req, res) => {
   }
 };
 
+const blockUser = async (req, res) => {
+  const { _id } = req.user;
+  validateMongoId(_id);
+  try {
+    const user = await Users.findByIdAndUpdate(
+      _id,
+      {
+        isBlocked: true,
+      },
+      {
+        new: true,
+      }
+    );
+    if (!user) {
+      res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json({ message: "User has been blocked" });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const unblockUser = async (req, res) => {
+  const { _id } = req.params;
+  validateMongoId(_id);
+  try {
+    const user = await Users.findByIdAndUpdate(
+      _id,
+      {
+        isBlocked: false,
+      },
+      {
+        new: true,
+      }
+    );
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json({ message: "User has been unblocked" });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 module.exports = {
   updateUserDetails,
   deleteUser,
@@ -143,4 +189,6 @@ module.exports = {
   sendPasswordResetTokenEmail,
   getSingleUser,
   getAllUsers,
+  blockUser,
+  unblockUser,
 };
