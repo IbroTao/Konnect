@@ -168,7 +168,7 @@ const editPost = async (req, res) => {
     );
 
     if (!post) {
-      return res.status(400).json({ error: "Post failed to update" });
+      return res.status(400).json({ error: "Post failed to updated" });
     }
 
     res.status(200).json({ message: "Post updated", post });
@@ -177,11 +177,44 @@ const editPost = async (req, res) => {
   }
 };
 
-const deletePost = async (req, res) => {};
+const deletePost = async (req, res) => {
+  const { id } = req.params;
+  validateMongoId(id);
+  try {
+    const post = await GroupPosts.findByIdAndDelete(id);
+    if (!post) {
+      return res.status(400).json({ error: "Post failed to be deleted" });
+    }
+
+    res.status(200).json({ message: "Post deleted" });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const getSinglePost = async (req, res) => {
+  const { id } = req.params;
+  validateMongoId(id);
+  try {
+    const post = await GroupPosts.findById(id);
+    if (!post) {
+      res.status(404).json({ error: "Post not found" });
+    }
+
+    res.status(200).json({ post });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 module.exports = {
   createGroup,
   editGroupDetails,
   joinGroup,
   deleteGroup,
+  createPost,
+  editPost,
+  makeAdmin,
+  deletePost,
+  getSinglePost,
 };
