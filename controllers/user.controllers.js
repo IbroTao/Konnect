@@ -109,10 +109,38 @@ const deleteUser = async (req, res) => {
   }
 };
 
+const getSingleUser = async (req, res) => {
+  const { _id } = req.user;
+  validateMongoId(_id);
+  try {
+    const user = await Users.findById(_id);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json({ user });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await Users.find().sort({
+      createdAt: "desc",
+    });
+    res.status(200).json({ users });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 module.exports = {
   updateUserDetails,
   deleteUser,
   updatePassword,
   updatePasswordViaEmail,
   sendPasswordResetTokenEmail,
+  getSingleUsers,
+  getAllUsers,
 };
