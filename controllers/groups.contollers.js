@@ -131,10 +131,53 @@ const createPost = async (req, res) => {
   validateMongoId(_id);
   const file = req.file;
   try {
+    const user = await Users.findOne({ _id });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const post = await GroupPosts.create({
+      image: `assets/images/${file.originalname}`,
+      caption: req.body.caption,
+      postedBy: user._id,
+    });
+    if (!post) {
+      res.status(400).json({ error: "Post failed to be created" });
+    }
+
+    res.status(200).json({ message: "Post created", post });
   } catch (error) {
     throw new Error(error);
   }
 };
+
+const editPost = async (req, res) => {
+  const { id } = req.params;
+  validateMongoId(id);
+  const file = req.file;
+  try {
+    const post = await GroupPosts.findByIdAndUpdate(
+      id,
+      {
+        image: `assets/images/${file.originalname}`,
+        caption: req.body.caption,
+      },
+      {
+        new: true,
+      }
+    );
+
+    if (!post) {
+      return res.status(400).json({ error: "Post failed to update" });
+    }
+
+    res.status(200).json({ message: "Post updated", post });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const deletePost = async (req, res) => {};
 
 module.exports = {
   createGroup,
