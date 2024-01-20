@@ -141,6 +141,6 @@ module.exports = {
   updatePassword,
   updatePasswordViaEmail,
   sendPasswordResetTokenEmail,
-  getSingleUsers,
+  getSingleUser,
   getAllUsers,
 };

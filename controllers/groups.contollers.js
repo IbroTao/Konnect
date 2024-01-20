@@ -85,50 +85,56 @@ const joinGroup = async (req, res) => {
   }
 };
 
-const getUserGroups = async(req, res) => {
-    const {_id} = req.user;
-    validateMongoId(_id);
+const getUserGroups = async (req, res) => {
+  const { _id } = req.user;
+  validateMongoId(_id);
 
-    const user = await Users.findById(_id);
-    try{
-        if(!user) {
-            res.status(404).json({message: "User not found!"});
-        };
-
-        const groupId = user.groups;
-        const groups = await Groups.find({groupId}).select(['_id', 'name', 'description', 'admin', 'createdAt', 'updatedAt']);
-
-        const admin = await Users.findById(groups.admin).select(['username']);
-        const data = {
-            groups,
-            admin
-        };
-        res.status(200).json({data});
-    }catch(error){
-        throw new Error(error);
+  const user = await Users.findById(_id);
+  try {
+    if (!user) {
+      res.status(404).json({ message: "User not found!" });
     }
-}
 
-const makeAdmin = async(req, res) => {
-    const {_id} = req.user;
-    validateMongoId(_id);
-    try{
-        const admin = await Groups.findByIdAndUpdate()
-    }catch(error){
-        throw new Error(error)
-    }
-}
+    const groupId = user.groups;
+    const groups = await Groups.find({ groupId }).select([
+      "_id",
+      "name",
+      "description",
+      "admin",
+      "createdAt",
+      "updatedAt",
+    ]);
 
-const createPost = async(req, res) => {
-  const {_id} = req.user;
-  validateMongoId(_id)
-  const file = req.file;
-  try{
-    const user = await 
-  }catch(error){
+    const admin = await Users.findById(groups.admin).select(["username"]);
+    const data = {
+      groups,
+      admin,
+    };
+    res.status(200).json({ data });
+  } catch (error) {
     throw new Error(error);
   }
-}
+};
+
+const makeAdmin = async (req, res) => {
+  const { _id } = req.user;
+  validateMongoId(_id);
+  try {
+    const admin = await Groups.findByIdAndUpdate();
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const createPost = async (req, res) => {
+  const { _id } = req.user;
+  validateMongoId(_id);
+  const file = req.file;
+  try {
+  } catch (error) {
+    throw new Error(error);
+  }
+};
 
 module.exports = {
   createGroup,
