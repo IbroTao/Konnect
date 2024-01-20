@@ -27,6 +27,12 @@ const groupSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    members: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "users",
+      },
+    ],
   },
   {
     timestamps: true,

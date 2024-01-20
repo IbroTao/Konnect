@@ -62,7 +62,7 @@ const deleteGroup = async (req, res) => {
   }
 };
 
-const joinGroup = async (req, res) => {
+const addMembers = async (req, res) => {
   const { _id } = req.user;
   validateMongoId(_id);
   try {
@@ -75,10 +75,32 @@ const joinGroup = async (req, res) => {
     if (!user) {
       res.status(404).json({ message: "User not found or deleted" });
     }
+    group.members.push(_id);
+    res.status(200).json({
+      message: "Member added",
+    });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const userGroup = async (req, res) => {
+  const { _id } = req.user;
+  validateMongoId(_id);
+  try {
+    const group = await Groups.findById(req.params.id);
+    if (!group) {
+      res.status(404).json({ message: "Group not found!" });
+    }
+
+    const user = await Users.findById(_id);
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+    }
     user.groups = [group._id];
-    await user.save();
-    res.status(201).json({
-      message: `${user.username} has joined ${group.name} successfully`,
+    const userGroup = await user.save();
+    res.status(200).json({
+      userGroup,
     });
   } catch (error) {
     throw new Error(error);
