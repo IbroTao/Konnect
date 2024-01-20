@@ -37,16 +37,17 @@ const Groups = mongoose.model("groups", groupSchema);
 
 const groupMessagesSchema = new mongoose.Schema(
   {
-    messages: {
-      text: {
-        type: String,
-        required: true,
-      },
-      users: Array,
-      sentBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "users",
-      },
+    message: {
+      type: String,
+      required: true,
+    },
+    sender: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
+    },
+    recipient: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
     },
   },
   {

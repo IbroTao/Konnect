@@ -25,12 +25,15 @@ router.post(
   authenticateUser,
   sendPasswordResetTokenEmail
 );
+
 router.get("/", authenticateUser, authenticateAdmin, getAllUsers);
 router.get("/:id", authenticateUser, restrictBlockedUsers, getSingleUser);
+
 router.put("/block/:id", authenticateAdmin, blockUser);
 router.put("/unblock/:id", authenticateAdmin, unblockUser);
 router.put("/passowrd", authenticateUser, updatePassword);
 router.put("/:id", authenticateUser, updateUserDetails);
+
 router.delete("/:id", authenticateUser, deleteUser);
 
 module.exports = router;

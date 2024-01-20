@@ -371,6 +371,42 @@ const getGroupMembers = async (req, res) => {
   }
 };
 
+const sendMessage = async (req, res) => {
+  const { _id } = req.user;
+  validateMongoId(_id);
+  const { recipientId, message } = req.body;
+  const sender = await Users.findById(_id);
+  const recipient = await Users.findById(recipientId);
+  try {
+    if (!sender || !recipient) {
+      return res
+        .status(404)
+        .json({ message: "Sender and recipient not found " });
+    }
+
+    const newMessage = new GroupMessages({
+      sender: sender._id,
+      recipient: recipient._id,
+      message: message,
+    });
+    await newMessage.save();
+
+    res.status(200).json({ message: "Message sent successfully" });
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+const getGroupMessages = async (req, res) => {
+  const { _id } = req.user;
+  validateMongoId(_id);
+  try {
+    const memberMessages = await GroupMessages.find({});
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 module.exports = {
   createGroup,
   editGroupDetails,
@@ -386,4 +422,5 @@ module.exports = {
   likePost,
   addComments,
   getUserGroups,
+  suspendMembers,
 };
