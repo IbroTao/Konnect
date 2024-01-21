@@ -107,10 +107,7 @@ const likePost = async (req, res) => {
     const post = await Posts.findById(postId);
 
     // Check if the user has already liked the post
-    const isLiked = post.isLiked;
-
-    // Check if the user dislike the post
-    const isDisliked = post.disikes.find(
+    const isLiked = post.likes.find(
       (id) => id.toString() === userId.toString()
     );
 
@@ -126,19 +123,6 @@ const likePost = async (req, res) => {
         }
       );
       res.status(200).json({ post, totalLikes: post.length });
-    }
-    if (isDisliked) {
-      const post = await Posts.findByIdAndUpdate(
-        postId,
-        {
-          $pull: { disikes: userId },
-          isDisliked: false,
-        },
-        {
-          new: true,
-        }
-      );
-      res.status(200).json(post);
     } else {
       const likepost = await Posts.findByIdAndUpdate(
         postId,
@@ -151,55 +135,6 @@ const likePost = async (req, res) => {
         }
       );
       res.status(200).json({ likepost, totalLikes: likepost.length });
-    }
-  } catch (error) {
-    throw new Error(error);
-  }
-};
-
-const dislikePost = async (req, res) => {
-  try {
-    const { postId } = req.body;
-    const userId = req.user._id;
-
-    const post = await Posts.findById(postId);
-
-    const isDisliked = post.isDisliked;
-    const isLiked = post.likes.find(
-      (id) => id.toString() === userId.toString()
-    );
-
-    if (isDisliked) {
-      const post = await Posts.findByIdAndUpdate(
-        postId,
-        {
-          $pull: { dislikes: userId },
-          isDisliked: false,
-        },
-        {
-          new: true,
-        }
-      );
-      res.status(200).json(post);
-    }
-    if (isLiked) {
-      const post = await Posts.findByIdAndUpdate(
-        postId,
-        {
-          $pull: { likes: userId },
-          isLiked: false,
-        },
-        {
-          new: true,
-        }
-      );
-      res.status(200).json({ post, totalLikes: post.length });
-    } else {
-      const post = await Posts.findByIdAndUpdate(postId, {
-        $push: { dislikes: userId },
-        isDisliked: true,
-      });
-      res.status(200).json(post);
     }
   } catch (error) {
     throw new Error(error);

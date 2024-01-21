@@ -52,10 +52,20 @@ router.put(
 );
 router.get("/post/:id", authenticateUser, restrictBlockedUsers, getSinglePost);
 router.get("/admin/:id", authenticateUser, restrictBlockedUsers, makeAdmin);
-router.get("/:id/members", authenticateUser, getAllMembers);
-router.get("/posts", authenticateAdmin, getAllPosts);
-router.get("/message", authenticateUser, getGroupMessages);
-router.delete("/:id", authenticateAdmin, deleteGroup);
-router.delete("/post/:id", authenticateUser, deletePost);
+router.get(
+  "/:id/members",
+  authenticateUser,
+  restrictBlockedUsers,
+  getAllMembers
+);
+router.get("/posts", authenticateAdmin, restrictBlockedUsers, getAllPosts);
+router.get(
+  "/message",
+  authenticateUser,
+  restrictBlockedUsers,
+  getGroupMessages
+);
+router.delete("/:id", authenticateAdmin, restrictBlockedUsers, deleteGroup);
+router.delete("/post/:id", authenticateUser, restrictBlockedUsers, deletePost);
 
 module.exports = router;
