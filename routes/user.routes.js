@@ -12,7 +12,7 @@ const {
   deleteUser,
   getAllUsers,
   getSingleUser,
-  sendPasswordResetTokenEmail,
+  sendPasswordResetTokenViaEmail,
   unblockUser,
   updatePassword,
   updatePasswordViaEmail,
@@ -23,7 +23,7 @@ router.post("/reset-password/:token", authenticateUser, updatePasswordViaEmail);
 router.post(
   "/forgot-password-token",
   authenticateUser,
-  sendPasswordResetTokenEmail
+  sendPasswordResetTokenViaEmail
 );
 
 router.get("/", authenticateUser, authenticateAdmin, getAllUsers);

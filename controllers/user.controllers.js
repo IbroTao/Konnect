@@ -6,6 +6,7 @@ const {
 const { validateMongoId } = require("../utils/validateMongoId");
 const crypto = require("crypto");
 
+// Update User Details
 const updateUserDetails = async (req, res) => {
   const { _id } = req.user;
   validateMongoId(_id);
@@ -23,6 +24,7 @@ const updateUserDetails = async (req, res) => {
   }
 };
 
+// Send Password Reset Token to the User Email
 const sendResetPasswordTokenViaEmail = async (req, res) => {
   const { email } = req.body;
   const user = await Users.findOne({ email }).select(["-password"]);
@@ -48,6 +50,7 @@ const sendResetPasswordTokenViaEmail = async (req, res) => {
   });
 };
 
+// Update Password after getting Password Reset Token through email
 const updatePasswordViaEmail = async (req, res) => {
   const { password } = req.body;
   const { token } = req.params;
@@ -71,6 +74,7 @@ const updatePasswordViaEmail = async (req, res) => {
   }
 };
 
+// Update user password without email
 const updatePassword = async (req, res) => {
   const { _id } = req.user;
   validateMongoId(_id);
@@ -94,6 +98,7 @@ const updatePassword = async (req, res) => {
   }
 };
 
+// Delete user through their id
 const deleteUser = async (req, res) => {
   const { _id } = req.user;
   validateMongoId(_id);
@@ -109,6 +114,7 @@ const deleteUser = async (req, res) => {
   }
 };
 
+// Get a user through his/her id
 const getSingleUser = async (req, res) => {
   const { _id } = req.user;
   validateMongoId(_id);
@@ -124,17 +130,21 @@ const getSingleUser = async (req, res) => {
   }
 };
 
+// Find and fetch all users
 const getAllUsers = async (req, res) => {
   try {
-    const users = await Users.find().sort({
-      createdAt: "desc",
-    });
+    const users = await Users.find()
+      .sort({
+        createdAt: "desc",
+      })
+      .populate("username email");
     res.status(200).json({ users });
   } catch (error) {
     throw new Error(error);
   }
 };
 
+// Block user through their id
 const blockUser = async (req, res) => {
   const { id } = req.params;
   validateMongoId(id);
@@ -158,6 +168,7 @@ const blockUser = async (req, res) => {
   }
 };
 
+// Unblock user through their id
 const unblockUser = async (req, res) => {
   const { id } = req.params;
   validateMongoId(id);
@@ -186,7 +197,7 @@ module.exports = {
   deleteUser,
   updatePassword,
   updatePasswordViaEmail,
-  sendPasswordResetTokenEmail,
+  sendPasswordResetTokenViaEmail,
   getSingleUser,
   getAllUsers,
   blockUser,
