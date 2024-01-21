@@ -135,7 +135,7 @@ const makeAdmin = async (req, res) => {
   const { _id } = req.user;
   validateMongoId(_id);
   try {
-    const group = await Groups.findById(groupId);
+    const group = await Groups.findById(req.params.groupId);
     if (!group) {
       res.status(404).json({ message: "Group not found" });
     }
@@ -350,7 +350,7 @@ const addComments = async (req, res) => {
           comments: { $elemMatch: alreadyComment },
         },
         {
-          $set: { "comments.$.comment": comment },
+          $set: { "comments.$.comment": comment, "comments.$.commenter": _id },
         },
         {
           new: true,

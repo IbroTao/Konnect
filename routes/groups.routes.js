@@ -22,20 +22,39 @@ const {
   addMembers,
   getAllMembers,
   makeAdmin,
-  getGroupMembers,
   getGroupMessages,
   sendMessage,
 } = require("../controllers/groups.contollers");
 
 router.post("/", authenticateUser, createGroup);
-router.post("/posts", authenticateUser, createPost);
-router.post("/:id/members/:id", authenticateAdmin, addMembers);
-router.put("/:id", authenticateAdmin, editGroupDetails);
-router.put("/post/:id", authenticateUser, editPost);
-router.put("/post/approve/:id", authenticateAdmin, approvePost);
-router.get("/post/:id", authenticateUser, getSinglePost);
+router.post("/message", authenticateUser, restrictBlockedUsers, sendMessage);
+router.post("/posts", authenticateUser, restrictBlockedUsers, createPost);
+router.post(
+  "/:id/members/:id",
+  authenticateAdmin,
+  restrictBlockedUsers,
+  addMembers
+);
+router.post(
+  "/post/comment/:id",
+  authenticateUser,
+  restrictBlockedUsers,
+  addComments
+);
+router.put("/:id", authenticateAdmin, restrictBlockedUsers, editGroupDetails);
+router.put("/post/like", authenticateUser, restrictBlockedUsers, likePost);
+router.put("/post/:id", authenticateUser, restrictBlockedUsers, editPost);
+router.put(
+  "/post/approve/:id",
+  authenticateAdmin,
+  restrictBlockedUsers,
+  approvePost
+);
+router.get("/post/:id", authenticateUser, restrictBlockedUsers, getSinglePost);
+router.get("/admin/:id", authenticateUser, restrictBlockedUsers, makeAdmin);
 router.get("/:id/members", authenticateUser, getAllMembers);
 router.get("/posts", authenticateAdmin, getAllPosts);
+router.get("/message", authenticateUser, getGroupMessages);
 router.delete("/:id", authenticateAdmin, deleteGroup);
 router.delete("/post/:id", authenticateUser, deletePost);
 
