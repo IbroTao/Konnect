@@ -8,19 +8,19 @@ const authRouter = require("./routes/auth.routes");
 const userRouter = require("./routes/user.routes");
 const chatRouter = require("./routes/chats.routes");
 const postRouter = require("./routes/posts.routes");
-const groupRouter = require("./route/groups.routes");
+const groupRouter = require("./routes/groups.routes");
 
 app.use(express.json());
 app.use(express.urlencoded());
-
-app.use(notFound);
-app.use(errorHandler);
 
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/chats", chatRouter);
 app.use("/api/posts", postRouter);
 app.use("/api/groups", groupRouter);
+
+app.use(notFound);
+app.use(errorHandler);
 
 const port = process.env.PORT;
 

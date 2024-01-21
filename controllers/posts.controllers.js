@@ -192,6 +192,5 @@ module.exports = {
   getSinglePost,
   getAllPosts,
   likePost,
-  dislikePost,
   addComments,
 };

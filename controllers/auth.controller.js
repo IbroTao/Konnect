@@ -1,4 +1,4 @@
-const { hashSync, compareSync } = require("bcryptjs");
+const bcrypt = require("bcryptjs");
 const { sendVerificationEmail } = require("../utils/sendVerificationEmail");
 const { generateToken } = require("../configs/generateToken");
 const { Users } = require("../models/user.models");
@@ -17,8 +17,8 @@ const signupUser = async (req, res) => {
       username,
       email,
       mobile,
-      password: hashSync(password, 10),
-      verificationToken,
+      password: bcrypt.hashSync(password, 10),
+      //verificationToken,
     });
 
     // await sendVerificationEmail({
@@ -59,21 +59,18 @@ const verifyAndSignupUser = async (req, res) => {
   }
 };
 
+// Login User after been email verified
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
-    if (!email || !password) {
-      res.status(400).json({ message: "Please provide email and password" });
-    }
-
     const user = await Users.findOne({ email });
     if (!user) {
-      res.status(404).json({ message: "User not found! try logging in" });
+      res.status(404).json({ error: "User not found! try logging in" });
     }
 
-    const comparePassword = compareSync(password, user.password);
+    const comparePassword = bcrypt.compareSync(password, user.password);
     if (!comparePassword) {
-      res.status(400).json({ message: "Incorrect password" });
+      res.status(400).json({ error: "Incorrect password" });
     }
 
     // if (!user.isVerified) {
@@ -87,17 +84,18 @@ const loginUser = async (req, res) => {
     });
     res.status(200).json({ message: "User logged in!", user });
   } catch (error) {
-    throw new Error(error);
+    res.status(500).json(error);
   }
 };
 
+// Logout User
 const logoutUser = async (req, res) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,
       secure: true,
     });
-    return res.status(204);
+    return res.sendStatus(204);
   } catch (error) {
     throw new Error(error);
   }

@@ -15,11 +15,11 @@ const userSchema = new mongoose.Schema(
       type: Number,
       maxlength: 11,
       required: true,
+      unique: true,
     },
     password: {
       type: String,
       required: true,
-      select: false,
     },
     image: {
       type: String,

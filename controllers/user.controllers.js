@@ -136,46 +136,46 @@ const getAllUsers = async (req, res) => {
 };
 
 const blockUser = async (req, res) => {
-  const { _id } = req.user;
-  validateMongoId(_id);
+  const { id } = req.params;
+  validateMongoId(id);
   try {
     const user = await Users.findByIdAndUpdate(
-      _id,
+      id,
       {
         isBlocked: true,
       },
       {
         new: true,
       }
-    );
+    ).select(["-password"]);
     if (!user) {
       res.status(404).json({ error: "User not found" });
     }
 
-    res.status(200).json({ message: "User has been blocked" });
+    res.status(200).json({ message: "User has been blocked", user });
   } catch (error) {
     throw new Error(error);
   }
 };
 
 const unblockUser = async (req, res) => {
-  const { _id } = req.params;
-  validateMongoId(_id);
+  const { id } = req.params;
+  validateMongoId(id);
   try {
     const user = await Users.findByIdAndUpdate(
-      _id,
+      id,
       {
         isBlocked: false,
       },
       {
         new: true,
       }
-    );
+    ).select(["-password"]);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
 
-    res.status(200).json({ message: "User has been unblocked" });
+    res.status(200).json({ message: "User has been unblocked", user });
   } catch (error) {
     throw new Error(error);
   }

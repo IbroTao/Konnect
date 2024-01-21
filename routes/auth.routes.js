@@ -12,6 +12,6 @@ router.post("/signup", signupUser);
 router.post("/login", loginUser);
 router.post("/verify-email", verifyAndSignupUser);
 
-router.get("/logout", logoutUser);
+router.delete("/logout", logoutUser);
 
 module.exports = router;

@@ -39,7 +39,7 @@ router.put(
   "/:id",
   authenticateUser,
   restrictBlockedUsers,
-  multer({ fileFilter, fileStorage }),
+  multer({ fileFilter, fileStorage }).single("image"),
   editPost
 );
 

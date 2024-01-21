@@ -31,7 +31,7 @@ router.get("/:id", authenticateUser, restrictBlockedUsers, getSingleUser);
 
 router.put("/block/:id", authenticateAdmin, blockUser);
 router.put("/unblock/:id", authenticateAdmin, unblockUser);
-router.put("/passowrd", authenticateUser, updatePassword);
+router.put("/password", authenticateUser, updatePassword);
 router.put("/:id", authenticateUser, updateUserDetails);
 
 router.delete("/:id", authenticateUser, deleteUser);
