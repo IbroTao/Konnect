@@ -1,6 +1,10 @@
 const { Router } = require("express");
 const router = Router();
 
+const multer = require("multer");
+
+const { fileFilter, fileStorage } = require("../utils/multer");
+
 const {
   authenticateAdmin,
   authenticateUser,
@@ -28,7 +32,13 @@ const {
 
 router.post("/", authenticateUser, createGroup);
 router.post("/message", authenticateUser, restrictBlockedUsers, sendMessage);
-router.post("/posts", authenticateUser, restrictBlockedUsers, createPost);
+router.post(
+  "/posts",
+  authenticateUser,
+  restrictBlockedUsers,
+  multer({ fileFilter, fileStorage }).single("image"),
+  createPost
+);
 router.post(
   "/:id/members/:id",
   authenticateAdmin,
@@ -43,7 +53,13 @@ router.post(
 );
 router.put("/:id", authenticateAdmin, restrictBlockedUsers, editGroupDetails);
 router.put("/post/like", authenticateUser, restrictBlockedUsers, likePost);
-router.put("/post/:id", authenticateUser, restrictBlockedUsers, editPost);
+router.put(
+  "/post/:id",
+  authenticateUser,
+  restrictBlockedUsers,
+  multer({ fileFilter, fileStorage }).single("image"),
+  editPost
+);
 router.put(
   "/post/approve/:id",
   authenticateAdmin,

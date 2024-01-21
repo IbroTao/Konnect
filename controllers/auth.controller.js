@@ -11,7 +11,7 @@ const signupUser = async (req, res) => {
     if (findUser)
       return res.status(400).json({ message: "User already signed up!" });
 
-    const verificationToken = crypto.randomBytes(40).toString("hex");
+    // const verificationToken = crypto.randomBytes(40).toString("hex");
 
     const user = await Users.create({
       username,
@@ -21,13 +21,15 @@ const signupUser = async (req, res) => {
       verificationToken,
     });
 
-    await sendVerificationEmail({
-      name: user.name,
-      email: user.email,
-      verificationToken,
-    });
+    // await sendVerificationEmail({
+    //   name: user.name,
+    //   email: user.email,
+    //   verificationToken,
+    // });
     res.status(201).json({
-      message: "Verify your email before signing in!",
+      message: "User signed up",
+      user: user,
+      //message: "Verify your email before signing in!",
     });
   } catch (error) {
     throw new Error(error);
@@ -74,9 +76,9 @@ const loginUser = async (req, res) => {
       res.status(400).json({ message: "Incorrect password" });
     }
 
-    if (!user.isVerified) {
-      res.status(400).json({ message: "Please verify your email" });
-    }
+    // if (!user.isVerified) {
+    //   res.status(400).json({ message: "Please verify your email" });
+    // }
 
     const token = generateToken(user._id);
     res.cookie("token", token, {
