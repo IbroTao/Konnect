@@ -2,6 +2,7 @@ const { Chats } = require("../models/chat.models");
 const { Users } = require("../models/user.models");
 const { validateMongoId } = require("../utils/validateMongoId");
 
+// Send Chats
 const sendChats = async (req, res) => {
   const { _id } = req.user;
   const { recipientId, chat } = req.body;
@@ -25,6 +26,7 @@ const sendChats = async (req, res) => {
   }
 };
 
+// Get user chats
 const getUserChats = async (req, res) => {
   const { _id } = req.user;
   validateMongoId(_id);

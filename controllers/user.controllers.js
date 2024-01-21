@@ -197,7 +197,7 @@ module.exports = {
   deleteUser,
   updatePassword,
   updatePasswordViaEmail,
-  sendPasswordResetTokenViaEmail,
+  sendResetPasswordTokenViaEmail,
   getSingleUser,
   getAllUsers,
   blockUser,

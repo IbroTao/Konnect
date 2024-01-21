@@ -4,6 +4,7 @@ const { generateToken } = require("../configs/generateToken");
 const { Users } = require("../models/user.models");
 const crypto = require("crypto");
 
+// Signup new user
 const signupUser = async (req, res) => {
   const { email, password, username, mobile } = req.body;
   const findUser = await Users.findOne({ email });
@@ -36,6 +37,7 @@ const signupUser = async (req, res) => {
   }
 };
 
+// Verify user email, then sign up
 const verifyAndSignupUser = async (req, res) => {
   const { verificationToken, email } = req.body;
   const user = await Users.findOne({ email });
