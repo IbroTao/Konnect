@@ -140,6 +140,10 @@ const makeAdmin = async (req, res) => {
       res.status(404).json({ message: "Group not found" });
     }
 
+    if (!group.members.includes(_id)) {
+      res.status(400).json({ message: "User is not a member of the group" });
+    }
+
     group.admin = _id;
     await group.save();
 
@@ -377,8 +381,27 @@ const addComments = async (req, res) => {
 
 const suspendMembers = async (req, res) => {
   const { _id } = req.user;
+  const { groupId } = req.params;
   validateMongoId(_id);
   try {
+    const group = await Groups.findById(groupId);
+    if (!group) {
+      return res.status(404).json({ error: "Group not found" });
+    }
+
+    if (!group.members.includes(_id)) {
+      return res
+        .status(400)
+        .json({ error: "User is not a member of the group" });
+    }
+
+    const memberIndex = group.members.indexOf(_id);
+
+    group.members[memberIndex].isSuspended = true;
+
+    await group.save();
+
+    res.status(200).json({ message: "User has been suspended" });
   } catch (error) {}
 };
 
@@ -438,7 +461,6 @@ module.exports = {
   likePost,
   addComments,
   suspendMembers,
-  getGroupMembers,
   sendMessage,
   getGroupMessages,
 };
