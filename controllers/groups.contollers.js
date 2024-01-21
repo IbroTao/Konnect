@@ -6,6 +6,7 @@ const {
 const { Users } = require("../models/user.models");
 const { validateMongoId } = require("../utils/validateMongoId");
 
+// Create Group
 const createGroup = async (req, res) => {
   const { _id } = req.user;
   validateMongoId(_id);
@@ -22,6 +23,7 @@ const createGroup = async (req, res) => {
   }
 };
 
+// Edit Group Details (Admin only)
 const editGroupDetails = async (req, res) => {
   const { id } = req.params;
   validateMongoId(id);
@@ -76,8 +78,14 @@ const addMembers = async (req, res) => {
       res.status(404).json({ message: "User not found or deleted" });
     }
     group.members.push(_id);
+
+    if (!group.admin) {
+      group.admin = userId;
+    }
+    const savedGroup = await group.save();
     res.status(200).json({
       message: "Member added",
+      savedGroup,
     });
   } catch (error) {
     throw new Error(error);
@@ -98,41 +106,26 @@ const userGroup = async (req, res) => {
       res.status(404).json({ message: "User not found" });
     }
     user.groups = [group._id];
-    const userGroup = await user.save();
-    res.status(200).json({
-      userGroup,
-    });
+    await user.save();
+    return user.groups;
   } catch (error) {
     throw new Error(error);
   }
 };
 
-const getUserGroups = async (req, res) => {
-  const { _id } = req.user;
-  validateMongoId(_id);
-
-  const user = await Users.findById(_id);
+const getAllMembers = async (req, res) => {
+  const { id } = req.params;
+  validateMongoId(id);
   try {
-    if (!user) {
-      res.status(404).json({ message: "User not found!" });
+    const group = await Groups.findById(id).populate(
+      "members",
+      "username email"
+    );
+    if (!group) {
+      res.status(404).json({ error: "Group not found" });
     }
 
-    const groupId = user.groups;
-    const groups = await Groups.find({ groupId }).select([
-      "_id",
-      "name",
-      "description",
-      "admin",
-      "createdAt",
-      "updatedAt",
-    ]);
-
-    const admin = await Users.findById(groups.admin).select(["username"]);
-    const data = {
-      groups,
-      admin,
-    };
-    res.status(200).json({ data });
+    return group.members;
   } catch (error) {
     throw new Error(error);
   }
@@ -142,7 +135,15 @@ const makeAdmin = async (req, res) => {
   const { _id } = req.user;
   validateMongoId(_id);
   try {
-    const admin = await Groups.findByIdAndUpdate();
+    const group = await Groups.findById(groupId);
+    if (!group) {
+      res.status(404).json({ message: "Group not found" });
+    }
+
+    group.admin = _id;
+    await group.save();
+
+    res.status(200).json({ message: "You have added this member as an admin" });
   } catch (error) {
     throw new Error(error);
   }
@@ -375,22 +376,10 @@ const addComments = async (req, res) => {
 };
 
 const suspendMembers = async (req, res) => {
-  const { id } = req.user;
+  const { _id } = req.user;
+  validateMongoId(_id);
   try {
   } catch (error) {}
-};
-
-const getGroupMembers = async (req, res) => {
-  const { id } = req.params;
-  validateMongoId(id);
-  try {
-    const group = await Groups.findById(id).select([]);
-    if (!group) {
-      res.status(404).json({ error: "Group not found" });
-    }
-  } catch (error) {
-    throw new Error(error);
-  }
 };
 
 const sendMessage = async (req, res) => {
@@ -436,7 +425,8 @@ const getGroupMessages = async (req, res) => {
 module.exports = {
   createGroup,
   editGroupDetails,
-  joinGroup,
+  addMembers,
+  getAllMembers,
   deleteGroup,
   createPost,
   editPost,
@@ -447,7 +437,6 @@ module.exports = {
   approvePost,
   likePost,
   addComments,
-  getUserGroups,
   suspendMembers,
   getGroupMembers,
   sendMessage,
