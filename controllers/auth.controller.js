@@ -65,7 +65,7 @@ const verifyAndSignupUser = async (req, res) => {
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await Users.findOne({ email });
+    const user = await Users.findOne({ email }).select(["-password"]);
     if (!user) {
       res.status(404).json({ error: "User not found! try logging in" });
     }
