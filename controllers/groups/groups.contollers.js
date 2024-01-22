@@ -74,8 +74,118 @@ const updateGroupInfo = async (req, res) => {
   }
 };
 
+const updateGroupRulesAndTypes = async (req, res) => {
+  const { id } = req.params;
+  validateMongoId(id);
+  try {
+    let group;
+
+    if (req.body.rules && req.body.type) {
+      group = await Groups.findByIdAndUpdate(
+        id,
+        {
+          rules: req.body.rules,
+          type: req.body.type,
+        },
+        {
+          new: true,
+        }
+      );
+    } else if (req.body.rules) {
+      group = await Groups.findByIdAndUpdate(
+        id,
+        {
+          rules: req.body.rules,
+        },
+        {
+          new: true,
+        }
+      );
+    } else if (req.body.type) {
+      group = await Groups.findByIdAndUpdate(
+        id,
+        {
+          type: req.body.type,
+        },
+        {
+          new: true,
+        }
+      );
+    }
+    if (!group) {
+      res.status(404).json({ error: "group not found" });
+    }
+    res.status(200).json({ message: "group rules and type updated", group });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+const getGroupById = async (req, res) => {
+  const { id } = req.params;
+  validateMongoId(id);
+  try {
+    const group = await Groups.findById(id);
+    if (!group) {
+      res.status(404).json({ error: "group not found" });
+    }
+    res.status(200).json(group);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+const addMember = async (req, res) => {
+  const { member } = req.body;
+  const { id } = req.params;
+  validateMongoId(id);
+  try {
+    const group = await Groups.findByIdAndUpdate(id, {
+      $addToSet: { members: { id: member } },
+      $inc: { membersCount: 1 },
+    });
+
+    if (!group) {
+      res.status(404).json({ error: "group not found" });
+    }
+
+    res
+      .status(200)
+      .json({ message: "You have been added as a member of this group" });
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+const addAdmin = async (req, res) => {
+  const { id } = req.params;
+  validateMongoId(id);
+
+  const { admin } = req.body;
+  const admins = [];
+  try {
+    admin.map((id) => {
+      admins.push({ id });
+    });
+
+    const group = await Groups.findByIdAndUpdate(id, {
+      $push: { admins },
+      $inc: { adminCount: admins.length },
+    });
+
+    if (!group) {
+      res.status(404).json({ error: "group not found" });
+    }
+  } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
 module.exports = {
   createGroup,
   queryGroups,
   updateGroupInfo,
+  updateGroupRulesAndTypes,
+  getGroupById,
+  addMember,
 };
