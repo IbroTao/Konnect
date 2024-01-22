@@ -13,6 +13,7 @@ const sendChats = async (req, res) => {
       return res.status(404).json({ error: "Sender or recipient not found" });
     }
 
+    // new chat
     const newChat = new Chats({
       sender: sender._id,
       recipient: recipient._id,

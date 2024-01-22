@@ -178,6 +178,16 @@ const createPost = async (req, res) => {
   }
 };
 
+const getGroupById = async (req, res) => {
+  const { id } = req.params;
+  validateMongoId(id);
+  try {
+    const group = await Groups.find;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
 const editPost = async (req, res) => {
   const { id } = req.params;
   validateMongoId(id);

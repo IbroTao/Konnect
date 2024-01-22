@@ -1,113 +1,67 @@
 const mongoose = require("mongoose");
 
+const memberSchema = new mongoose.Schema(
+  {
+    id: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
+    },
+    joinedAt: {
+      type: Date,
+      default: Date.now(),
+    },
+  },
+  {
+    id: false,
+    _id: false,
+  }
+);
+
 const groupSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      minlength: 5,
-      maxlength: 30,
-    },
-    description: {
-      type: String,
-      maxlength: 50,
-    },
-    createdBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
-    },
-    role: {
-      type: String,
-      default: "user",
-    },
-    admin: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
-    },
-    isBlocked: {
-      type: Boolean,
-      default: false,
-    },
-    members: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "users",
-      },
-    ],
-  },
-  {
-    timestamps: true,
-  }
-);
-
-const Groups = mongoose.model("groups", groupSchema);
-
-const groupMessagesSchema = new mongoose.Schema(
-  {
-    message: {
-      type: String,
       required: true,
+      minlength: 2,
+      maxlength: 40,
+      unique: true,
     },
-    sender: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
-    },
-    recipient: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
-    },
-  },
-  {
-    timestamps: true,
-  }
-);
-
-const GroupMessages = mongoose.model("group_msg", groupMessagesSchema);
-
-const groupPostsSchema = new mongoose.Schema(
-  {
-    image: {
-      type: String,
-    },
-    caption: {
+    info: {
       type: String,
       required: true,
       minlength: 10,
-      maxlength: 100,
+      maxlength: 400,
+      required: true,
     },
-    isLiked: {
-      type: Boolean,
-      default: false,
+    type: {
+      type: String,
+      enum: ["private", "public"],
     },
-    likes: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
+    rules: {
+      type: String,
+      required: true,
     },
-    isApproved: {
-      type: Boolean,
-      default: false,
+    adminCount: {
+      type: Number,
+      default: 0,
     },
+    admins: [memberSchema],
+    membersCount: {
+      type: Number,
+      default: 0,
+    },
+    members: [memberSchema],
     isSuspended: {
       type: Boolean,
       default: false,
     },
-    comments: [
-      {
-        comment: {
-          type: String,
-        },
-        commenter: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "users",
-        },
+    coverImage: {
+      url: {
+        type: String,
       },
-    ],
-    totalLikes: {
-      type: Number,
-      default: 0,
-    },
-    postedBy: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "users",
+      publicId: {
+        type: String,
+      },
     },
   },
   {
@@ -115,6 +69,5 @@ const groupPostsSchema = new mongoose.Schema(
   }
 );
 
-const GroupPosts = mongoose.model("group_posts", groupPostsSchema);
-
-module.exports = { Groups, GroupMessages, GroupPosts };
+const Group = mongoose.model("groups", groupSchema);
+module.exports = { Group };
