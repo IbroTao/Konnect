@@ -1,6 +1,7 @@
 const { Groups } = require("../../models/groups/groups.model");
 const myCustomLabels = require("../../utils/labelPaginate");
 const { validateMongoId } = require("../../utils/validateMongoId");
+const { notificationQueue } = require("../../schemas/notificationQueue");
 
 const createGroup = async (req, res) => {
   try {
@@ -176,6 +177,11 @@ const addAdmin = async (req, res) => {
     if (!group) {
       res.status(404).json({ error: "group not found" });
     }
+
+    const notificationData = [];
+    admin.forEach((admin) => {
+      notificationQueue.msg = `You have been made an admin in ${group.name}`;
+    });
   } catch (error) {
     res.status(500).json(error);
   }
