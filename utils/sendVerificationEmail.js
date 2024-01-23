@@ -24,7 +24,7 @@ const sendEmail = async ({ to, subject, html }) => {
 };
 
 const sendVerificationEmail = async ({ name, email, verificationToken }) => {
-  const message = `<p>Please confirm your email b clicking on the following link: <a href="https://localhost:9090/api/auth/verify-email?token=${verificationToken}"></p>`;
+  const message = `<p>Please confirm your email b clicking on the following link: <a href="http://localhost:9090/api/auth/verify-email?token=${verificationToken}"></p>`;
 
   return sendEmail({
     to: email,

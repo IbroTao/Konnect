@@ -50,9 +50,11 @@ const queryGroups = async (req, res) => {
         populate: { path: "admins.id", select: "_id username" },
       }
     );
-    return groups;
     if (!groups) {
+      res.status(404).json({ error: "Groups not found" });
     }
+
+    res.status(200).json(groups);
   } catch (error) {
     res.status(500).json(error);
   }
@@ -181,6 +183,10 @@ const addAdmin = async (req, res) => {
     const notificationData = [];
     admin.forEach((admin) => {
       notificationQueue.msg = `You have been made an admin in ${group.name}`;
+      notificationQueue.link = `http:localhost:9090/api/groups/${group._id}`;
+      (notificationQueue.type = "role-assign"),
+        (notificationQueue.timestamps = new Date().toISOString),
+        (notificationQueue.recipientId = admin);
     });
   } catch (error) {
     res.status(500).json(error);

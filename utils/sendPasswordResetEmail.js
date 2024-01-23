@@ -23,7 +23,7 @@ const sendEmail = async ({ to, subject, html }) => {
 };
 
 const sendPasswordResetTokenEmail = async ({ name, token }) => {
-  const resetLink = `https://localhost:9090/api/user/reset-password/${token}`;
+  const resetLink = `http://localhost:9090/api/user/reset-password/${token}`;
   const message = `<p>Please reset your password by clicking on the following link: <a href="${resetLink}"><p>`;
 
   return sendEmail({

@@ -28,9 +28,8 @@ const signupUser = async (req, res) => {
       verificationToken,
     });
     res.status(201).json({
-      message: "User signed up",
-      user: user,
-      message: "Verify your email before signing in!",
+      message: "Verify email for confirmation",
+      verificationToken: verificationToken,
     });
   } catch (error) {
     throw new Error(error);
@@ -57,7 +56,7 @@ const verifyAndSignupUser = async (req, res) => {
     const verifiedUser = await user.save();
     res.status(200).json({ message: "User signed in", user: verifiedUser });
   } catch (error) {
-    throw new Error(error);
+    res.status(500).json(error);
   }
 };
 

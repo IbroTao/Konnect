@@ -6,4 +6,4 @@ const notificationQueue = {
   link: "",
 };
 
-moodule.exports = { notificationQueue };
+module.exports = { notificationQueue };
