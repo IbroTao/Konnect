@@ -187,6 +187,11 @@ const addAdmin = async (req, res) => {
       (notificationQueue.type = "role-assign"),
         (notificationQueue.timestamps = new Date().toISOString),
         (notificationQueue.recipientId = admin);
+      notificationData.push(notificationQueue);
+    });
+    const notifications = [];
+    notificationData.forEach((notification) => {
+      const data = {};
     });
   } catch (error) {
     res.status(500).json(error);
