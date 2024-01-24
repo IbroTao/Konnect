@@ -109,6 +109,18 @@ const userSchema = new mongoose.Schema(
   }
 );
 
+/**
+ * Check if the email is taken
+ * @param {string} email - The user's email
+ * @param {ObjectId} [excludeUserId] - The id of the user to be exclude
+ * @returns {Promise<boolean>}
+ */
+
+userSchema.statics.isEmailTaken = async function (email, excludeUserId) {
+  const user = await this.findOne({ email, _id: { $ne: excludeUserId } });
+  return !!user;
+};
+
 const Users = mongoose.model("users", userSchema);
 
 module.exports = { Users };
