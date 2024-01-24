@@ -16,12 +16,13 @@ const userSchema = new mongoose.Schema(
     },
     phoneNumber: {
       type: String,
-      mtrim: true,
+      trim: true,
     },
     password: {
       type: String,
       required: true,
       trim: true,
+      private: true,
     },
     avatar: {
       url: {
