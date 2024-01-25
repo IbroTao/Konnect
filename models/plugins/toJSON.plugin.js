@@ -32,4 +32,4 @@ const toJSON = (schema) => {
   });
 };
 
-module.exports = toJSON;
+module.exports = { toJSON };
