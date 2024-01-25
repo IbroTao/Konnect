@@ -1,5 +1,6 @@
 const { Users } = require("../models/user.model");
 const { catchAsync } = require("../utils/catchAsync");
+const { uniqueFiveDigits } = require("../utils/generateDigits");
 
 const isUsernameTaken = async (username) => {
   const user = await Users.findOne({ username });
