@@ -125,3 +125,26 @@ userSchema.plugin(toJSON);
  * Check if email is taken
  * @
  */
+
+userSchema.statics.isEmailTaken = async function (email, excludeUserId) {
+  const user = await this.findOne({ email, _id: { $ne: excludeUserId } });
+  return !!user;
+};
+
+userSchema.methods.isPasswordMatch = async function (password) {
+  const user = this;
+  return bcrypt.compare(password, user.password);
+};
+
+userSchema.pre("save", async function (next) {
+  const user = this;
+  if (user.isModified("password")) {
+    if (user.password !== "none") {
+      user.password = await bcrypt.hash(user.password, 11);
+    }
+    next();
+  }
+});
+
+const User = mongoose.model(modelNames.user, userSchema);
+module.exports = User;
