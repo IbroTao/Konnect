@@ -47,4 +47,32 @@ const userSchema = new mongoose.Schema({
     type: [String],
     enum: adminPermissions,
   },
+  isEmailVerified: {
+    type: Boolean,
+    default: false,
+  },
+  isSuspended: {
+    type: Boolean,
+    default: false,
+  },
+  avatar: {
+    url: {
+      type: String,
+    },
+    publicId: {
+      type: String,
+    },
+  },
+  bio: {
+    type: String,
+    minlength: 50,
+    maxlength: 250,
+  },
+  dob: {
+    type: Date,
+  },
+  location: {
+    type: String,
+  },
+  gender: {},
 });
