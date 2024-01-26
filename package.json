@@ -35,7 +35,8 @@
     "redis": "^4.6.12",
     "socket.io": "^4.7.2",
     "validator": "^13.11.0",
-    "webrtc": "^1.14.1"
+    "webrtc": "^1.14.1",
+    "winston": "^3.11.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
