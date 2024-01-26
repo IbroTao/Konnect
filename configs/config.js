@@ -59,6 +59,26 @@ module.exports = {
     secret: envVars.JWT_SECRET,
     accessExpirationMinutes: envVars.JWT_ACCESS_EXPIRATION_MINUTES,
     refreshExpirationDays: envVars.JWT_REFRESH_EXPIRATION_DAYS,
-    resetPasswordExpirationMinutes: envVars.JWT_RESET_PASSWORD_MINUTES,
+    resetPasswordExpirationMinutes:
+      envVars.JWT_RESET_PASSWORD_EXPIRATION_MINUTES,
+    verifyEmailExpirationMinutes: envVars.JWT_VERIFY_EMAIL_EXPIRATION_MINUTES,
   },
+  email: {
+    gmail: {
+      service: "gmail",
+      auth: {
+        type: "Login",
+        user: envVars.SMTP_USERNAME,
+        pass: envVars.SMTP_PASSWORD,
+      },
+    },
+    from: envVars.EMAIL_SENDER,
+  },
+  cloudinary: {
+    cloud_name: envVars.CLOUDINARY_NAME,
+    api_secret: envVars.CLOUDINARY_API_SECRET,
+    api_key: envVars.CLOUDINARY_SECRET_KEY,
+  },
+  cookie_duration: envVars.COOKIE_DURATION,
+  session_secret: envVars.SESSION_SESSION,
 };
