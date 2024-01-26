@@ -18,6 +18,8 @@ const envSchema = Joi.object()
     JWT_REFRESH_EXPIRATION_DAYS: Joi.number()
       .default(30)
       .description("Days after which refresh tokens will be expired"),
+    JWT_RESET_PASSWORD_EXPIRATION_MINUTES: Joi.number().default(10),
+    JWT_VERIFY_EMAIL_EXPIRATION_MINUTES: Joi.number().default(10),
     SMTP_HOST: Joi.string().description("Default email server"),
     SMTP_PORT: Joi.number().description("Port to connect to the email server"),
     SMTP_USERNAME: Joi.string().description("Username for the email server"),
@@ -44,4 +46,19 @@ if (error) {
 module.exports = {
   env: envVars.NODE_ENV,
   port: envVars.PORT,
+  mongoose: {
+    url: envVars.MONGO_URL,
+    options: {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      autoIndex: true,
+      dbName: "konnect",
+    },
+  },
+  jwt: {
+    secret: envVars.JWT_SECRET,
+    accessExpirationMinutes: envVars.JWT_ACCESS_EXPIRATION_MINUTES,
+    refreshExpirationDays: envVars.JWT_REFRESH_EXPIRATION_DAYS,
+    resetPasswordExpirationMinutes: envVars.JWT_RESET_PASSWORD_MINUTES,
+  },
 };
