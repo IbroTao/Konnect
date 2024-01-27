@@ -202,6 +202,12 @@ const getUsersFollowers = async (filter, options) => {
   return followers;
 };
 
+const isUserFollowing = async (userId, currentUserId) => {
+  return Follow.findOne({
+    $and: [{ followedUser: userId }, { followingUser: currentUserId }],
+  }).lean();
+};
+
 module.exports = {
   createUser,
   getUserByUsername,
@@ -216,4 +222,5 @@ module.exports = {
   followUser,
   unfollowUser,
   getUsersFollowers,
+  isUserFollowing,
 };
