@@ -8,6 +8,14 @@ const MESSAGES = {
   CANNOT_SET_PASSWORD: "cannot set user's username and password",
   EMAIL_VERIFIED: "email verified",
   CODE_EXPIRED: "either code has expired or something went wrong",
+  PASSWORD_NO_MATCH: "password does not match",
+  PROVIDE_IMAGE: "please provide a valid image type i.e. png, jpeg or jpg",
+  PROVIDE_BODY: "provide request body",
+
+  UPDATED: "resource updated",
+  CREATED: "resource created",
+  DELETED: "resource deleted",
+  DELETE_FAILED: "cannot delete resource",
 };
 
 module.exports = {
