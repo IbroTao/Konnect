@@ -217,10 +217,17 @@ const getUsersFollowing = async (filter, options) => {
   return following;
 };
 
+const toggleMatureContent = async (user) => {
+  const matureContents = user.showMatureContent;
+  user.showMatureContent = !matureContents;
+  return user.save();
+};
+
 module.exports = {
   createUser,
   getUserByUsername,
   queryUsers,
+  toggleMatureContent,
   getUserById,
   returnUserData,
   getUserByEmail,
