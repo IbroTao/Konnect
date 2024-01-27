@@ -34,7 +34,15 @@ const logout = async (refreshToken) => {
   await refreshTokenDoc.remove();
 };
 
+const refreshAuth = async (refreshToken) => {
+  try {
+  } catch (error) {
+    throw new ApiError(httpsStatus.UNAUTHORIZED, "please authenticate");
+  }
+};
+
 module.exports = {
   loginWithEmailAndPassword,
   logout,
+  refreshAuth,
 };
