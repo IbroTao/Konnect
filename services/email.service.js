@@ -82,3 +82,14 @@ const defaultEmailSender = (to, subject, payload) => {
       break;
   }
 };
+
+const emailObj = { from: config.email.from, to, subject, html };
+
+module.exports = {
+  transporter,
+  sendEmail,
+  sendResetPasswordEmail,
+  sendVerificationEmail,
+  sendFiveDigitsForVerification,
+  defaultEmailSender,
+};
