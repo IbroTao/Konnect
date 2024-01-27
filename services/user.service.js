@@ -101,6 +101,18 @@ const updateUserById = async (userId, updateBody) => {
 const updateUserPrimitively = async (userId, updateBody) => {
   return User.findOneAndUpdate({ _id: userId }, updateBody);
 };
+
+const updateUserByEmail = async (email, updateBody) => {
+  const user = await getUserByEmail(email);
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
+  }
+  await isUsernameTaken(updateBody.username);
+  Object.assign(user, updateBody);
+  await User.save();
+  return user;
+};
+
 module.exports = {
   createUser,
   getUserByUsername,
@@ -108,6 +120,7 @@ module.exports = {
   getUserById,
   returnUserData,
   getUserByEmail,
+  updateUserById,
   updateUserByEmail,
   updateUserPrimitively,
 };
