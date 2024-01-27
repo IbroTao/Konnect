@@ -197,6 +197,11 @@ const unfollowUser = async (currentUser, userId) => {
   return true;
 };
 
+const getUsersFollowers = async (filter, options) => {
+  const followers = await Follow.paginate({ ...filter }, { ...options });
+  return followers;
+};
+
 module.exports = {
   createUser,
   getUserByUsername,
@@ -210,4 +215,5 @@ module.exports = {
   deleteUserById,
   followUser,
   unfollowUser,
+  getUsersFollowers,
 };
