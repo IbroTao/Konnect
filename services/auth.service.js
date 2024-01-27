@@ -14,7 +14,16 @@ const loginWithEmailAndPassword = async (email, password) => {
     throw new ApiError(httpStatus.BAD_REQUEST, "account does not exist");
   if (!user.isEmailVerified)
     throw new ApiError(
-      httpStatus.BAD_REQUEST,
+      httpStatus.UNAUTHORIZED,
       "verify email before you can login"
     );
+  if (!user || !(await user.isPasswordMatch(password)))
+    throw new ApiError(httpStatus.BAD_REQUEST, "password is not correct");
+  user.status = "online";
+  await user.save();
+  return user;
+};
+
+module.exports = {
+  loginWithEmailAndPassword,
 };
