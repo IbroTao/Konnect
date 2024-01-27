@@ -18,3 +18,19 @@ const createUser = async (userBody) => {
   if ((await isUsernameTaken(userBody.username)) === "available")
     return User.create({ ...userBody });
 };
+
+const getUserByUsername = async (username) => {
+  const user = await User.findOne({ username }).select([
+    "name",
+    "username",
+    "email",
+    "avatar",
+    "accountType",
+    "location",
+    "bio",
+    "gender",
+    "totalFollowers",
+    "totalFollowings",
+  ]);
+  return user;
+};
