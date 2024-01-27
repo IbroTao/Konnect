@@ -240,10 +240,17 @@ const deleteAccount = async (data) => {
   return deleteAccount.create(data);
 };
 
+const comparePassword = async (password, userId) => {
+  const user = await getUserById(userId);
+  if (!user) throw new ApiError(httpStatus.NOT_FOUND, "user not found");
+  return user.isPasswordMatch(password);
+};
+
 module.exports = {
   createUser,
   getUserByUsername,
   queryUsers,
+  comparePassword,
   toggleMatureContent,
   toggleDirectMessaging,
   deleteAccount,
