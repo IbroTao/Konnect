@@ -6,3 +6,15 @@ const Token = require("../models/token.model");
 const ApiError = require("../utils/ApiError");
 const { User } = require("../models");
 const { uniqueFiveDigits } = require("../utils/generateFiveDigits");
+const { defaultEmailSender } = require("./email.service");
+
+const loginWithEmailAndPassword = async (email, password) => {
+  const user = await userService.getUserByEmail(email);
+  if (!user)
+    throw new ApiError(httpStatus.BAD_REQUEST, "account does not exist");
+  if (!user.isEmailVerified)
+    throw new ApiError(
+      httpStatus.BAD_REQUEST,
+      "verify email before you can login"
+    );
+};
