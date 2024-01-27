@@ -16,6 +16,11 @@ const MESSAGES = {
   CREATED: "resource created",
   DELETED: "resource deleted",
   DELETE_FAILED: "cannot delete resource",
+  UPDATE_FAILED: "failed to update resource",
+  SUCCESS: "successful request",
+  FAILURE: "failed request",
+  FOLLOWED: "successfully followed user",
+  UNFOLLOWED: "successfully unfollowed user",
 };
 
 module.exports = {
