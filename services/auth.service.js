@@ -24,6 +24,17 @@ const loginWithEmailAndPassword = async (email, password) => {
   return user;
 };
 
+const logout = async (refreshToken) => {
+  const refreshTokenDoc = await Token.findOne({
+    token: refreshToken,
+    type: tokenTypes.REFRESH,
+    blacklisted: false,
+  });
+  if (!refreshTokenDoc) throw new ApiError(httpStatus.NOT_FOUND, "not found");
+  await refreshTokenDoc.remove();
+};
+
 module.exports = {
   loginWithEmailAndPassword,
+  logout,
 };
