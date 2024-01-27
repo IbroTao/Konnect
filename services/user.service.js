@@ -208,6 +208,10 @@ const isUserFollowing = async (userId, currentUserId) => {
   }).lean();
 };
 
+const getAllFollowers = async (userId) => {
+  return Follow.find({ folllowedUser: userId }).lean();
+};
+
 module.exports = {
   createUser,
   getUserByUsername,
@@ -223,4 +227,5 @@ module.exports = {
   unfollowUser,
   getUsersFollowers,
   isUserFollowing,
+  getAllFollowers,
 };
