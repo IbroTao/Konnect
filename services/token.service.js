@@ -6,3 +6,22 @@ const { Token } = require("../models");
 const userService = require("../services/user.service");
 const ApiError = require("../utils/ApiError");
 const { tokenTypes } = require("../configs/tokenTypes");
+
+const generateToken = async (
+  userId,
+  expires,
+  type,
+  secret = config.jwt.secret
+) => {
+  const payload = {
+    sub: userId,
+    iat: moment().unix(),
+    exp: expires.unix(),
+    type,
+  };
+  return jwt.sign(payload, secret);
+};
+
+module.exports = {
+  generateToken,
+};
