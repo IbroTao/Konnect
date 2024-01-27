@@ -65,3 +65,20 @@ const sendFiveDigitsForVerification = async (to) => {
     console.log(error);
   }
 };
+
+const defaultEmailSender = (to, subject, payload) => {
+  const { name, digits, link } = payload;
+  let html;
+
+  switch (subject) {
+    case "Verify Your Account":
+      html = verifyAccountViaDigitsTemplate({ name, digits, link });
+      break;
+    case "Password Reset":
+      html = forgetPasswordTemplate({ name, digits, link });
+      break;
+    case "Password Updated":
+      html = updatedPasswordTemplate({ name, digits, link });
+      break;
+  }
+};
