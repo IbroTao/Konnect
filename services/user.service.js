@@ -70,6 +70,14 @@ const queryUsers = async (
   return users;
 };
 
+const getUserById = async (id) => {
+  return User.findById(id);
+};
+
+const returnUserData = async (id) => {
+  return User.findById(id).select(["-password", "-name", "-updatedAt"]);
+};
+
 module.exports = {
   createUser,
   getUserByUsername,
