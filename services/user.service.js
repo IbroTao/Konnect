@@ -229,11 +229,24 @@ const toggleDirectMessaging = async (user) => {
   return user.save();
 };
 
+const deleteAccount = async (data) => {
+  const user = await User.findOne({ email: data.email });
+  if (user.id !== data.userId)
+    throw new ApiError(
+      httpStatus.UNAUTHORIZED,
+      "user does not have permission"
+    );
+  await User.remove();
+  return deleteAccount.create(data);
+};
+
 module.exports = {
   createUser,
   getUserByUsername,
   queryUsers,
   toggleMatureContent,
+  toggleDirectMessaging,
+  deleteAccount,
   getUserById,
   returnUserData,
   getUserByEmail,
