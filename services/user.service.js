@@ -122,6 +122,31 @@ const deleteUserById = async (userId) => {
   return user;
 };
 
+const followUser = async (currentUser, userId) => {
+  let user1, user2;
+  user1 = await User.findOneAndUpdate(
+    {
+      _id: userId,
+    },
+    {
+      $inc: { totalFollowers: 1 },
+    },
+    {
+      new: true,
+    }
+  );
+  if (!user1) {
+    throw new Error("could not accept request");
+  }
+
+  user2 = await User.findOneAndUpdate(
+    {
+      _id: currentUser,
+    },
+    {}
+  );
+};
+
 module.exports = {
   createUser,
   getUserByUsername,
@@ -132,4 +157,5 @@ module.exports = {
   updateUserById,
   updateUserByEmail,
   updateUserPrimitively,
+  deleteUserById,
 };
