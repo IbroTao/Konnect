@@ -94,7 +94,7 @@ const updateUserById = async (userId, updateBody) => {
   }
 
   Object.assign(user, updateBody);
-  const newUser = await User.save();
+  const newUser = await user.save();
   return newUser;
 };
 
@@ -109,7 +109,16 @@ const updateUserByEmail = async (email, updateBody) => {
   }
   await isUsernameTaken(updateBody.username);
   Object.assign(user, updateBody);
-  await User.save();
+  await user.save();
+  return user;
+};
+
+const deleteUserById = async (userId) => {
+  const user = await getUserById(userId);
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
+  }
+  await user.remove();
   return user;
 };
 
