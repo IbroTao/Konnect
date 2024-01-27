@@ -143,8 +143,58 @@ const followUser = async (currentUser, userId) => {
     {
       _id: currentUser,
     },
-    {}
+    {
+      $inc: { totalFollowings: 1 },
+    },
+    {
+      new: true,
+    }
   );
+
+  await Follow.create({
+    followedUser: userId,
+    followingUser: currentUser,
+  });
+
+  return { username: user1.username, userId: user2._id };
+};
+
+const unfollowUser = async (currentUser, userId) => {
+  const user1 = await User.updateOne(
+    {
+      _id: userId,
+    },
+    {
+      $inc: { totalFollowers: -1 },
+    },
+    {
+      new: true,
+    }
+  );
+  if (!user1) {
+    throw new Error("could not accept request");
+  }
+
+  const user2 = await User.updateOne(
+    {
+      _id: currentUser,
+    },
+    {
+      $inc: { totalFollowings: -1 },
+    },
+    {
+      new: true,
+    }
+  );
+
+  if (!user2) {
+    throw new Error("could not accept request");
+  }
+
+  await Follow.deleteOne({
+    $and: [{ followedUser: userId }, { followingUser: currentUser }],
+  });
+  return true;
 };
 
 module.exports = {
@@ -158,4 +208,6 @@ module.exports = {
   updateUserByEmail,
   updateUserPrimitively,
   deleteUserById,
+  followUser,
+  unfollowUser,
 };
