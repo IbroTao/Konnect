@@ -11,3 +11,10 @@ const isUsernameTaken = async (username) => {
   }
   return "available";
 };
+
+const createUser = async (userBody) => {
+  if (await User.isEmailTaken(userBody.email))
+    throw new ApiError(httpStatus.BAD_REQUEST);
+  if ((await isUsernameTaken(userBody.username)) === "available")
+    return User.create({ ...userBody });
+};
