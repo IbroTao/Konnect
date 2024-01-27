@@ -22,6 +22,18 @@ const generateToken = async (
   return jwt.sign(payload, secret);
 };
 
+const saveToken = async (token, type, userId, expires, blacklisted = false) => {
+  const tokenDoc = await Token.create({
+    token,
+    user: userId,
+    expires: expires.toDate(),
+    type,
+    blacklisted,
+  });
+  return tokenDoc;
+};
+
 module.exports = {
   generateToken,
+  saveToken,
 };
