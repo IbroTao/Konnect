@@ -24,3 +24,23 @@ const adminPermitter = (permissions) => {
     next();
   };
 };
+
+const ageCheck = (req, res, next) => {
+  const currentDate = new Date();
+  const age = currentDate.getFullYear() - req.user.dob.getFullYear();
+  if (age < 16) {
+    return next(
+      new ApiError(
+        httpStatus.FORBIDDEN,
+        "you cannot access this data due to age restriction"
+      )
+    );
+  }
+  next();
+};
+
+module.exports = {
+  isAdmin,
+  adminPermitter,
+  ageCheck,
+};
