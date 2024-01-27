@@ -78,8 +78,23 @@ const returnUserData = async (id) => {
   return User.findById(id).select(["-password", "-name", "-updatedAt"]);
 };
 
+const getUserByEmail = async (email) => {
+  return User.findOne({ email });
+};
+
+const updatedUserById = async(userId, updateBody) => {
+    const user = await getUserById(userId);
+    if(!user) throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
+    if(updateBody.email && (await User.isEmailTaken(updateBody.email, userId))) {
+        throw new ApiError(httpStatus.BAD_REQUEST, MESSAGES.EMAIL_TAKEN);
+    }
+    if(updatedBody)
+}
 module.exports = {
   createUser,
   getUserByUsername,
   queryUsers,
+  getUserById,
+  returnUserData,
+  getUserByEmail,
 };

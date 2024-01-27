@@ -7,6 +7,7 @@ const MESSAGES = {
   UPDATE_PASSWORD: "password updated",
   CANNOT_SET_PASSWORD: "cannot set user's username and password",
   EMAIL_VERIFIED: "email verified",
+  EMAIL_TAKEN: "email taken",
   CODE_EXPIRED: "either code has expired or something went wrong",
   PASSWORD_NO_MATCH: "password does not match",
   PROVIDE_IMAGE: "please provide a valid image type i.e. png, jpeg or jpg",
