@@ -9,3 +9,18 @@ const isAdmin = (req, res, next) => {
   }
   next();
 };
+
+const adminPermitter = (permissions) => {
+  return (req, res, next) => {
+    const permissionRights = req.user.permissions;
+    if (!permissions.every((value) => permissionRights.includes(value))) {
+      return next(
+        new ApiError(
+          httpStatus.UNAUTHORIZED,
+          "you don't have permission to make this request"
+        )
+      );
+    }
+    next();
+  };
+};
