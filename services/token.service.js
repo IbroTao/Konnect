@@ -86,9 +86,48 @@ const generateAuthTokens = async (user) => {
   };
 };
 
+const generateResetPasswordToken = async (email) => {
+  const user = await userService.getUserByEmail(email);
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, "No user found with this email");
+  }
+  const expires = moment().add(
+    config.jwt.resetPasswordExpirationMinutes,
+    "minutes"
+  );
+  const resetPasswordToken = generateToken(
+    user.id,
+    expires,
+    tokenTypes.RESET_PASSWORD
+  );
+  await saveToken(
+    resetPasswordToken,
+    user.id,
+    expires,
+    tokenTypes.RESET_PASSWORD
+  );
+  return resetPasswordToken;
+};
+
+const generateVerifyEmailToken = async (email) => {
+  const expires = moment().add(
+    config.jwt.verifyEmailExpirationMinutes,
+    "minutes"
+  );
+  const verifyEmailToken = generateToken(
+    user.id,
+    expires,
+    tokenTypes.VERIFY_EMAIL
+  );
+  await saveToken(verifyEmailToken, user.id, expires, tokenTypes.VERIFY_EMAIL);
+  return verifyEmailToken;
+};
+
 module.exports = {
   generateToken,
   saveToken,
   verifyToken,
   generateAuthTokens,
+  generateResetPasswordToken,
+  generateVerifyEmailToken,
 };
