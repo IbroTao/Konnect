@@ -23,4 +23,16 @@ const validateAccount = async (req, res, next) => {
       ApiError(httpStatus.UNAUTHORIZED, "provide a valid bearer token")
     );
   }
+  try {
+    const payload = jwt.verify(tokenJWT[1], config.jwt.secret);
+    const user = await userService.returnUserData(payload.sub);
+    if (!user.isEmailVerified)
+      return next(ApiError(httpStatus.UNAUTHORIZED, "verify email first"));
+    req.user = user;
+    next();
+  } catch (e) {
+    next(ApiError(httpStatus.SERVICE_UNAVAILABLE, e.message));
+  }
 };
+
+module.exports = validateAccount;
