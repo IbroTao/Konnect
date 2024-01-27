@@ -212,6 +212,11 @@ const getAllFollowers = async (userId) => {
   return Follow.find({ folllowedUser: userId }).lean();
 };
 
+const getUsersFollowing = async (filter, options) => {
+  const following = await Follow.paginate({ ...filter }, { ...options });
+  return following;
+};
+
 module.exports = {
   createUser,
   getUserByUsername,
@@ -228,4 +233,5 @@ module.exports = {
   getUsersFollowers,
   isUserFollowing,
   getAllFollowers,
+  getUsersFollowing,
 };
