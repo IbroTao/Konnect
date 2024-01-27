@@ -223,6 +223,12 @@ const toggleMatureContent = async (user) => {
   return user.save();
 };
 
+const toggleDirectMessaging = async (user) => {
+  const directMessaging = user.allowDirectMessaging;
+  user.allowDirectMessaging = !directMessaging;
+  return user.save();
+};
+
 module.exports = {
   createUser,
   getUserByUsername,
