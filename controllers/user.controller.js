@@ -61,6 +61,16 @@ const deleteUser = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json({ message: MESSAGES.DELETED });
 });
 
+const updateProfile = catchAsync(async (req, res) => {
+  const user = await userService.updateUserById(req.params.userId, req.body);
+  if (!user) throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
+  res.status(httpStatus.OK).json({
+    _id: user._id,
+    username: user.username,
+    updatedAt: user.updatedAt,
+  });
+});
+
 module.exports = {
   comparePassword,
   getUsers,
@@ -68,4 +78,5 @@ module.exports = {
   getUserByUsername,
   updateUser,
   deleteUser,
+  updateProfile,
 };
