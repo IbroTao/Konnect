@@ -50,7 +50,37 @@ const getMostPopulatedGroups = async (userId, { limit, page }) => {
   return groups;
 };
 
+const getMostLikedPosts = async (limit, page, dob) => {
+  const options = {
+    lean: true,
+    customLabels: myCustomLabels,
+  };
+
+  let filter = {};
+
+  const age = new Date().getFullYear() - dob.getFullYear();
+  if (age < 16) {
+    filter = { mature: false };
+  }
+
+  const posts = await Book.paginate(filter, {
+    page,
+    sort: { likes: -1 },
+    ...(limit ? { limit } : { limit: 10 }),
+    select: ["poster", "caption", "likes"],
+    ...options,
+    populate: [
+      {
+        path: "author",
+        select: "name username",
+      },
+    ],
+  });
+  return posts;
+};
+
 module.exports = {
   getMostFollowedUsers,
   getMostPopulatedGroups,
+  getMostLikedPosts,
 };
