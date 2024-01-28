@@ -102,7 +102,18 @@ const isUserFollowing = catchAsync(async (req, res) => {
     req.params.userId,
     req.user._id
   );
-  if (!result) throw new ApiError();
+  if (!result)
+    throw new ApiError(httpStatus.NOT_FOUND, "you are not following this user");
+  res.status(httpStatus.OK).json({ message: "following" });
+});
+
+const unfollowUser = catchAsync(async (req, res) => {
+  const result = await userService.unfollowUser(
+    req.user._id,
+    req.params.userId
+  );
+  if (!result) throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, result);
+  res.status(httpStatus.OK).json({ message: MESSAGES.UNFOLLOWED });
 });
 
 module.exports = {
@@ -115,4 +126,6 @@ module.exports = {
   updateProfile,
   updateAvatar,
   followUser,
+  unfollowUser,
+  isUserFollowing,
 };
