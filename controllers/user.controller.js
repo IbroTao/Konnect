@@ -3,7 +3,12 @@ const pick = require("../utils/pick");
 const ApiError = require("../utils/ApiError");
 const catchAsync = require("../utils/catchAsync");
 const { uploadSingle } = require("../libs/cloudinary");
-const { userService, userFeed, notificationInfo } = require("../services");
+const {
+  userService,
+  userFeed,
+  notificationInfo,
+  postService,
+} = require("../services");
 const { MESSAGES } = require("../constants/responseMessages");
 const { notificationQueue } = require("../schemas/notificationQueue");
 const otherConstants = require("../constants/others");
@@ -117,16 +122,26 @@ const unfollowUser = catchAsync(async (req, res) => {
 });
 
 const getUserPosts = catchAsync(async (req, res) => {
-  const result = await userService.getUserPosts(req.user._id);
+  const result = await postService.getUserPosts(req.user._id);
   if (result.no === 0)
     throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.RESOURCE_MISSING);
   res.status(httpStatus.OK).json(result);
 });
 
+const getPostsByUserId = catchAsync(async (req, res) => {
+  const result = await postService.getUserPosts(req.params.postId);
+  if (result.no === 0)
+    throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.RESOURCE_MISSING);
+  res.status(httpStatus.OK).json(result);
+});
+
+const getUserFollowers = catchAsync(async (req, res) => {});
+
 module.exports = {
   comparePassword,
   getUsers,
   getUser,
+  getPostsByUserId,
   getUserByUsername,
   updateUser,
   deleteUser,
