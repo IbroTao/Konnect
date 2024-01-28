@@ -6,4 +6,15 @@ const getMostFollowedUsers = async (userId, { limit, page }) => {
     lean: true,
     customLabels: myCustomLabels,
   };
+  const followers = await User.paginate(
+    {
+      _id: { $ne: userId },
+    },
+    {
+      page,
+      sort: { totalFollowers: -1 },
+      ...(limit ? { limit } : { limit: 10 }),
+      select: ["name", "username", "avatar"],
+    }
+  );
 };
