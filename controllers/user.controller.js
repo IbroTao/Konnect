@@ -71,6 +71,19 @@ const updateProfile = catchAsync(async (req, res) => {
   });
 });
 
+const updateAvatar = catchAsync(async (req, res) => {
+  if (!req.file)
+    throw new ApiError(httpStatus.BAD_REQUEST, MESSAGES.PROVIDE_IMAGE);
+  const { publicId, url } = await uploadSingle(req.file.path);
+
+  req.user.avatar = {
+    publicId,
+    url,
+  };
+  await user.save();
+  res.status(httpStatus.OK).json({ message: MESSAGES.SUCCESS });
+});
+
 module.exports = {
   comparePassword,
   getUsers,
@@ -79,4 +92,5 @@ module.exports = {
   updateUser,
   deleteUser,
   updateProfile,
+  updateAvatar,
 };
