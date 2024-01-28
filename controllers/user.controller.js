@@ -5,6 +5,7 @@ const catchAsync = require("../utils/catchAsync");
 const { uploadSingle } = require("../libs/cloudinary");
 const { userService, userFeed, notificationInfo } = require("../services");
 const { MESSAGES } = require("../constants/responseMessages");
+const { notificationQueue } = require("../schemas/notificationQueue");
 const otherConstants = require("../constants/others");
 
 const comparePassword = catchAsync(async (req, res) => {
@@ -82,6 +83,16 @@ const updateAvatar = catchAsync(async (req, res) => {
   };
   await user.save();
   res.status(httpStatus.OK).json({ message: MESSAGES.SUCCESS });
+});
+
+const followUser = catchAsync(async (req, res) => {
+  const result = await userService.followUser(req.user._id, req.params.userId);
+  if (result === false)
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, result);
+
+  notificationQueue.msg = `${result.username} now follows you`;
+  notificationQueue.link = `http://localhost:9090/konnect/users/${result.username}`;
+  notificationQueue.type = "follow";
 });
 
 module.exports = {
