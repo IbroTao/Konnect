@@ -13,9 +13,23 @@ const uploadSingle = async(filePath) => {
 
 const deleteSingle = async(fileUrl) => {
     return await cloud.v2.uploader.destroy(fileUrl);
-}
+};
+
+const uploadMany = async(filePaths) => {
+    const result = Promise.all(filePaths.map((path) => uploadSingle(path)));
+
+    if(!result) throw new Error('cannot upload multiple files');
+
+    return result;
+};
+
+const deleteMany = async(fileUrls) => {
+    return await cloud.v2.api.delete_resources(fileUrls)
+};
 
 module.exports = {
     uploadSingle,
-    deleteSingle
+    deleteSingle,
+    uploadMany,
+    deleteMany
 }
