@@ -43,9 +43,19 @@ const getUserByUsername = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json(user);
 });
 
+const updateUser = catchAsync(async (req, res) => {
+  const user = await userService.updateUserById(req.params.userId, req.body);
+  res.status(httpStatus.OK).json({
+    _id: user._id,
+    username: user.username,
+    updatedAt: user.updatedAt,
+  });
+});
+
 module.exports = {
   comparePassword,
   getUsers,
   getUser,
   getUserByUsername,
+  updateUser,
 };
