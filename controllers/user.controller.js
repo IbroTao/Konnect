@@ -93,6 +93,8 @@ const followUser = catchAsync(async (req, res) => {
   notificationQueue.msg = `${result.username} now follows you`;
   notificationQueue.link = `http://localhost:9090/konnect/users/${result.username}`;
   notificationQueue.type = "follow";
+  notificationQueue.timestamp = new Date().toISOString();
+  notificationQueue.recipientId = req.params.userId;
 });
 
 module.exports = {
