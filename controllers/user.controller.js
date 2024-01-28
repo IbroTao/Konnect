@@ -116,6 +116,13 @@ const unfollowUser = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json({ message: MESSAGES.UNFOLLOWED });
 });
 
+const getUserPosts = catchAsync(async (req, res) => {
+  const result = await userService.getUserPosts(req.user._id);
+  if (result.no === 0)
+    throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.RESOURCE_MISSING);
+  res.status(httpStatus.OK).json(result);
+});
+
 module.exports = {
   comparePassword,
   getUsers,
@@ -128,4 +135,5 @@ module.exports = {
   followUser,
   unfollowUser,
   isUserFollowing,
+  getUserPosts,
 };
