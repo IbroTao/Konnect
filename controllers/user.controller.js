@@ -135,13 +135,21 @@ const getPostsByUserId = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json(result);
 });
 
-const getUserFollowers = catchAsync(async (req, res) => {});
+const getUserFollowers = catchAsync(async (req, res) => {
+  const filter = { followedUser: req.params.userId };
+  const options = pick(req.query, ["limit", "page"]);
+  options.populate = { path: "followingUser", select: "avatar name username" };
+  options.select = ["-followedUser"];
+  const followers = await userService.getUsersFollowers(filter, options);
+  res.status(httpStatus.OK).json(followers);
+});
 
 module.exports = {
   comparePassword,
   getUsers,
   getUser,
   getPostsByUserId,
+  getUserFollowers,
   getUserByUsername,
   updateUser,
   deleteUser,
