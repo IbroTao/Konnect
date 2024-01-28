@@ -11,6 +11,11 @@ const uploadSingle = async(filePath) => {
     return {url: secure_url, publicId: public_id}
 };
 
+const deleteSingle = async(fileUrl) => {
+    return await cloud.v2.uploader.destroy(fileUrl);
+}
+
 module.exports = {
-    uploadSingle
+    uploadSingle,
+    deleteSingle
 }
