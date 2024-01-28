@@ -52,10 +52,20 @@ const updateUser = catchAsync(async (req, res) => {
   });
 });
 
+const deleteUser = catchAsync(async (req, res) => {
+  const user = await userService.deleteAccount({
+    userId: req.user.id,
+    email: req.user.email,
+    reason: req.body.reason,
+  });
+  res.status(httpStatus.OK).json({ message: MESSAGES.DELETED });
+});
+
 module.exports = {
   comparePassword,
   getUsers,
   getUser,
   getUserByUsername,
   updateUser,
+  deleteUser,
 };
