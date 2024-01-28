@@ -97,6 +97,14 @@ const followUser = catchAsync(async (req, res) => {
   notificationQueue.recipientId = req.params.userId;
 });
 
+const isUserFollowing = catchAsync(async (req, res) => {
+  const result = await userService.isUserFollowing(
+    req.params.userId,
+    req.user._id
+  );
+  if (!result) throw new ApiError();
+});
+
 module.exports = {
   comparePassword,
   getUsers,
@@ -106,4 +114,5 @@ module.exports = {
   deleteUser,
   updateProfile,
   updateAvatar,
+  followUser,
 };
