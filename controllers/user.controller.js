@@ -158,6 +158,11 @@ const toggleMatureContents = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json({ message: MESSAGES.UPDATED });
 });
 
+const toggleDirectMessaging = catchAsync(async (req, res) => {
+  await userService.toggleDirectMessaging(req.user);
+  res.status(httpStatus.OK).json({ message: MESSAGES.UPDATED });
+});
+
 module.exports = {
   comparePassword,
   getUsers,
@@ -169,6 +174,7 @@ module.exports = {
   updateUser,
   deleteUser,
   toggleMatureContents,
+  toggleDirectMessaging,
   updateProfile,
   updateAvatar,
   followUser,
