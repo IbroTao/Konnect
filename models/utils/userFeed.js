@@ -14,7 +14,22 @@ const getMostFollowedUsers = async (userId, { limit, page }) => {
       page,
       sort: { totalFollowers: -1 },
       ...(limit ? { limit } : { limit: 10 }),
-      select: ["name", "username", "avatar"],
+      select: [
+        "name",
+        "username",
+        "avatar",
+        "totalFollowers",
+        "totalFollowings",
+        "bio",
+        "location",
+        "status",
+      ],
+      ...options,
     }
   );
+  return followers;
+};
+
+module.exports = {
+  getMostFollowedUsers,
 };
