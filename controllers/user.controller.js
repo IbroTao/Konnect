@@ -163,6 +163,14 @@ const toggleDirectMessaging = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json({ message: MESSAGES.UPDATED });
 });
 
+const getLatestPosts = catchAsync(async (req, res) => {
+  const { limit, page } = req.query;
+  const posts = await userFeed.getMostLikedPosts(limit, page, req.user.dob);
+  if (!posts)
+    throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.RESOURCE_MISSING);
+  res.status(httpStatus.OK).json(posts);
+});
+
 module.exports = {
   comparePassword,
   getUsers,
@@ -173,6 +181,7 @@ module.exports = {
   getUserByUsername,
   updateUser,
   deleteUser,
+  getLatestPosts,
   toggleMatureContents,
   toggleDirectMessaging,
   updateProfile,
