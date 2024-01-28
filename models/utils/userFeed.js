@@ -79,6 +79,26 @@ const getMostLikedPosts = async (limit, page, dob) => {
   return posts;
 };
 
+const getNewestPosts = async (limit, dob, page) => {
+  const options = {
+    lean: true,
+    customLabels: myCustomLabels,
+  };
+
+  let filter = {};
+
+  const age = new Date().getFullYear() - dob.getFullYear();
+  if (age < 16) {
+    filter = { mature: false };
+  }
+
+  const posts = await Post.paginate(filter, {
+    page,
+    sort: { likes: -1 },
+    ...(limit ? { limit } : { limit: 10 }),
+  });
+};
+
 module.exports = {
   getMostFollowedUsers,
   getMostPopulatedGroups,
