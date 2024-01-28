@@ -3,7 +3,7 @@ const notificationQueue = {
   timestamp: new Date().toISOString(),
   recipientId: "",
   type: "",
-  limk: "",
+  link: "",
 };
 
 module.exports = { notificationQueue };
