@@ -26,7 +26,15 @@ const getUsers = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json(result);
 });
 
+const getUser = catchAsync(async (req, res) => {
+  const user = await userService.getUserById(req.params.userId);
+  if (!user) throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
+  user.password = "";
+  res.status(httpStatus.OK).json(user);
+});
+
 module.exports = {
   comparePassword,
   getUsers,
+  getUser,
 };
