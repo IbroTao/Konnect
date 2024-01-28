@@ -33,8 +33,19 @@ const getUser = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json(user);
 });
 
+const getUserByUsername = catchAsync(async (req, res) => {
+  let { username } = req.params;
+  if (username.at(0) !== "@") {
+    username = `@${username}`;
+  }
+  const user = await userService.getUserByUsername(username);
+  if (!user) throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
+  res.status(httpStatus.OK).json(user);
+});
+
 module.exports = {
   comparePassword,
   getUsers,
   getUser,
+  getUserByUsername,
 };
