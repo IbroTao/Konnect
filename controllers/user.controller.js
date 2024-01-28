@@ -19,6 +19,14 @@ const comparePassword = catchAsync(async (req, res) => {
   res.status(204).json();
 });
 
+const getUsers = catchAsync(async (req, res) => {
+  const { search } = req.query;
+  const filter = pick(req.query, ["role"]);
+  const result = await userService.queryUsers({ search, filter }, req.query);
+  res.status(httpStatus.OK).json(result);
+});
+
 module.exports = {
   comparePassword,
+  getUsers,
 };
