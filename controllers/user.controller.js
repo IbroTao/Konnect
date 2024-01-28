@@ -153,6 +153,11 @@ const getUserFollowing = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json(following);
 });
 
+const toggleMatureContents = catchAsync(async (req, res) => {
+  await userService.toggleMatureContent(req.user);
+  res.status(httpStatus.OK).json({ message: MESSAGES.UPDATED });
+});
+
 module.exports = {
   comparePassword,
   getUsers,
@@ -163,6 +168,7 @@ module.exports = {
   getUserByUsername,
   updateUser,
   deleteUser,
+  toggleMatureContents,
   updateProfile,
   updateAvatar,
   followUser,
