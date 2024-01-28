@@ -98,7 +98,12 @@ const getNewestPosts = async (limit, dob, page) => {
     ...(limit ? { limit } : { limit: 10 }),
     select: ["poster", "caption", "likes"],
     ...options,
-    populate: [(path: "poster"), (select: "user username")],
+    populate: [
+      {
+        path: "poster",
+        select: "user username",
+      },
+    ],
   });
   return posts;
 };
@@ -107,4 +112,5 @@ module.exports = {
   getMostFollowedUsers,
   getMostPopulatedGroups,
   getMostLikedPosts,
+  getNewestPosts,
 };
