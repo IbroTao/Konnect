@@ -73,7 +73,7 @@ const verifyEmail = async (verifyEmailToken) => {
   }
 };
 
-const verificationCode = async (req, user) => {
+const verificationCode = async (user) => {
   const digits = uniqueFiveDigits();
   const link = `https://konnect.com`;
 
@@ -83,6 +83,8 @@ const verificationCode = async (req, user) => {
     name: user.name,
   });
 };
+
+const verifyAccount = async (digits) => {};
 
 module.exports = {
   loginWithEmailAndPassword,
