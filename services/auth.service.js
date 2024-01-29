@@ -49,8 +49,18 @@ const refreshAuth = async (refreshToken) => {
   }
 };
 
+const forgetPassword = async (email) => {
+  const user = await userService.getUserByEmail(email);
+  if (user.password === "none")
+    throw new ApiError(httpStatus.BAD_REQUEST, "provide your password");
+  if (!user) throw new ApiError(httpStatus.NOT_FOUND, "user does not exist");
+  const digits = uniqueFiveDigits();
+  return { user: user.name, digits };
+};
+
 module.exports = {
   loginWithEmailAndPassword,
   logout,
   refreshAuth,
+  forgetPassword,
 };
