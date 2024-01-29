@@ -58,9 +58,25 @@ const forgetPassword = async (email) => {
   return { user: user.name, digits };
 };
 
+const verifyEmail = async (verifyEmailToken) => {
+  try {
+    const verifyEmailTokenDoc = await tokenService.verifyToken(
+      verifyToken,
+      tokenTypes.VERIFY_EMAIL
+    );
+    const user = await userService.getUserById(verifyEmailTokenDoc.user);
+    if (!user) throw new ApiError(httpStatus.NOT_FOUND, "user not found");
+    await Token.deleteMany({ user: user.id, type: tokenTypes.VERIFY_EMAIL });
+    await userService.updateUserById(user.id, { isEmailVerified: true });
+  } catch (error) {
+    throw new ApiError(httpStatus.UNAUTHORIZED, "Email verification failed");
+  }
+};
+
 module.exports = {
   loginWithEmailAndPassword,
   logout,
   refreshAuth,
   forgetPassword,
+  verifyEmail,
 };
