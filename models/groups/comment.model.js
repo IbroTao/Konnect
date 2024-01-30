@@ -21,4 +21,26 @@ const schema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: modelNames.group_posts,
   },
+  replyCount: {
+    type: Number,
+    default: 0,
+  },
+  totalLikes: {
+    type: Number,
+    default: 0,
+  },
+  likes: [
+    {
+      userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: modelNames.user,
+      },
+    },
+  ],
 });
+
+schema.plugin(mongoosePaginate);
+schema.paginate(toJSON);
+
+const groupComment = mongoose.model(modelNames.group_comment, schema);
+module.exports = { groupComment };
