@@ -92,5 +92,5 @@ module.exports = {
   refreshAuth,
   forgetPassword,
   verifyEmail,
-  getVerificationCode,
+  verificationCode,
 };

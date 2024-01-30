@@ -16,7 +16,7 @@ const register = catchAsync(async (req, res) => {
     ...req.body,
     username: `@${username}`,
   });
-  await authService.getVerificationCode(req, user);
+  await authService.verificationCodeerificationCode(req, user);
   res.status(httpStatus.CREATED).json({ user });
 });
 
