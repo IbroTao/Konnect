@@ -40,4 +40,15 @@ const logout = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
-module.exports = { register, resendVerificationCode, login, logout };
+const refreshTokens = catchAsync(async (req, res) => {
+  const tokens = await authService.refreshAuth(req.body.refreshToken);
+  res.status(httpStatus.OK).json({ ...tokens });
+});
+
+module.exports = {
+  register,
+  resendVerificationCode,
+  login,
+  logout,
+  refreshTokens,
+};
