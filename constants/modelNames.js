@@ -7,6 +7,7 @@ const modelNames = {
   post: "posts",
   post_comment: "post-comments",
   group: "groups",
+  group_posts: "group_posts",
   group_comment: "groups_comments",
   suspended_groups: "suspended-groups",
   follower: "follows",
