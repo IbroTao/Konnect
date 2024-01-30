@@ -4,7 +4,7 @@ const app = express();
 
 const { mongoConnection } = require("../configs/mongo");
 const config = require("../configs/config");
-const { errorConverter } = require("../middlewares/errorHandler");
+const { errorConverter, errorHandler } = require("../middlewares/errorHandler");
 const authRouter = require("../routes/auth.routes");
 
 app.use(express.json());
@@ -13,6 +13,7 @@ app.use(express.urlencoded());
 app.use("/konnect/auth", authRouter);
 
 app.use(errorConverter);
+app.use(errorHandler);
 
 const port = process.env.PORT;
 

@@ -16,8 +16,16 @@ const register = catchAsync(async (req, res) => {
     ...req.body,
     username: `@${username}`,
   });
-  await authService.verificationCodeerificationCode(req, user);
-  res.status(httpStatus.CREATED).json({ user });
+  const verifyAcc = await authService.getVerificationCode(req, user);
+  console.log(verifyAcc);
+  res.status(httpStatus.CREATED).json({ user, verifyAcc });
 });
 
-module.exports = { register };
+const resendVerificationCode = catchAsync(async (req, res) => {
+  const user = await userService.getUserByEmail(req.body.email);
+  if (!user) throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
+  await authService.getVerificationCode(req, user);
+  res.status(httpStatus.OK).json({ message: MESSAGES.SEND_VERIFICATION_CODE });
+});
+
+module.exports = { register, resendVerificationCode };
