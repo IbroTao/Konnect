@@ -45,10 +45,22 @@ const refreshTokens = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json({ ...tokens });
 });
 
+const forgotPassword = catchAsync(async (req, res) => {
+  const { user, digits } = await authService.forgetPassword(req.body.email);
+  const link = `https://konnect.com`;
+  await defaultEmailSender(req.body.email, "Password Reset", {
+    name: user,
+    link,
+    digits,
+  });
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
 module.exports = {
   register,
   resendVerificationCode,
   login,
   logout,
   refreshTokens,
+  forgotPassword,
 };
