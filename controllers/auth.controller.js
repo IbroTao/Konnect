@@ -28,4 +28,11 @@ const resendVerificationCode = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json({ message: MESSAGES.SEND_VERIFICATION_CODE });
 });
 
-module.exports = { register, resendVerificationCode };
+const login = catchAsync(async (req, res) => {
+  const { email, password } = req.body;
+  const user = await authService.loginWithEmailAndPassword(email, password);
+  const tokens = await tokenService.generateAuthTokens(user);
+  res.status(httpStatus.OK).json({ user, tokens });
+});
+
+module.exports = { register, resendVerificationCode, login };
