@@ -78,8 +78,8 @@ const getVerificationCode = async (user) => {
   const link = `https://konnect.com`;
 
   return defaultEmailSender(user.email, "Verify Your Account", {
-    digits,
-    link,
+    digits: digits,
+    link: link,
     name: user.name,
   });
 };
