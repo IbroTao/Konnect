@@ -19,3 +19,60 @@ const memberSchema = new mongoose.Schema(
     _id: false,
   }
 );
+
+const schema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true,
+      unique: true,
+      minlength: 5,
+      maxlength: 40,
+    },
+    info: {
+      type: String,
+      minlength: 10,
+      maxlength: 400,
+      required: true,
+    },
+    type: {
+      type: String,
+      enum: ["public", "private"],
+    },
+    rules: {
+      type: String,
+      required: true,
+    },
+    adminsCount: {
+      type: Number,
+      default: 0,
+    },
+    admins: [memberSchema],
+    membersCount: {
+      type: Number,
+      default: 0,
+    },
+    members: [memberSchema],
+    isSuspended: {
+      type: Boolean,
+      default: false,
+    },
+    coverImage: {
+      url: {
+        type: String,
+      },
+      publicId: {
+        type: String,
+      },
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
+schema.plugin(mongoosePaginate);
+schema.plugin(toJSON);
+
+const Group = mongoose.model(modelNames.group, schema);
+module.exports = { Group };
