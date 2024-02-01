@@ -5,7 +5,7 @@ const toJSON = require("../plugins/toJSON.plugin");
 const httpStatus = require("http-status");
 const ApiError = require("../../utils/ApiError");
 const { toJSON } = require("../plugins");
-const DateCreator = require('../../utils/dateCreator')
+const DateCreator = require("../../utils/dateCreator");
 
 const schema = new mongoose.Schema(
   {
@@ -35,9 +35,15 @@ const schema = new mongoose.Schema(
 schema.plugin(mongoosePaginate);
 schema.plugin(toJSON);
 
-schema.pre('save', async function (next) {
+schema.pre("save", async function (next) {
   const user = this;
-  if(user.duration === '24hours') {
-    const releaseDate = DateCreator.
+  if (user.duration === "24hours") {
+    const releaseDate = DateCreator.add24hours(new Date());
+    user.releaseDate = releaseDate;
+  } else if (user.duration === "7days") {
+    const releaseDate = DateCreator.add7days(new Date());
+    user.releaseDate = releaseDate;
+  } else if (user.duration === "1month") {
+    const releaseDate = DateCreator.add1month(new Date());
   }
-})
+});

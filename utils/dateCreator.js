@@ -11,7 +11,7 @@ class DateCreator {
     return date.setDays(date.getDays() + 14);
   }
 
-  static add1months(date) {
+  static add1month(date) {
     return date.setMonth(date.getMonth() + 1);
   }
 
