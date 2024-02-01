@@ -39,7 +39,7 @@ const verifyToken = async (token, type) => {
     token,
     type,
     user: payload.sub,
-    blcklisted: false,
+    blacklisted: false,
   });
   if (!tokenDoc) {
     throw new Error("Token not found");
@@ -109,7 +109,7 @@ const generateResetPasswordToken = async (email) => {
   return resetPasswordToken;
 };
 
-const generateVerifyEmailToken = async (email) => {
+const generateVerifyEmailToken = async (user) => {
   const expires = moment().add(
     config.jwt.verifyEmailExpirationMinutes,
     "minutes"
