@@ -28,7 +28,7 @@ const register = catchAsync(async (req, res) => {
 const resendVerificationCode = catchAsync(async (req, res) => {
   const user = await userService.getUserByEmail(req.body.email);
   if (!user) throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
-  await authService.getVerificationCode(req, user);
+  await emailService.getVerificationCode({req.body.name, email});
   res.status(httpStatus.OK).json({ message: MESSAGES.SEND_VERIFICATION_CODE });
 });
 
@@ -52,7 +52,8 @@ const refreshTokens = catchAsync(async (req, res) => {
 const forgotPassword = catchAsync(async (req, res) => {
   const { user, digits } = await authService.forgetPassword(req.body.email);
   const link = `https://konnect.com`;
-  await defaultEmailSender(req.body.email, "Password Reset", {
+
+  defaultEmailSender(req.body.email, "Password Reset", {
     name: user,
     link,
     digits,
@@ -71,7 +72,7 @@ const sendVerificationEmail = catchAsync(async (req, res) => {
   await emailService.sendVerificationEmail({
     name: req.user.name,
     email: req.user.email,
-    verifyEmailToken,
+    token: verifyEmailToken,
   });
 });
 

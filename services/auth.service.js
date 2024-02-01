@@ -5,7 +5,7 @@ const { tokenTypes } = require("../configs/tokenTypes");
 const Token = require("../models/token.model");
 const ApiError = require("../utils/ApiError");
 const { User } = require("../models");
-const { uniqueFiveDigits } = require("../utils/generateFiveDigits");
+const { uniqueFiveDigits } = require("../utils/generateSixDigits");
 const { defaultEmailSender, sendEmail } = require("./email.service");
 
 const loginWithEmailAndPassword = async (email, password) => {

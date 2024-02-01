@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 const config = require("../configs/config");
 const logger = require("../configs/logger");
-const { uniqueFiveDigits } = require("../utils/generateFiveDigits");
+const { uniqueSixDigits } = require("../utils/generateSixDigits");
 const {
   forgetPasswordTemplate,
   updatedPasswordTemplate,
@@ -43,14 +43,14 @@ const sendResetPasswordEmail = async ({ name, token }) => {
 };
 
 const getVerificationCode = async ({ email, name }) => {
-  const digits = uniqueFiveDigits();
+  const digits = uniqueSixDigits();
   const text = `Thanks creating an account with us at Konnect. To continue registration, we send a 5-digits code to you for further verification and authentication.
-  Your 5-digit code is ${digits}`;
+  Your 6-digit code is ${digits}`;
 
   return sendEmail({
     to: email,
     subject: "Account Verification",
-    html: `<h4>Dear</h4> ${text}`,
+    html: `<h4>Dear ${name}</h4> ${text}`,
   });
 };
 
@@ -67,7 +67,7 @@ const sendVerificationEmail = async ({ name, token }) => {
 };
 
 const sendFiveDigitsForVerification = async ({ digits }) => {
-  const digits = uniqueFiveDigits();
+  // const digits = uniqueFiveDigits();
   var mailOptions = {
     from: from,
     to: req.body.email,
