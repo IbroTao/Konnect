@@ -53,6 +53,15 @@ schema.pre("save", async function (next) {
     const releaseDate = DateCreator.add6months(new Date());
     user.releaseDate = releaseDate;
   } else {
-    next(ApiError(httpStatus.INTERNAL_SERVER_ERROR));
+    next(
+      ApiError(
+        httpStatus.INTERNAL_SERVER_ERROR,
+        "duration can only be ['24hours', '7days', '14days', '1month', '6months' ]"
+      )
+    );
   }
+  next();
 });
+
+const suspendedGroups = mongoose.model(modelNames.suspended_groups, schema);
+module.exports = { suspendedGroups };
