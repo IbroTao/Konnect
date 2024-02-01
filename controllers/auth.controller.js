@@ -74,6 +74,12 @@ const sendVerificationEmail = catchAsync(async (req, res) => {
     email: req.user.email,
     token: verifyEmailToken,
   });
+  res.status(httpStatus.NO_CONTENT).send();
+});
+
+const verifyEmail = catchAsync(async (req, res) => {
+  await authService.verifyEmail(req.query.token);
+  res.status(httpStatus.NO_CONTENT).json({ message: MESSAGES.EMAIL_VERIFIED });
 });
 
 module.exports = {
@@ -83,4 +89,5 @@ module.exports = {
   logout,
   refreshTokens,
   forgotPassword,
+  verifyEmail,
 };
