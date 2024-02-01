@@ -13,4 +13,10 @@ router.post(
   authController.register
 );
 
+router.post(
+  "/verify",
+  validate(authValidation.register),
+  authController.sendVerificationEmail
+);
+
 module.exports = router;

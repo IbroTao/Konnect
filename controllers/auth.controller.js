@@ -28,7 +28,7 @@ const register = catchAsync(async (req, res) => {
 const resendVerificationCode = catchAsync(async (req, res) => {
   const user = await userService.getUserByEmail(req.body.email);
   if (!user) throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
-  await emailService.getVerificationCode({req.body.name, email});
+  await emailService.getVerificationCode({ email });
   res.status(httpStatus.OK).json({ message: MESSAGES.SEND_VERIFICATION_CODE });
 });
 
