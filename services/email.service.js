@@ -1,56 +1,77 @@
 const nodemailer = require("nodemailer");
 const config = require("../configs/config");
 const logger = require("../configs/logger");
+const { uniqueFiveDigits } = require("../utils/generateFiveDigits");
 const {
   forgetPasswordTemplate,
   updatedPasswordTemplate,
   verifyAccountViaDigitsTemplate,
 } = require("../utils/convertMjmlToHtml");
 
+const sender = process.env.SMTP_NAME;
 const SMTP_HOST = "smtp.gmail.com";
 const SMTP_PORT = 465;
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  name: SMTP_HOST,
-  host: SMTP_HOST,
-  port: SMTP_PORT,
-  secure: true,
-  auth: {
-    user: "ghostcodert@gmail.com",
-    pass: "vast ffoy hdqi bdqa",
-  },
-  logger: false,
-  debug: true,
-});
 
-const sendEmail = async (to, subject, text) => {
-  const msg = { from: config.email.from, to, subject, html: text };
-  await transporter.sendMail(msg);
+const sendEmail = async ({ to, subject, html }) => {
+  const transporter = nodemailer.createTransport({
+    port: SMTP_PORT,
+    host: SMTP_HOST,
+    auth: {
+      user: sender,
+      pass: process.env.SMTP_PASSWORD,
+    },
+    secure: true,
+  });
+
+  return await transporter.sendMail({
+    from: sender,
+    to,
+    subject,
+    html,
+  });
 };
 
-const sendResetPasswordEmail = async (name, to, token) => {
-  const subject = "Reset Password";
+const sendResetPasswordEmail = async ({ name, token }) => {
   const resetPasswordUrl = `http://localhost:9090/konnect/reset-password?token=${token}`;
-  const text = `Dear ${name}, 
-    To rest your password, click on this link: ${resetPasswordUrl}. If you did not request any password resets, then kindly ignore this email or contact our team for more information.`;
-  await sendEmail(to, subject, text);
+  const text = `To reset your password, click on this link: ${resetPasswordUrl}. If you did not request any password resets, then kindly ignore this email or contact our team for more information.`;
+
+  return sendEmail({
+    to: email,
+    subject: "Reset Password",
+    html: `<h4>Dear, ${name}</h4> ${text}`,
+  });
 };
 
-const sendVerificationEmail = async (name, to, token) => {
-  const subject = "Email Verification";
+const getVerificationCode = async ({ email, name }) => {
+  const digits = uniqueFiveDigits();
+  const text = `Thanks creating an account with us at Konnect. To continue registration, we send a 5-digits code to you for further verification and authentication.
+  Your 5-digit code is ${digits}`;
+
+  return sendEmail({
+    to: email,
+    subject: "Account Verification",
+    html: `<h4>Dear</h4> ${text}`,
+  });
+};
+
+const sendVerificationEmail = async ({ name, token }) => {
   const verificationEmailUrl = `http://localhost:9090/konnect/verify-email?token=${token}`;
-  const text = `Dear ${name},
-    To verify your email, click on this link: ${verificationEmailUrl}
-    If you did not create an account, kindly ignore this email or contact our team for more information`;
+  const text = `To verify your email, click on this link: ${verificationEmailUrl}
+  If you did not create an account, kindly ignore this email or contact our team for more information`;
+
+  return sendEmail({
+    to: email,
+    subject: "Verify Your Account",
+    html: `<h4>Dear ${name}</h4> ${text}`,
+  });
 };
 
-const sendFiveDigitsForVerification = async (to) => {
-  const subject = "Verify Your Account";
-  const from = `ghoscodert@gmail.com`;
+const sendFiveDigitsForVerification = async ({ digits }) => {
+  const digits = uniqueFiveDigits();
   var mailOptions = {
     from: from,
-    to: to,
-    subject: `Verify Your Email`,
+    to: req.body.email,
+    subject: "Verify Your Account",
     html: `<p>oo<p>`,
   };
   try {
@@ -84,10 +105,10 @@ const defaultEmailSender = (to, subject, payload) => {
 };
 
 module.exports = {
-  transporter,
   sendEmail,
   sendResetPasswordEmail,
   sendVerificationEmail,
   sendFiveDigitsForVerification,
   defaultEmailSender,
+  getVerificationCode,
 };
