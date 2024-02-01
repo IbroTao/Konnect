@@ -32,3 +32,11 @@ const schema = new mongoose.Schema(
 
 schema.plugin(mongoosePaginate);
 schema.plugin(toJSON);
+
+schema.pre("save", async function (next) {
+  const user = this;
+  if (user.duration === "24hours") {
+    const releaseDate = DateCreator.add24hours(new Date());
+    user.releaseDate = releaseDate;
+  }
+});
