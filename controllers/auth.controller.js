@@ -11,14 +11,18 @@ const { MESSAGES } = require("../constants/responseMessages");
 const { defaultEmailSender } = require("../services/email.service");
 
 const register = catchAsync(async (req, res) => {
-  const { username } = req.body;
+  const { username, email, name } = req.body;
   const user = await userService.createUser({
     ...req.body,
     username: `@${username}`,
   });
-  const verifyAcc = await authService.getVerificationCode(req, user);
-  console.log(verifyAcc);
-  res.status(httpStatus.CREATED).json({ user, verifyAcc });
+
+  await emailService.getVerificationCode({
+    name,
+    email,
+  });
+
+  res.status(httpStatus.CREATED).json({ user, message: "5 digits code sent" });
 });
 
 const resendVerificationCode = catchAsync(async (req, res) => {
