@@ -7,3 +7,4 @@ module.exports.Group = require("./groups/group.model");
 module.exports.groupPosts = require("./groups/posts.model");
 module.exports.suspendedGroups = require("./groups/suspendedGroups.model");
 module.exports.groupRequest = require("./groups/request.model");
+module.exports.suspendedAccounts = require("./suspendedAccounts");
