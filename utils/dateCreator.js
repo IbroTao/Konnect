@@ -15,5 +15,9 @@ class DateCreator {
     return date.setMonth(date.getMonth() + 1);
   }
 
-  static add6months;
+  static add6months(date) {
+    return date.setMonth(date.getMonth() + 6);
+  }
 }
+
+module.exports = DateCreator;
