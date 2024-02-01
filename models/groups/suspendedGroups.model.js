@@ -43,7 +43,16 @@ schema.pre("save", async function (next) {
   } else if (user.duration === "7days") {
     const releaseDate = DateCreator.add7days(new Date());
     user.releaseDate = releaseDate;
+  } else if (user.duration === "14days") {
+    const releaseDate = DateCreator.add14days(new Date());
+    user.releaseDate = releaseDate;
   } else if (user.duration === "1month") {
     const releaseDate = DateCreator.add1month(new Date());
+    user.releaseDate = releaseDate;
+  } else if (user.duration === "6months") {
+    const releaseDate = DateCreator.add6months(new Date());
+    user.releaseDate = releaseDate;
+  } else {
+    next(ApiError(httpStatus.INTERNAL_SERVER_ERROR));
   }
 });
