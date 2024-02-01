@@ -73,7 +73,7 @@ const sendVerificationEmail = catchAsync(async (req, res) => {
 
 module.exports = {
   register,
-  resendVerificationCode,
+  sendVerificationEmail,
   login,
   logout,
   refreshTokens,

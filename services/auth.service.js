@@ -6,7 +6,7 @@ const Token = require("../models/token.model");
 const ApiError = require("../utils/ApiError");
 const { User } = require("../models");
 const { uniqueFiveDigits } = require("../utils/generateFiveDigits");
-const { defaultEmailSender } = require("./email.service");
+const { defaultEmailSender, sendEmail } = require("./email.service");
 
 const loginWithEmailAndPassword = async (email, password) => {
   const user = await userService.getUserByEmail(email);
@@ -73,22 +73,10 @@ const verifyEmail = async (verifyEmailToken) => {
   }
 };
 
-const getVerificationCode = async (user) => {
-  const digits = uniqueFiveDigits();
-  const link = `https://konnect.com`;
-
-  return defaultEmailSender(user.email, "Verify Your Account", {
-    digits: digits,
-    link: link,
-    name: user.name,
-  });
-};
-
 module.exports = {
   loginWithEmailAndPassword,
   logout,
   refreshAuth,
   forgetPassword,
   verifyEmail,
-  getVerificationCode,
 };
