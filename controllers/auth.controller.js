@@ -62,8 +62,8 @@ const forgotPassword = catchAsync(async (req, res) => {
 });
 
 // const resetPassword = catchAsync(async(req, res) => {
-//   await authService.
-// })
+//    await authService.
+//  })
 
 const sendVerificationEmail = catchAsync(async (req, res) => {
   const verifyEmailToken = await tokenService.generateVerifyEmailToken(
@@ -81,6 +81,9 @@ const verifyEmail = catchAsync(async (req, res) => {
   await authService.verifyEmail(req.query.token);
   res.status(httpStatus.NO_CONTENT).json({ message: MESSAGES.EMAIL_VERIFIED });
 });
+
+// This feature is only used when the user is logged in.
+// const updatePassword
 
 module.exports = {
   register,
