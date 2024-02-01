@@ -5,20 +5,39 @@ const toJSON = require("../plugins/toJSON.plugin");
 const httpStatus = require("http-status");
 const ApiError = require("../../utils/ApiError");
 const { toJSON } = require("../plugins");
+const DateCreator = require('../../utils/dateCreator')
 
-const schema = new mongoose.Schema({
-  groupId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: modelNames.group,
-    required: true,
+const schema = new mongoose.Schema(
+  {
+    groupId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: modelNames.group,
+      required: true,
+    },
+    reason: {
+      type: String,
+      required: true,
+    },
+    duration: {
+      type: String,
+      enum: ["24hours", "7days", "1month", "6months"],
+      default: "24hours",
+    },
+    releaseDate: {
+      type: Date,
+    },
   },
-  reason: {
-    type: String,
-    required: true,
-  },
-  duration: {
-    type: String,
-    enum: ["24hours", "7days", "1month", "6months"],
-    default: "24hours",
-  },
-});
+  {
+    timestamps: true,
+  }
+);
+
+schema.plugin(mongoosePaginate);
+schema.plugin(toJSON);
+
+schema.pre('save', async function (next) {
+  const user = this;
+  if(user.duration === '24hours') {
+    const releaseDate = DateCreator.
+  }
+})
