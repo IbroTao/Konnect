@@ -6,6 +6,15 @@ const createPost = async (data) => {
   return post;
 };
 
+const getPostById = async (id) => {
+  const post = await GroupPosts.findById(id)
+    .populate("author", "username name avatar")
+    .select(["-likes", "-shares"])
+    .lean();
+  return post;
+};
+
 module.exports = {
   createPost,
+  getPostById,
 };
