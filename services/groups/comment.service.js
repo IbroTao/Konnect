@@ -32,3 +32,22 @@ const createComment = async (postId, content, userId, parentId) => {
   );
   return GroupPosts.findById(postId).select(["author"]);
 };
+
+const queryComments = async ({ postId, limit, page, orderBy, sortedBy }) => {
+  const options = {
+    lean: true,
+    customLabels: myCustomLabels,
+  };
+
+  const comments = await GroupComment.paginate(
+    { postId },
+    {
+      ...(limit ? { limit } : { limit: 20 }),
+      page,
+      sort: { [orderBy]: sortedBy === "asc" ? 1 : -1 },
+      ...options,
+      populate: { path: "author", select: "_id username avatar name" },
+    }
+  );
+  return comments;
+};
