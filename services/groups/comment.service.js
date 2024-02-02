@@ -70,10 +70,19 @@ const deleteComment = async (commentId) => {
   const post = await GroupPosts.findById(postId);
 
   const { commentCount } = post;
+  if (commentCount < 1) throw new Error("no comments");
+
+  if (parentId) {
+    await GroupComment.findByIdAndUpdate(parentId, {
+      $pull: { replies: comment._id },
+      $inc: { replyCount: -1 },
+    });
+  }
 };
 
 module.exports = {
   createComment,
   queryComments,
   updateComment,
+  deleteComment,
 };
