@@ -70,6 +70,18 @@ const deleteGroup = async (id) => {
   return group;
 };
 
+const sendRequestTo = async (userId, groupId) => {
+  const group = await Group.findOne({ _id: groupId });
+  if (group.type === "public")
+    throw new Error("you cannot send a request to a public group");
+
+  await groupRequest.create({
+    userId,
+    communityId,
+  });
+  return group;
+};
+
 module.exports = {
   createGroup,
   getAGroupById,
@@ -79,4 +91,5 @@ module.exports = {
   updateGroup,
   uploadImage,
   deleteGroup,
+  sendRequestTo,
 };
