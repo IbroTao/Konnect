@@ -86,6 +86,14 @@ const shareAPost = async (userId, postId, groupId, data) => {
   } else if (data.content) {
     Object.assign(body, { content: data.content });
   }
+
+  const post = await createPost(body);
+  if (!post) throw new Error("cannot create post");
+
+  return await GroupPosts.updateOne(
+    { _id: postId },
+    { $addToSet: { shares: { userId } }, $inc: { totalShares: 1 } }
+  );
 };
 
 module.exports = {
@@ -97,4 +105,5 @@ module.exports = {
   getPostLikes,
   getPosts,
   isPostLikedByUser,
+  shareAPost,
 };
