@@ -52,10 +52,16 @@ const queryGroups = async (
   return groups;
 };
 
+const updateGroup = async (id, data, opts) => {
+  const group = await Group.findByIdAndUpdate(id, data, opts);
+  return group;
+};
+
 module.exports = {
   createGroup,
   getAGroupById,
   getGroupByName,
   getMembers,
   queryGroups,
+  updateGroup,
 };
