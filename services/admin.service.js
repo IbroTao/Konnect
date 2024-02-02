@@ -1,11 +1,10 @@
 const {
-  deletedAccount,
-  groupComment,
-  groupPosts,
-  suspendedGroups,
-  suspendedAccounts,
+  DeletedAccounts,
+  GroupPosts,
+  SuspendedAccounts,
+  SuspendedGroups,
 } = require("../models");
-const { userService } = require("../services");
+const { userService, groupService } = require("../services");
 const myCustomLabels = require("../utils/myCustomLabels");
 
 const createAdmin = async ({ name, email, password, permissions }) => {
@@ -19,8 +18,16 @@ const createAdmin = async ({ name, email, password, permissions }) => {
   });
 };
 
-const suspendUser = async (userId, duration, reason) => {};
+const suspendUser = async (userId, duration, reason) => {
+  await userService.updateUserById(userId, { isSuspended: true });
+  return SuspendedAccounts.create({
+    userId,
+    duration,
+    reason,
+  });
+};
 
 module.exports = {
   createAdmin,
+  suspendUser,
 };
