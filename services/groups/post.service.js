@@ -8,7 +8,7 @@ const createPost = async (data) => {
 
 const getPostById = async (id) => {
   const post = await GroupPosts.findById(id)
-    .populate("author", "username name avatar")
+    .populate("poster", "username name avatar")
     .select(["-likes", "-shares"])
     .lean();
   return post;
@@ -22,7 +22,7 @@ const updatePost = async (data, id) => {
 // uses findOneAndUpdate to return the data to the controller
 const updatePostAndReturn = async (data, id) => {
   const post = await GroupPosts.findByIdAndUpdate(id, data).populate(
-    "author",
+    "poster",
     "username"
   );
   return post;

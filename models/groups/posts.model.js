@@ -22,7 +22,7 @@ const schema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    author: {
+    poster: {
       type: mongoose.Schema.Types.ObjectId,
       ref: modelNames.user,
       required: true,

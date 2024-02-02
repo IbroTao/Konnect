@@ -91,7 +91,28 @@ const mostViewedPosts = async (limit, page) => {
   return posts;
 };
 
+const topPosters = async ({ limit, page }) => {
+  const options = {
+    lean: true,
+    customLabels: myCustomLabels,
+  };
+  const posters = await User.paginate(
+    {
+      $or: [{ role: "both" }, { role: "poster" }],
+    },
+    {
+      page,
+      sort: { totalFollowers: -1 },
+      ...(limit ? { limit } : { limit: 10 }),
+      select: ["name", "user", "avatar", "totalFollowers", "totalFollowings"],
+      ...options,
+    }
+  );
+  return posters;
+};
+
 module.exports = {
+  topPosters
   createAdmin,
   suspendUser,
   suspendGroup,
