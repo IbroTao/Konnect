@@ -54,6 +54,10 @@ const unsuspendGroup = async (groupId) => {
   return SuspendedGroups.deleteOne({ groupId });
 };
 
+const getTotalPosts = async () => {
+  return GroupPosts.countDocuments();
+};
+
 module.exports = {
   createAdmin,
   suspendUser,
@@ -61,5 +65,6 @@ module.exports = {
   getSuspendedAccounts,
   getSuspendedGroups,
   unsuspendUser,
-  unsuspendedGroup,
+  unsuspendGroup,
+  getTotalPosts,
 };
