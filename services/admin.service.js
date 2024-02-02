@@ -49,6 +49,11 @@ const unsuspendUser = async (userId) => {
   return SuspendedAccounts.deleteOne({ userId });
 };
 
+const unsuspendGroup = async (groupId) => {
+  await groupService.updateGroup(groupId, { isSuspended: false });
+  return SuspendedGroups.deleteOne({ groupId });
+};
+
 module.exports = {
   createAdmin,
   suspendUser,
@@ -56,4 +61,5 @@ module.exports = {
   getSuspendedAccounts,
   getSuspendedGroups,
   unsuspendUser,
+  unsuspendedGroup,
 };
