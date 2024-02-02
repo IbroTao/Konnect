@@ -36,8 +36,13 @@ const suspendGroup = async (groupId, reason, duration) => {
   });
 };
 
+const getSuspendedAccounts = async (filter, options) => {
+  return SuspendedAccounts.paginate(filter, options);
+};
+
 module.exports = {
   createAdmin,
   suspendUser,
   suspendGroup,
+  getSuspendedAccounts,
 };
