@@ -40,9 +40,14 @@ const getSuspendedAccounts = async (filter, options) => {
   return SuspendedAccounts.paginate(filter, options);
 };
 
+const getSuspendedGroups = async (filter, options) => {
+  return SuspendedGroups.paginate(filter, options);
+};
+
 module.exports = {
   createAdmin,
   suspendUser,
   suspendGroup,
   getSuspendedAccounts,
+  getSuspendedGroups,
 };
