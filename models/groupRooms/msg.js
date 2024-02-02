@@ -42,3 +42,9 @@ const schema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+schema.plugin(mongoosePaginate);
+schema.plugin(toJSON);
+
+const GroupRoomMessages = mongoose.model(modelNames.chat_groups_msg, schema);
+module.exports = { GroupRoomMessages };
