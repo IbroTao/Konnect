@@ -86,6 +86,28 @@ const deleteRequest = async (id) => {
   return GroupRequest.deleteOne({ _id: id });
 };
 
+const getAllRequests = async ({ id, limit, page }) => {
+  const options = {
+    lean: true,
+    customLabels: myCustomLabels,
+  };
+
+  const requests = await GroupRequest.paginate(
+    { groupId: id },
+    {
+      ...(limit ? { limit } : { limit: 15 }),
+      page,
+      sort: "asc",
+      populate: {
+        path: "userId",
+        select: "avatar name username totalFollowers totalFollowings createdAt",
+      },
+      ...options,
+    }
+  );
+  return requests;
+};
+
 module.exports = {
   createGroup,
   getAGroupById,
@@ -97,4 +119,5 @@ module.exports = {
   deleteGroup,
   sendRequestTo,
   deleteRequest,
+  getAllRequests,
 };
