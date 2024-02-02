@@ -57,6 +57,19 @@ const updateGroup = async (id, data, opts) => {
   return group;
 };
 
+const uploadImage = async (id, url, publicId) => {
+  const group = await Group.updateOne(
+    { _id: id },
+    { coverImage: url, publicId }
+  );
+  return group;
+};
+
+const deleteGroup = async (id) => {
+  const group = await Group.findOneAndDelete({ _id: id });
+  return group;
+};
+
 module.exports = {
   createGroup,
   getAGroupById,
@@ -64,4 +77,6 @@ module.exports = {
   getMembers,
   queryGroups,
   updateGroup,
+  uploadImage,
+  deleteGroup,
 };
