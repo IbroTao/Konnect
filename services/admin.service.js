@@ -111,24 +111,30 @@ const getTopPosters = async ({ limit, page }) => {
   return posters;
 };
 
-const getMostFollowedUsers = async({limit, page}) => {
+const getMostFollowedUsers = async ({ limit, page }) => {
   const options = {
     lean: true,
-    customLabels: myCustomLabels
+    customLabels: myCustomLabels,
   };
 
   const followers = await User.paginate(
     {},
     {
       page,
-      sort: {totalFollowers: -1}
-      ...(limit ? {limit} : {limit: 10}),
-      select: ['name', 'avatar', 'username', 'totalFollowers', 'totalFollowings'],
-      ...options
+      sort: { totalFollowers: -1 },
+      ...(limit ? { limit } : { limit: 10 }),
+      select: [
+        "name",
+        "avatar",
+        "username",
+        "totalFollowers",
+        "totalFollowings",
+      ],
+      ...options,
     }
   );
-  return followers
-}
+  return followers;
+};
 
 module.exports = {
   getTopPosters,
@@ -144,5 +150,5 @@ module.exports = {
   getTotalGroups,
   approvePost,
   mostViewedPosts,
-  getMostFollowedUsers
+  getMostFollowedUsers,
 };
