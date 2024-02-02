@@ -4,7 +4,7 @@ const modelNames = require("../../constants/modelNames");
 const toJSON = require("../plugins/toJSON.plugin");
 
 const schema = new mongoose.Schema({
-  commenter: {
+  author: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
     ref: modelNames.user,
