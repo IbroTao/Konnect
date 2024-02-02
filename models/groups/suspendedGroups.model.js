@@ -63,5 +63,5 @@ schema.pre("save", async function (next) {
   next();
 });
 
-const suspendedGroups = mongoose.model(modelNames.suspended_groups, schema);
-module.exports = { suspendedGroups };
+const SuspendedGroups = mongoose.model(modelNames.suspended_groups, schema);
+module.exports = { SuspendedGroups };

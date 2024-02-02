@@ -42,5 +42,5 @@ const schema = new mongoose.Schema({
 schema.plugin(mongoosePaginate);
 schema.plugin(toJSON);
 
-const groupComment = mongoose.model(modelNames.group_comment, schema);
-module.exports = { groupComment };
+const GroupComment = mongoose.model(modelNames.group_comment, schema);
+module.exports = { GroupComment };

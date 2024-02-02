@@ -61,5 +61,5 @@ schema.pre("save", async function (next) {
   next();
 });
 
-const suspendedAccounts = mongoose.model(modelNames.suspendedAccount);
-module.exports = { suspendedAccounts };
+const SuspendedAccounts = mongoose.model(modelNames.suspendedAccount);
+module.exports = { SuspendedAccounts };

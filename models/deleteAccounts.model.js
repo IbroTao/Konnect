@@ -22,5 +22,5 @@ const schema = new mongoose.Schema(
 schema.plugin(paginate);
 schema.plugin(toJSON);
 
-const deletedAccount = mongoose.model(modelNames.deletedAccount, schema);
-module.exports = deletedAccount;
+const DeletedAccounts = mongoose.model(modelNames.deletedAccount, schema);
+module.exports = DeletedAccounts;

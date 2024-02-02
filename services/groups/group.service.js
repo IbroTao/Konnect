@@ -1,5 +1,5 @@
 const myCustomLabels = require("../../utils/myCustomLabels");
-const { Group, groupRequest } = require("../../models");
+const { Group, GroupRequest } = require("../../models");
 
 const createGroup = async (data) => {
   const group = await Group.create(data);
@@ -75,11 +75,15 @@ const sendRequestTo = async (userId, groupId) => {
   if (group.type === "public")
     throw new Error("you cannot send a request to a public group");
 
-  await groupRequest.create({
+  await GroupRequest.create({
     userId,
     communityId,
   });
   return group;
+};
+
+const deleteRequest = async (id) => {
+  return GroupRequest.deleteOne({ _id: id });
 };
 
 module.exports = {
@@ -92,4 +96,5 @@ module.exports = {
   uploadImage,
   deleteGroup,
   sendRequestTo,
+  deleteRequest,
 };

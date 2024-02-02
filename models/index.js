@@ -1,10 +1,10 @@
 module.exports.User = require("./user.model");
 module.exports.Token = require("./token.model");
 module.exports.Follow = require("./follow.model");
-module.exports.deletedAccount = require("./deleteAccounts.model");
-module.exports.groupComment = require("./groups/comment.model");
+module.exports.DeletedAccounts = require("./deleteAccounts.model");
+module.exports.GroupComment = require("./groups/comment.model");
 module.exports.Group = require("./groups/group.model");
-module.exports.groupPosts = require("./groups/posts.model");
-module.exports.suspendedGroups = require("./groups/suspendedGroups.model");
-module.exports.groupRequest = require("./groups/request.model");
-module.exports.suspendedAccounts = require("./suspendedAccounts");
+module.exports.GroupPosts = require("./groups/posts.model");
+module.exports.SuspendedGroups = require("./groups/suspendedGroups.model");
+module.exports.GroupRequest = require("./groups/request.model");
+module.exports.SuspendedAccounts = require("./suspendedAccounts");
