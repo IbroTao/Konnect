@@ -44,10 +44,16 @@ const getSuspendedGroups = async (filter, options) => {
   return SuspendedGroups.paginate(filter, options);
 };
 
+const unsuspendUser = async (userId) => {
+  await userService.updateUserById(userId, { isSuspended: false });
+  return SuspendedAccounts.deleteOne({ userId });
+};
+
 module.exports = {
   createAdmin,
   suspendUser,
   suspendGroup,
   getSuspendedAccounts,
   getSuspendedGroups,
+  unsuspendUser,
 };
