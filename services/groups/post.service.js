@@ -41,6 +41,26 @@ const getPostLikes = async (postId) => {
   return post;
 };
 
+const getPosts = async (
+  { search, filter, groupId },
+  { limit, sortedBy, orderBy }
+) => {
+  const options = {
+    lean: true,
+    customLabels: myCustomLabels,
+  };
+
+  const posts = await GroupPosts.paginate(
+    {
+      $and: [{ content: { $regex: search, $options: "i" } }, { groupId }],
+      ...filter,
+    },
+    {
+      ...(limit ? { limit } : { limit: 15 }),
+    }
+  );
+};
+
 module.exports = {
   createPost,
   getPostById,
