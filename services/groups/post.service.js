@@ -65,6 +65,13 @@ const getPosts = async (
   return posts;
 };
 
+const isPostLikedByUser = async (userId, postId) => {
+  const post = await GroupPosts.findOne({
+    $and: [{ _id: postId }, { "likes.userId": { $in: userId } }],
+  });
+  return post;
+};
+
 module.exports = {
   createPost,
   getPostById,
@@ -73,4 +80,5 @@ module.exports = {
   updatePostAndReturn,
   getPostLikes,
   getPosts,
+  isPostLikedByUser,
 };
