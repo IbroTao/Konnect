@@ -13,5 +13,14 @@ const createComment = async (postId, content, userId, parentId) => {
       _id: userId,
       comments: parentId,
     });
+    if (!parentComment) throw new Error("parent comment not found");
+
+    newComment.parentId = parentId;
+
+    await GroupComment.findByIdAndUpdate(parentId, {
+      $inc: { replyCount: 1 },
+    });
   }
+
+  newComment = await newComment.save;
 };
