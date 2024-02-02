@@ -18,5 +18,28 @@ const schema = new mongoose.Schema({
       required: true,
     },
   ],
-  muteIds: [{}],
+  muteIds: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: modelNames.user,
+    },
+  ],
+  logo: {
+    url: {
+      type: String,
+    },
+    publicId: {
+      type: String,
+    },
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  blockIds: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: modelNames.user,
+    },
+  ],
 });
