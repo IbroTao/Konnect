@@ -14,7 +14,13 @@ const getPostById = async (id) => {
   return post;
 };
 
+const updatePost = async (data, id) => {
+  const post = await GroupPosts.updateOne({ _id: id }, data);
+  return post;
+};
+
 module.exports = {
   createPost,
   getPostById,
+  updatePost,
 };
