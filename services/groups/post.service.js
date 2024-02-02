@@ -19,8 +19,18 @@ const updatePost = async (data, id) => {
   return post;
 };
 
+// uses findOneAndUpdate to return the data to the controller
+const updatePostAndReturn = async (data, id) => {
+  const post = await GroupPosts.findByIdAndUpdate(id, data).populate(
+    "author",
+    "username"
+  );
+  return post;
+};
+
 module.exports = {
   createPost,
   getPostById,
   updatePost,
+  updatePostAndReturn,
 };
