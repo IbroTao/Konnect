@@ -16,8 +16,18 @@ const getGroupByName = async (name) => {
   return group;
 };
 
+const getMembers = async (id) => {
+  const members = await Group.findById(id)
+    .populate("members.id", "avatar name username _id")
+    .populate("admins.id", "avatar name username _id")
+    .select(["members", "admins", "name"])
+    .lean();
+  return members;
+};
+
 module.exports = {
   createGroup,
   getAGroupById,
   getGroupByName,
+  getMembers,
 };
