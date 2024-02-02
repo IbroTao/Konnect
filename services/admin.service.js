@@ -6,7 +6,7 @@ const {
   User,
   Group,
 } = require("../models");
-const { userService, groupService } = require("../services");
+const { userService, groupService, groupPostService } = require("../services");
 const myCustomLabels = require("../utils/myCustomLabels");
 
 const createAdmin = async ({ name, email, password, permissions }) => {
@@ -68,6 +68,11 @@ const getTotalGroups = async () => {
   return Group.countDocuments();
 };
 
+const approvePost = async (postId) => {
+  const post = await groupPostService.updatePost(postId, { isApproved: true });
+  return post;
+};
+
 module.exports = {
   createAdmin,
   suspendUser,
@@ -79,4 +84,5 @@ module.exports = {
   getTotalPosts,
   getTotalUsers,
   getTotalGroups,
+  approvePost,
 };

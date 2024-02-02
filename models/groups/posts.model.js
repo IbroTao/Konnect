@@ -41,6 +41,14 @@ const schema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: modelNames.group_posts,
     },
+    views: {
+      type: Number,
+      default: 0,
+    },
+    isApproved: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
