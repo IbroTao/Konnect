@@ -61,6 +61,17 @@ const updateComment = async (id, content) => {
   return comment;
 };
 
+const deleteComment = async (commentId) => {
+  const comment = await GroupComment.findById(commentId);
+  if (!comment) throw new Error("comment not found");
+
+  const { parentId, postId } = comment;
+
+  const post = await GroupPosts.findById(postId);
+
+  const { commentCount } = post;
+};
+
 module.exports = {
   createComment,
   queryComments,
