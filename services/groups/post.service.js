@@ -28,9 +28,14 @@ const updatePostAndReturn = async (data, id) => {
   return post;
 };
 
+const deletePost = async (id) => {
+  return await GroupPosts.deleteOne({ _id: id });
+};
+
 module.exports = {
   createPost,
   getPostById,
   updatePost,
+  deletePost,
   updatePostAndReturn,
 };
