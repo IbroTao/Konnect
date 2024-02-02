@@ -72,6 +72,22 @@ const isPostLikedByUser = async (userId, postId) => {
   return post;
 };
 
+const shareAPost = async (userId, postId, groupId, data) => {
+  const body = { author: userId, groupId, sharedPostId: postId };
+
+  if (data.file) {
+    const d = {
+      file: {
+        url: data.file.url,
+        publicId: date.file.url,
+      },
+    };
+    Object.assign(body, d);
+  } else if (data.content) {
+    Object.assign(body, { content: data.content });
+  }
+};
+
 module.exports = {
   createPost,
   getPostById,
