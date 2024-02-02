@@ -51,3 +51,8 @@ const queryComments = async ({ postId, limit, page, orderBy, sortedBy }) => {
   );
   return comments;
 };
+
+module.exports = {
+  createComment,
+  queryComments,
+};
