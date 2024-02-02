@@ -11,7 +11,13 @@ const getAGroupById = async (id) => {
   return group;
 };
 
+const getGroupByName = async (name) => {
+  const group = await Group.findOne({ name });
+  return group;
+};
+
 module.exports = {
   createGroup,
   getAGroupById,
+  getGroupByName,
 };
