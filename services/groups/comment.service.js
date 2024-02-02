@@ -52,7 +52,17 @@ const queryComments = async ({ postId, limit, page, orderBy, sortedBy }) => {
   return comments;
 };
 
+const updateComment = async (id, content) => {
+  const comment = await GroupComment.updateOne(
+    { _id: id },
+    { content },
+    { new: true }
+  );
+  return comment;
+};
+
 module.exports = {
   createComment,
   queryComments,
+  updateComment,
 };
