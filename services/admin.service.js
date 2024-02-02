@@ -4,6 +4,7 @@ const {
   SuspendedAccounts,
   SuspendedGroups,
   User,
+  Group,
 } = require("../models");
 const { userService, groupService } = require("../services");
 const myCustomLabels = require("../utils/myCustomLabels");
@@ -63,6 +64,10 @@ const getTotalUsers = async () => {
   return User.countDocuments();
 };
 
+const getTotalGroups = async () => {
+  return Group.countDocuments();
+};
+
 module.exports = {
   createAdmin,
   suspendUser,
@@ -73,4 +78,5 @@ module.exports = {
   unsuspendGroup,
   getTotalPosts,
   getTotalUsers,
+  getTotalGroups,
 };
