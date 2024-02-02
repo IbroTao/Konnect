@@ -78,6 +78,10 @@ const deleteComment = async (commentId) => {
       $inc: { replyCount: -1 },
     });
   }
+  await GroupPosts.findByIdAndUpdate(comment.postId, {
+    $inc: { commentCount: -1 },
+  }).lean();
+  return GroupComment.deleteOne({ _id: commentId });
 };
 
 module.exports = {
