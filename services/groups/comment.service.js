@@ -23,4 +23,12 @@ const createComment = async (postId, content, userId, parentId) => {
   }
 
   newComment = await newComment.save;
+
+  await GroupComment.updateOne(
+    { _id: postId },
+    {
+      $inc: { commentCount: 1 },
+    }
+  );
+  return GroupPosts.findById(postId).select(["author"]);
 };
