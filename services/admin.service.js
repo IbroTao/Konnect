@@ -73,6 +73,24 @@ const approvePost = async (postId) => {
   return post;
 };
 
+const mostViewedPosts = async (limit, page) => {
+  const options = {
+    lean: true,
+  };
+
+  const posts = await GroupPosts.paginate(
+    {},
+    {
+      page,
+      sort: { views: -1 },
+      ...(limit ? { limit } : { limit: 10 }),
+      select: ["content", "author"],
+      ...options,
+    }
+  );
+  return posts;
+};
+
 module.exports = {
   createAdmin,
   suspendUser,
@@ -85,4 +103,5 @@ module.exports = {
   getTotalUsers,
   getTotalGroups,
   approvePost,
+  mostViewedPosts,
 };
