@@ -27,7 +27,17 @@ const suspendUser = async (userId, duration, reason) => {
   });
 };
 
+const suspendGroup = async (groupId, reason, duration) => {
+  await groupService.updateGroup(groupId, { isSuspended: true });
+  return SuspendedGroups.create({
+    groupId,
+    reason,
+    duration,
+  });
+};
+
 module.exports = {
   createAdmin,
   suspendUser,
+  suspendGroup,
 };
