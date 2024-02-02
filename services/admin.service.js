@@ -19,6 +19,8 @@ const createAdmin = async ({ name, email, password, permissions }) => {
   });
 };
 
+const suspendUser = async (userId, duration, reason) => {};
+
 module.exports = {
   createAdmin,
 };
