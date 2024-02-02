@@ -32,10 +32,20 @@ const deletePost = async (id) => {
   return await GroupPosts.deleteOne({ _id: id });
 };
 
+const getPostLikes = async (postId) => {
+  const post = await GroupPosts.findById(postId)
+    .populate("likes.userId", "name avatar username")
+    .populate("shares.userId", "name avatar username")
+    .select(["likes", "shares", "totalLikes", "totalShares"])
+    .lean();
+  return post;
+};
+
 module.exports = {
   createPost,
   getPostById,
   updatePost,
   deletePost,
   updatePostAndReturn,
+  getPostLikes,
 };
