@@ -57,8 +57,12 @@ const getPosts = async (
     },
     {
       ...(limit ? { limit } : { limit: 15 }),
+      page,
+      sort: { [orderBy]: sortedBy === "asc" ? 1 : -1 },
+      ...options,
     }
   );
+  return posts;
 };
 
 module.exports = {
@@ -68,4 +72,5 @@ module.exports = {
   deletePost,
   updatePostAndReturn,
   getPostLikes,
+  getPosts,
 };
