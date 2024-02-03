@@ -78,10 +78,18 @@ const updateRulesAndType = catchAsync(async (req, res) => {
   res.status(200).json({ message: MESSAGES.SUCCESS });
 });
 
+const getGroupByName = catchAsync(async (req, res) => {
+  const { name } = req.params;
+  const group = await groupService.getGroupByName(name);
+  if (!group)
+    throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.RESOURCE_MISSING);
+});
+
 module.exports = {
   createGroup,
   queryGroups,
   uploadImage,
   updateInfo,
   updateRulesAndType,
+  getGroupByName,
 };
