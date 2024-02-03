@@ -45,11 +45,43 @@ const uploadImage = catchAsync(async (req, res) => {
 
 const updateInfo = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const group = await groupService;
+  const group = await groupService.updateGroup(id, { info: req.body.info });
+  if (!group)
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      MESSAGES.UPDATE_FAILED
+    );
+  res.status(200).json({ message: MESSAGES.UPDATED });
+});
+
+const updateRulesAndType = catchAsync(async (req, res) => {
+  const { id } = req.params;
+
+  let group;
+
+  if (req.body.rules && req.body.type) {
+    group = await groupService.updateGroup(id, {
+      rules: req.body.rules,
+      type: req.body.type,
+    });
+  } else if (req.body.rules) {
+    group = await groupService.updateGroup(id, { rules: req.body.rules });
+  } else if (req.body.type) {
+    group = await groupService.updateGroup(id, { type: req.body.type });
+  }
+
+  if (!group)
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      MESSAGES.UPDATE_FAILED
+    );
+  res.status(200).json({ message: MESSAGES.SUCCESS });
 });
 
 module.exports = {
   createGroup,
   queryGroups,
   uploadImage,
+  updateInfo,
+  updateRulesAndType,
 };
