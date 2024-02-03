@@ -34,7 +34,22 @@ const queryGroups = catchAsync(async (req, res) => {
   res.status(200).json(groups);
 });
 
+const uploadImage = catchAsync(async (req, res) => {
+  const { file } = req;
+  const { publicId, url } = await uploadSingle(file.path);
+  const group = await groupService.uploadImage(req.params.id, url, publicId);
+  if (group.modifiedCount !== 1)
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, MESSAGES.FAILURE);
+  res.status(200).json({ message: MESSAGES.SUCCESS });
+});
+
+const updateInfo = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const group = await groupService;
+});
+
 module.exports = {
   createGroup,
   queryGroups,
+  uploadImage,
 };
