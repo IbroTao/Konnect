@@ -20,6 +20,10 @@ const createGroup = catchAsync(async (req, res) => {
   res.status(201).json({ message: MESSAGES.SUCCESS });
 });
 
+const queryCommunities = catchAsync(async (req, res) => {
+  const { search, limit, page, filter, sortedBy, orderBy } = req.query;
+});
+
 module.exports = {
   createGroup,
 };
