@@ -94,6 +94,17 @@ const getGroupById = catchAsync(async (req, res) => {
   res.status(200).json(group);
 });
 
+const addMember = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const group = await groupService.updateGroup(id, {
+    $addToSet: { members: { id: req.body.member } },
+    $inc: { membersCount: 1 },
+  });
+  if (!group)
+    throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.RESOURCE_MISSING);
+  res.status(200).json({ message: MESSAGES.SUCCESS });
+});
+
 module.exports = {
   createGroup,
   queryGroups,
@@ -102,4 +113,5 @@ module.exports = {
   updateRulesAndType,
   getGroupByName,
   getGroupById,
+  addMember,
 };
