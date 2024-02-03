@@ -112,6 +112,9 @@ const removeMember = catchAsync(async (req, res) => {
     $pull: { members: { id: req.body.member } },
     $inc: { membersCount: -1 },
   });
+  if (!group)
+    throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.RESOURCE_MISSING);
+  res.status(200).json({ message: MESSAGES.SUCCESS });
 });
 
 // UNFINISHED
@@ -140,4 +143,5 @@ module.exports = {
   getGroupByName,
   getGroupById,
   addMember,
+  removeMember,
 };
