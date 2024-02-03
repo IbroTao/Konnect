@@ -4,6 +4,7 @@ const catchAsync = require("../../utils/catchAsync");
 const { MESSAGES } = require("../../constants/responseMessages");
 const { uploadSingle, deleteSingle } = require("../../libs/cloudinary");
 const { groupService, notificationInfo } = require("../../services");
+const { notificationQueue } = require("../../schemas");
 
 const createGroup = catchAsync(async (req, res) => {
   const { body } = req;
@@ -23,8 +24,8 @@ const createGroup = catchAsync(async (req, res) => {
 const queryGroups = catchAsync(async (req, res) => {
   const { search, limit, page, filter, sortedBy, orderBy } = req.query;
   const groups = await groupService.queryGroups(
-    { search, filter },
-    { page, limit, orderBy, sortedBy }
+    { page, limit, orderBy, sortedBy },
+    { search, filter }
   );
   if (!groups)
     throw new ApiError(
@@ -103,6 +104,31 @@ const addMember = catchAsync(async (req, res) => {
   if (!group)
     throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.RESOURCE_MISSING);
   res.status(200).json({ message: MESSAGES.SUCCESS });
+});
+
+const removeMember = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const group = await groupService.updateGroup(id, {
+    $pull: { members: { id: req.body.member } },
+    $inc: { membersCount: -1 },
+  });
+});
+
+// UNFINISHED
+const addAdmin = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const admins = [];
+
+  re.body.admin.map((id) => {
+    admins.push({ id });
+  });
+
+  const group = await groupService.updateGroup(id, {
+    $push: { admins },
+    $inc: { adminCount: admins.length },
+  });
+
+  if (!group) throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.NOT_FOUND);
 });
 
 module.exports = {

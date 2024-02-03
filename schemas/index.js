@@ -1,2 +1,1 @@
-const { notificationQueue } = require("./notificationQueue");
-module.exports = { notificationQueue };
+module.exports.notificationQueue = require("./notificationQueue");
