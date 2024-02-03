@@ -83,6 +83,15 @@ const getGroupByName = catchAsync(async (req, res) => {
   const group = await groupService.getGroupByName(name);
   if (!group)
     throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.RESOURCE_MISSING);
+  res.status(200).json(group);
+});
+
+const getGroupById = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const group = await groupService.getAGroupById(id);
+  if (!group)
+    throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.RESOURCE_MISSING);
+  res.status(200).json(group);
 });
 
 module.exports = {
@@ -92,4 +101,5 @@ module.exports = {
   updateInfo,
   updateRulesAndType,
   getGroupByName,
+  getGroupById,
 };
