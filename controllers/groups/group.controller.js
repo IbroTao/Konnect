@@ -20,10 +20,21 @@ const createGroup = catchAsync(async (req, res) => {
   res.status(201).json({ message: MESSAGES.SUCCESS });
 });
 
-const queryCommunities = catchAsync(async (req, res) => {
+const queryGroups = catchAsync(async (req, res) => {
   const { search, limit, page, filter, sortedBy, orderBy } = req.query;
+  const groups = await groupService.queryGroups(
+    { search, filter },
+    { page, limit, orderBy, sortedBy }
+  );
+  if (!groups)
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      MESSAGES.RESOURCE_MISSING
+    );
+  res.status(200).json(groups);
 });
 
 module.exports = {
   createGroup,
+  queryGroups,
 };
