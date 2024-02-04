@@ -93,4 +93,5 @@ module.exports = {
   refreshTokens,
   forgotPassword,
   verifyEmail,
+  resendVerificationCode,
 };

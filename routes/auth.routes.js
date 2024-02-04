@@ -13,9 +13,11 @@ router.post(
   authController.register
 );
 
+router.post("/login", validate(authValidation.login), authController.login);
+
 router.post(
   "/verify",
-  validate(authValidation.register),
+  validate(authValidation),
   authController.sendVerificationEmail
 );
 
