@@ -13,4 +13,9 @@ const createPost = catchAsync(async (req, res) => {
     author: req.user._id,
     groupId: body.groupId,
   };
+
+  if (files.length) {
+    const filePaths = files.map((file) => file.path);
+    const result = await uploadMany(filePaths);
+  }
 });
