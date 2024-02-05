@@ -23,4 +23,12 @@ const createPost = catchAsync(async (req, res) => {
     }));
     Object.assign(data, { file: multipleFiles });
   }
+  const post = await groupPostService.createPost(data);
+  if (!post)
+    throw new ApiError(httpStatus.EXPECTATION_FAILED, MESSAGES.FAILURE);
+  res.status(201).json({ message: MESSAGES.SUCCESS });
 });
+
+module.exports = {
+  createPost,
+};
