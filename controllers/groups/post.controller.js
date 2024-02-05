@@ -17,5 +17,10 @@ const createPost = catchAsync(async (req, res) => {
   if (files.length) {
     const filePaths = files.map((file) => file.path);
     const result = await uploadMany(filePaths);
+    const multipleFiles = result.map((file) => ({
+      url: file.url,
+      publicId: file.publicId,
+    }));
+    Object.assign(data, { file: multipleFiles });
   }
 });
