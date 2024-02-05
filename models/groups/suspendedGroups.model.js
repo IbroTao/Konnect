@@ -4,7 +4,6 @@ const mongoosePaginate = require("mongoose-paginate-v2");
 const toJSON = require("../plugins/toJSON.plugin");
 const httpStatus = require("http-status");
 const ApiError = require("../../utils/ApiError");
-const { toJSON } = require("../plugins");
 const DateCreator = require("../../utils/dateCreator");
 
 const schema = new mongoose.Schema(

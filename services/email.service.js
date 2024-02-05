@@ -45,12 +45,12 @@ const sendResetPasswordEmail = async ({ name, token }) => {
 const getVerificationCode = async ({ email, name }) => {
   const digits = uniqueSixDigits();
   const text = `Thanks creating an account with us at Konnect. 
-  To continue registration, we sent a 5-digits code to you for further verification and authentication.
+  To continue registration, we sent a 6-digits code to you for further verification and authentication.
 
   Your 6-digit code is <h4>${digits}</h4>
   
   Kindly enter the code into your device to continue the registration process. For any help, you can contact us at Konnect.
-  
+
   Best Wishes,
   @KonnectICT`;
 
