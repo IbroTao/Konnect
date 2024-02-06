@@ -25,5 +25,5 @@ const schema = new mongoose.Schema(
 schema.plugin(mongoosePaginate);
 schema.plugin(toJSON);
 
-const GroupRequest = mongoose.model(modelNames.group_request, schema);
-module.exports = { GroupRequest };
+const CommunityRequest = mongoose.model(modelNames.community_request, schema);
+module.exports = { CommuntityRequest };
