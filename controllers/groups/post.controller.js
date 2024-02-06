@@ -135,6 +135,14 @@ const sharePost = catchAsync(async (req, res) => {
       },
     };
   }
+
+  const post = await groupPostService.shareAPost(postId, user._id, groupId, {
+    ...body,
+    ...media,
+  });
+  if (post.modifiedCount === 0)
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, MESSAGES.FAILURE);
+  res.status(201).json({ message: MESSAGES.CREATED });
 });
 
 module.exports = {
@@ -143,6 +151,7 @@ module.exports = {
   updatePosts,
   getPostsById,
   deletePost,
+  sharePost,
   unlikePost,
   getPostLikes,
 };
