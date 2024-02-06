@@ -108,6 +108,10 @@ const unlikePost = catchAsync(async (req, res) => {
     },
     req.params.id
   );
+
+  if (post.modifiedCount === 0)
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, MESSAGES.FAILURE);
+  res.status(200).json({ message: MESSAGES.SUCCESS });
 });
 
 module.exports = {
@@ -116,4 +120,5 @@ module.exports = {
   updatePosts,
   getPostsById,
   deletePost,
+  unlikePost,
 };
