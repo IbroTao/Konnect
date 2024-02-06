@@ -41,7 +41,11 @@ const queryPosts = catchAsync(async (req, res) => {
   res.status(201).json({ message: MESSAGES.SUCCESS });
 });
 
+const getPostsById = catchAsync(async (req, res) => {
+  const post = await groupPostService.getPostById(req.params.id);
+});
 module.exports = {
   createPost,
   queryPosts,
+  getPostsById,
 };
