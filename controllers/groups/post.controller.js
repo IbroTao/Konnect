@@ -73,6 +73,25 @@ const deletePost = catchAsync(async (req, res) => {
   res.status(200).json({ message: MESSAGES.DELETED });
 });
 
+// UNFINISHED
+const likePost = catchAsync(async (req, res) => {
+  const { user } = req;
+  const isPost = await groupPostService.isPostLikedByUser(
+    user._id,
+    req.params.id
+  );
+  if (isPost) throw new ApiError(httpStatus.BAD_REQUEST, MESSAGES.FAILURE);
+
+  const opts = {
+    $addToSet: { likes: { userId: user._id } },
+    $inc: { totalLikes: 1 },
+  };
+
+  const post = await groupPostService.updatePostAndReturn(opts, req.params.id);
+  if (!post)
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, MESSAGES.FAILURE);
+});
+
 module.exports = {
   createPost,
   queryPosts,
