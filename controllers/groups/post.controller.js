@@ -121,6 +121,22 @@ const getPostLikes = catchAsync(async (req, res) => {
   res.status(200).json(likes);
 });
 
+const sharePost = catchAsync(async (req, res) => {
+  const { user, file, body } = req;
+  const { groupId, postId } = req.params;
+  let media = {};
+
+  if (file) {
+    const { url, publicId } = await uploadSingle(file.path);
+    media = {
+      file: {
+        url,
+        publicId,
+      },
+    };
+  }
+});
+
 module.exports = {
   createPost,
   queryPosts,
