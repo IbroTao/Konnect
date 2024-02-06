@@ -29,6 +29,10 @@ const createPost = catchAsync(async (req, res) => {
   res.status(201).json({ message: MESSAGES.SUCCESS });
 });
 
+const queryPosts = catchAsync(async(req, res) => {
+  const {search}
+})
+
 module.exports = {
   createPost,
 };
