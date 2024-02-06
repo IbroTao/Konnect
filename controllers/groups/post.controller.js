@@ -36,6 +36,8 @@ const queryPosts = catchAsync(async (req, res) => {
     { search, filter, groupId },
     { limit, page, sortedBy, orderBy }
   );
+  if (!posts)
+    throw new ApiError(httpStatus.EXPECTATION_FAILED, MESSAGES.FAILURE);
 });
 
 module.exports = {
