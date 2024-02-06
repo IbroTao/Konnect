@@ -50,8 +50,22 @@ const getPostsById = catchAsync(async (req, res) => {
   res.status(200).json(post);
 });
 
+const updatePosts = catchAsync(async (req, res) => {
+  const post = await groupPostService.updatePost(
+    { content: req.body.content },
+    req.params.id
+  );
+  if (post.modifiedCount === 0)
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      MESSAGES.UPDATE_FAILED
+    );
+  res.status(200).json({ message: MESSAGES.SUCCESS });
+});
+
 module.exports = {
   createPost,
   queryPosts,
+  updatePosts,
   getPostsById,
 };
