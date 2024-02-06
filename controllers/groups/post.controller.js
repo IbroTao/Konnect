@@ -63,9 +63,20 @@ const updatePosts = catchAsync(async (req, res) => {
   res.status(200).json({ message: MESSAGES.SUCCESS });
 });
 
+const deletePost = catchAsync(async (req, res) => {
+  const post = await groupPostService.deletePost(req.params.id);
+  if (post.deletedCount !== 1)
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      MESSAGES.DELETE_FAILED
+    );
+  res.status(200).json({ message: MESSAGES.DELETED });
+});
+
 module.exports = {
   createPost,
   queryPosts,
   updatePosts,
   getPostsById,
+  deletePost,
 };
