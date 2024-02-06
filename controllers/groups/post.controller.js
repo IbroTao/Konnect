@@ -37,13 +37,19 @@ const queryPosts = catchAsync(async (req, res) => {
     { limit, page, sortedBy, orderBy }
   );
   if (!posts)
-    throw new ApiError(httpStatus.EXPECTATION_FAILED, MESSAGES.FAILURE);
+    throw new ApiError(
+      httpStatus.EXPECTATION_FAILED,
+      MESSAGES.RESOURCE_MISSING
+    );
   res.status(201).json({ message: MESSAGES.SUCCESS });
 });
 
 const getPostsById = catchAsync(async (req, res) => {
   const post = await groupPostService.getPostById(req.params.id);
+  if (!post) throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.MISSING);
+  res.status(200).json(post);
 });
+
 module.exports = {
   createPost,
   queryPosts,
