@@ -29,9 +29,10 @@ const createPost = catchAsync(async (req, res) => {
   res.status(201).json({ message: MESSAGES.SUCCESS });
 });
 
-const queryPosts = catchAsync(async(req, res) => {
-  const {search}
-})
+const queryPosts = catchAsync(async (req, res) => {
+  const { search, limit, page, filter, sortedBy, orderBy } = req.query;
+  const { groupId } = req.params;
+});
 
 module.exports = {
   createPost,
