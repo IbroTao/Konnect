@@ -92,6 +92,24 @@ const likePost = catchAsync(async (req, res) => {
     throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, MESSAGES.FAILURE);
 });
 
+const unlikePost = catchAsync(async (req, res) => {
+  const { user } = req;
+  const isPost = await groupPostService.isPostLikedByUser(
+    user._id,
+    req.params.id
+  );
+  if (!isPost)
+    throw new ApiError(httpStatus.BAD_REQUEST, "user has not like this post");
+
+  const post = await groupPostService.updatePost(
+    {
+      $pull: { likes: { userId: user._id } },
+      $inc: { totalLikes: -1 },
+    },
+    req.params.id
+  );
+});
+
 module.exports = {
   createPost,
   queryPosts,
