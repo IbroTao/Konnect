@@ -114,6 +114,13 @@ const unlikePost = catchAsync(async (req, res) => {
   res.status(200).json({ message: MESSAGES.SUCCESS });
 });
 
+const getPostLikes = catchAsync(async (req, res) => {
+  const likes = await groupPostService.getPostLikes(req.params.id);
+  if (!likes)
+    throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.RESOURCE_MISSING);
+  res.status(200).json(likes);
+});
+
 module.exports = {
   createPost,
   queryPosts,
@@ -121,4 +128,5 @@ module.exports = {
   getPostsById,
   deletePost,
   unlikePost,
+  getPostLikes,
 };
