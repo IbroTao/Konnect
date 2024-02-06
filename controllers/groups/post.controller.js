@@ -32,6 +32,10 @@ const createPost = catchAsync(async (req, res) => {
 const queryPosts = catchAsync(async (req, res) => {
   const { search, limit, page, filter, sortedBy, orderBy } = req.query;
   const { groupId } = req.params;
+  const posts = await groupPostService.getPosts(
+    { search, filter, groupId },
+    { limit, page, sortedBy, orderBy }
+  );
 });
 
 module.exports = {
