@@ -38,8 +38,10 @@ const queryPosts = catchAsync(async (req, res) => {
   );
   if (!posts)
     throw new ApiError(httpStatus.EXPECTATION_FAILED, MESSAGES.FAILURE);
+  res.status(201).json({ message: MESSAGES.SUCCESS });
 });
 
 module.exports = {
   createPost,
+  queryPosts,
 };
