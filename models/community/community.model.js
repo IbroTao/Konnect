@@ -74,5 +74,5 @@ const schema = new mongoose.Schema(
 schema.plugin(mongoosePaginate);
 schema.plugin(toJSON);
 
-const Group = mongoose.model(modelNames.group, schema);
-module.exports = { Group };
+const Community = mongoose.model(modelNames.community, schema);
+module.exports = { Community };
