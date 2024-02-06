@@ -72,5 +72,5 @@ schema.statics.hasUserDisliked = async function (commentId, userId) {
   return !!result;
 };
 
-const GroupPosts = mongoose.model(modelNames.group_posts, schema);
-module.exports = { GroupPosts };
+const CommunityPosts = mongoose.model(modelNames.community_posts, schema);
+module.exports = { CommunityPosts };
