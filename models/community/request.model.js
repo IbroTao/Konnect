@@ -25,5 +25,5 @@ const schema = new mongoose.Schema(
 schema.plugin(mongoosePaginate);
 schema.plugin(toJSON);
 
-const CommuntityRequest = mongoose.model(modelNames.community_request, schema);
-module.exports = { CommuntityRequest };
+const requestModel = mongoose.model(modelNames.community_request, schema);
+module.exports = { requestModel };
