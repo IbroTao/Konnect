@@ -24,9 +24,24 @@ const findGroupById = async (id) => {
   return group;
 };
 
+const findGroupByName = async (name, userId) => {
+  const group = await Groups.findOne({
+    $and: [
+      { name: { $regex: name, $options: "i" } },
+      { $in: { members: userId } },
+    ],
+  })
+    .populate("members", "name avatar username")
+    .populate("admins", "name avatar username")
+    .populate("muteIds", "name avatar username")
+    .populate("blockIds", "name avatar username");
+  return group;
+};
+
 module.exports = {
   initiateGroup,
   updateGroupById,
   deleteGroup,
   findGroupById,
+  findGroupByName,
 };
