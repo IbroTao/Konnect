@@ -8,3 +8,6 @@ module.exports.CommunityPosts = require("./community/posts.model");
 module.exports.SuspendedCommunities = require("./community/suspendedCommunity.model");
 module.exports.CommunityRequest = require("./community/request.model");
 module.exports.SuspendedAccounts = require("./suspendedAccounts");
+module.exports.Groups = require("./groups/group");
+module.exports.GroupMsg = require("./groups/msg");
+module.exports.GroupReports = require("./reports/group.model");
