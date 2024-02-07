@@ -1,13 +1,13 @@
 const myCustomLabels = require("../../utils/myCustomLabels");
-const { GroupPosts } = require("../../models");
+const { CommunityPosts } = require("../../models");
 
 const createPost = async (data) => {
-  const post = await GroupPosts.create(data);
+  const post = await CommunityPosts.create(data);
   return post;
 };
 
 const getPostById = async (id) => {
-  const post = await GroupPosts.findById(id)
+  const post = await CommunityPosts.findById(id)
     .populate("poster", "username name avatar")
     .select(["-likes", "-shares"])
     .lean();
@@ -15,13 +15,13 @@ const getPostById = async (id) => {
 };
 
 const updatePost = async (data, id) => {
-  const post = await GroupPosts.updateOne({ _id: id }, data);
+  const post = await CommunityPosts.updateOne({ _id: id }, data);
   return post;
 };
 
 // uses findOneAndUpdate to return the data to the controller
 const updatePostAndReturn = async (data, id) => {
-  const post = await GroupPosts.findByIdAndUpdate(id, data).populate(
+  const post = await CommunityPosts.findByIdAndUpdate(id, data).populate(
     "poster",
     "username"
   );
@@ -29,11 +29,12 @@ const updatePostAndReturn = async (data, id) => {
 };
 
 const deletePost = async (id) => {
-  return await GroupPosts.deleteOne({ _id: id });
+  return await CommunityPosts.deleteOne({ _id: id });
 };
 
 const getPostLikes = async (postId) => {
-  const post = await GroupPosts.findById(postId)
+  const post = await communityPosts
+    .findById(postId)
     .populate("likes.userId", "name avatar username")
     .populate("shares.userId", "name avatar username")
     .select(["likes", "shares", "totalLikes", "totalShares"])
@@ -42,7 +43,7 @@ const getPostLikes = async (postId) => {
 };
 
 const getPosts = async (
-  { search, filter, groupId },
+  { search, filter, communityId },
   { limit, sortedBy, orderBy }
 ) => {
   const options = {
@@ -50,9 +51,9 @@ const getPosts = async (
     customLabels: myCustomLabels,
   };
 
-  const posts = await GroupPosts.paginate(
+  const posts = await CommunityPosts.paginate(
     {
-      $and: [{ content: { $regex: search, $options: "i" } }, { groupId }],
+      $and: [{ content: { $regex: search, $options: "i" } }, { communityId }],
       ...filter,
     },
     {
@@ -66,14 +67,14 @@ const getPosts = async (
 };
 
 const isPostLikedByUser = async (userId, postId) => {
-  const post = await GroupPosts.findOne({
+  const post = await CommunityPosts.findOne({
     $and: [{ _id: postId }, { "likes.userId": { $in: userId } }],
   });
   return post;
 };
 
-const shareAPost = async (userId, postId, groupId, data) => {
-  const body = { author: userId, groupId, sharedPostId: postId };
+const shareAPost = async (userId, postId, communityId, data) => {
+  const body = { poster: userId, communityId, sharedPostId: postId };
 
   if (data.file) {
     const d = {
@@ -90,7 +91,7 @@ const shareAPost = async (userId, postId, groupId, data) => {
   const post = await createPost(body);
   if (!post) throw new Error("cannot create post");
 
-  return await GroupPosts.updateOne(
+  return await CommunityPosts.updateOne(
     { _id: postId },
     { $addToSet: { shares: { userId } }, $inc: { totalShares: 1 } }
   );
