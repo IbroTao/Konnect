@@ -17,4 +17,15 @@ const schema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: modelNames.chat_groups,
   },
+  reason: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 100,
+  },
 });
+
+schema.plugin(mongoosePaginate);
+
+const groupReports = mongoose.model("GroupReport", schema);
+module.exports = groupReports;
