@@ -10,7 +10,7 @@ const schema = new mongoose.Schema(
       ref: modelNames.user,
       required: true,
     },
-    groupId: {
+    communityId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: modelNames.group,
       required: true,
