@@ -105,6 +105,14 @@ const getMsgsByGroupId = async (filter, options) => {
   return GroupMsg.paginate({ ...filter }, { ...options });
 };
 
+const checkIfUserIsAMember = async (userId, groupId) => {
+  const group = await Groups.findOne({
+    _id: groupId,
+    members: { $in: userId },
+  });
+  return group;
+};
+
 module.exports = {
   initiateGroup,
   updateGroupById,
@@ -112,6 +120,7 @@ module.exports = {
   getMsgsByGroupId,
   markMsgRead,
   getMsgById,
+  checkIfUserIsAMember,
   addAdmins,
   removeAdmins,
   addMembers,
