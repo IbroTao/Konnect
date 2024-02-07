@@ -45,6 +45,13 @@ const blockUsers = async (id, usersId) => {
   return group;
 };
 
+const unblockUsers = async (id, usersId) => {
+  const group = await Groups.findByIdAndUpdate(id, {
+    $pull: { blockIds: usersId },
+  });
+  return group;
+};
+
 module.exports = {
   initiateGroup,
   updateGroupById,
@@ -52,4 +59,5 @@ module.exports = {
   findGroupById,
   findGroupByName,
   blockUsers,
+  unblockUsers,
 };
