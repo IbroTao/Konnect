@@ -58,22 +58,22 @@ const updateCommunity = async (id, data, opts) => {
 };
 
 const uploadImage = async (id, url, publicId) => {
-  const group = await Group.updateOne(
+  const community = await Community.updateOne(
     { _id: id },
     { coverImage: url, publicId }
   );
-  return group;
+  return community;
 };
 
-const deleteGroup = async (id) => {
-  const group = await Group.findOneAndDelete({ _id: id });
-  return group;
+const deleteCommunity = async (id) => {
+  const community = await Community.findOneAndDelete({ _id: id });
+  return community;
 };
 
-const sendRequestTo = async (userId, groupId) => {
-  const community = await Community.findOne({ _id: groupId });
+const sendRequestTo = async (userId, communityId) => {
+  const community = await Community.findOne({ _id: communityId });
   if (community.type === "public")
-    throw new Error("you cannot send a request to a public group");
+    throw new Error("you cannot send a request to a public community");
 
   await CommunityRequest.requestModel({
     userId,
