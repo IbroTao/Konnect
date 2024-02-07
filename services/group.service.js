@@ -6,12 +6,17 @@ const initiateGroup = async (data) => {
   return group;
 };
 
-const updateGroupById = async (id) => {
-  const group = await Groups.findByIdAndUpdate(id);
+const updateGroupById = async (id, data, options) => {
+  const group = await Groups.findByIdAndUpdate(id, data, options);
   return group;
+};
+
+const deleteGroup = async (id) => {
+  return Groups.findByIdAndDelete(id);
 };
 
 module.exports = {
   initiateGroup,
   updateGroupById,
+  deleteGroup,
 };
