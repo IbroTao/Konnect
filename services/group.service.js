@@ -6,6 +6,12 @@ const initiateGroup = async (data) => {
   return group;
 };
 
+const updateGroupById = async (id) => {
+  const group = await Groups.findByIdAndUpdate(id);
+  return group;
+};
+
 module.exports = {
   initiateGroup,
+  updateGroupById,
 };
