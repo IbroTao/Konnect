@@ -1,23 +1,23 @@
 const myCustomLabels = require("../../utils/myCustomLabels");
-const { Group, GroupRequest } = require("../../models");
+const { Community, CommunityRequest } = require("../../models");
 
-const createGroup = async (data) => {
-  const group = await Group.create(data);
-  return group;
+const createCommunity = async (data) => {
+  const community = await Community.create(data);
+  return community;
 };
 
-const getAGroupById = async (id) => {
-  const group = await Group.findById(id);
-  return group;
+const getACommunityById = async (id) => {
+  const community = await Community.findById(id);
+  return community;
 };
 
-const getGroupByName = async (name) => {
-  const group = await Group.findOne({ name });
-  return group;
+const getCommunityByName = async (name) => {
+  const community = await Community.findOne({ name });
+  return community;
 };
 
 const getMembers = async (id) => {
-  const members = await Group.findById(id)
+  const members = await Community.findById(id)
     .populate("members.id", "avatar name username _id")
     .populate("admins.id", "avatar name username _id")
     .select(["members", "admins", "name"])
@@ -25,7 +25,7 @@ const getMembers = async (id) => {
   return members;
 };
 
-const queryGroups = async (
+const queryCommunities = async (
   { search, filter },
   { page, limit, orderBy, sortedBy }
 ) => {
@@ -33,7 +33,7 @@ const queryGroups = async (
     lean: true,
   };
 
-  const groups = await Group.paginate(
+  const communities = await Community.paginate(
     {
       $or: [
         { name: { $regex: search, $options: "i" } },
