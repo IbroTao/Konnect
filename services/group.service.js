@@ -57,9 +57,17 @@ const postMessage = async (data) => {
   return msg;
 };
 
+const markMsgDeleted = async (id) => {
+  const msg = await GroupMsg.findByIdAndUpdate(id, {
+    $set: { isDeleted: true },
+  });
+  return msg;
+};
+
 module.exports = {
   initiateGroup,
   updateGroupById,
+  markMsgDeleted,
   deleteGroup,
   postMessage,
   findGroupById,
