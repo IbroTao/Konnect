@@ -88,10 +88,19 @@ const removeAdmins = async (id, admins) => {
   return group;
 };
 
+const markMsgRead = async (groupId, userId) => {
+  const group = await GroupMsg.updateMany(
+    { groupId, "readBy.userId": { $ne: userId } },
+    { $addToSet: { readBy: { userId } } }
+  );
+  return group;
+};
+
 module.exports = {
   initiateGroup,
   updateGroupById,
   markMsgDeleted,
+  markMsgRead,
   addAdmins,
   removeAdmins,
   addMembers,
