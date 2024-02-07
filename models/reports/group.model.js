@@ -8,5 +8,13 @@ const schema = new mongoose.Schema({
     ref: modelNames.user,
     required: true,
   },
-  reportedMsg: {},
+  reportedMsg: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: modelNames.chat_groups_msg,
+    required: true,
+  },
+  groupId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: modelNames.chat_groups,
+  },
 });
