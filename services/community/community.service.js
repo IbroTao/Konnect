@@ -49,12 +49,12 @@ const queryCommunities = async (
       populate: { path: "admins.id", select: "_id username avatar name" },
     }
   );
-  return groups;
+  return communities;
 };
 
-const updateGroup = async (id, data, opts) => {
-  const group = await Group.findByIdAndUpdate(id, data, opts);
-  return group;
+const updateCommunity = async (id, data, opts) => {
+  const community = await Community.findByIdAndUpdate(id, data, opts);
+  return community;
 };
 
 const uploadImage = async (id, url, publicId) => {
@@ -71,19 +71,19 @@ const deleteGroup = async (id) => {
 };
 
 const sendRequestTo = async (userId, groupId) => {
-  const group = await Group.findOne({ _id: groupId });
-  if (group.type === "public")
+  const community = await Community.findOne({ _id: groupId });
+  if (community.type === "public")
     throw new Error("you cannot send a request to a public group");
 
-  await GroupRequest.create({
+  await CommunityRequest.requestModel({
     userId,
     communityId,
   });
-  return group;
+  return community;
 };
 
 const deleteRequest = async (id) => {
-  return GroupRequest.deleteOne({ _id: id });
+  return CommunityRequest.deleteOne({ _id: id });
 };
 
 const getAllRequests = async ({ id, limit, page }) => {
@@ -92,8 +92,8 @@ const getAllRequests = async ({ id, limit, page }) => {
     customLabels: myCustomLabels,
   };
 
-  const requests = await GroupRequest.paginate(
-    { groupId: id },
+  const requests = await CommunityRequest.paginate(
+    { communityId: id },
     {
       ...(limit ? { limit } : { limit: 15 }),
       page,
@@ -109,14 +109,14 @@ const getAllRequests = async ({ id, limit, page }) => {
 };
 
 module.exports = {
-  createGroup,
-  getAGroupById,
-  getGroupByName,
+  createCommunity,
+  getACommunityById,
+  getCommunityByName,
   getMembers,
-  queryGroups,
-  updateGroup,
+  queryCommunities,
+  updateCommunity,
   uploadImage,
-  deleteGroup,
+  deleteCommunity,
   sendRequestTo,
   deleteRequest,
   getAllRequests,
