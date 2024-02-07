@@ -69,11 +69,19 @@ const addMembers = async (id, members) => {
   return group;
 };
 
+const removeMembers = async (id, members) => {
+  const group = await Groups.findByIdAndUpdate(id, {
+    $pull: { members: { $in: members } },
+  });
+  return group;
+};
+
 module.exports = {
   initiateGroup,
   updateGroupById,
   markMsgDeleted,
   addMembers,
+  removeMembers,
   deleteGroup,
   postMessage,
   findGroupById,
