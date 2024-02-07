@@ -38,10 +38,18 @@ const findGroupByName = async (name, userId) => {
   return group;
 };
 
+const blockUsers = async (id, usersId) => {
+  const group = await Groups.findByIdAndUpdate(id, {
+    $addToSet: { blockIds: usersId },
+  });
+  return group;
+};
+
 module.exports = {
   initiateGroup,
   updateGroupById,
   deleteGroup,
   findGroupById,
   findGroupByName,
+  blockUsers,
 };
