@@ -101,10 +101,15 @@ const getMsgById = async (msgId) => {
   return msg;
 };
 
+const getMsgsByGroupId = async (filter, options) => {
+  return GroupMsg.paginate({ ...filter }, { ...options });
+};
+
 module.exports = {
   initiateGroup,
   updateGroupById,
   markMsgDeleted,
+  getMsgsByGroupId,
   markMsgRead,
   getMsgById,
   addAdmins,
