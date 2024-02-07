@@ -81,6 +81,13 @@ const addAdmins = async (id, admins) => {
   return group;
 };
 
+const removeAdmins = async (id, admins) => {
+  const group = await Groups.findByIdAndUpdate(id, {
+    $pull: { admins: { $in: admins } },
+  });
+  return group;
+};
+
 module.exports = {
   initiateGroup,
   updateGroupById,
