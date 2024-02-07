@@ -11,7 +11,7 @@ const schema = new mongoose.Schema(
       type: String,
       minlength: 1,
     },
-    groupId: {
+    communityId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: modelNames.group,
     },
