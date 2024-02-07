@@ -64,10 +64,16 @@ const markMsgDeleted = async (id) => {
   return msg;
 };
 
+const addMembers = async (id, members) => {
+  const group = await Groups.findByIdAndUpdate(id, { $addToSet: { members } });
+  return group;
+};
+
 module.exports = {
   initiateGroup,
   updateGroupById,
   markMsgDeleted,
+  addMembers,
   deleteGroup,
   postMessage,
   findGroupById,
