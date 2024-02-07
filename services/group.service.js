@@ -52,10 +52,16 @@ const unblockUsers = async (id, usersId) => {
   return group;
 };
 
+const postMessage = async (data) => {
+  const msg = await GroupMsg.create(data);
+  return msg;
+};
+
 module.exports = {
   initiateGroup,
   updateGroupById,
   deleteGroup,
+  postMessage,
   findGroupById,
   findGroupByName,
   blockUsers,
