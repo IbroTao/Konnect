@@ -15,8 +15,18 @@ const deleteGroup = async (id) => {
   return Groups.findByIdAndDelete(id);
 };
 
+const findGroupById = async (id) => {
+  const group = await Groups.findById(id)
+    .populate("members", "name avatar username")
+    .populate("admins", "name avatar username")
+    .populate("muteIds", "name avatar username")
+    .populate("blockIds", "name avatar username");
+  return group;
+};
+
 module.exports = {
   initiateGroup,
   updateGroupById,
   deleteGroup,
+  findGroupById,
 };
