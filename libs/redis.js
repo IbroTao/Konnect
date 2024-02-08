@@ -8,7 +8,7 @@ async function addToRedis(key, value, expiresIn = 60 * 60 * 24) {
   }
 }
 
-async function addRedisToCaching(key, value, expiresIn = 360) {
+async function addRedisForCaching(key, value, expiresIn = 360) {
   try {
     return await redisClient.setex(key, expiresIn, value);
   } catch (error) {
@@ -23,3 +23,18 @@ async function delInRedis(key) {
     throw new Error(error);
   }
 }
+
+async function getFromRedis(key) {
+  try {
+    return await edisClient.get(key);
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+
+module.exports = {
+  addToRedis,
+  addRedisForCaching,
+  delInRedis,
+  getFromRedis,
+};
