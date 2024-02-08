@@ -115,7 +115,17 @@ const checkIfUserIsAMember = async (userId, groupId) => {
 
 const getGroupsByUserId = async (userId) => {
   const groups = await Groups.find({ members: { $in: userId } });
-  return modelNames.chat_groups;
+  return groups;
+};
+
+const reportMessage = async (reporter, reportedMsg, groupId, reason) => {
+  const report = await GroupReport.create({
+    groupId,
+    reporterId: reporter,
+    reason,
+    reportedMsg,
+  });
+  return report;
 };
 
 module.exports = {
@@ -123,6 +133,7 @@ module.exports = {
   updateGroupById,
   markMsgDeleted,
   getMsgsByGroupId,
+  reportMessage,
   markMsgRead,
   getMsgById,
   getGroupsByUserId,
