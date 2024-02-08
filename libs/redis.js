@@ -15,3 +15,11 @@ async function addRedisToCaching(key, value, expiresIn = 360) {
     throw new Error(error);
   }
 }
+
+async function delInRedis(key) {
+  try {
+    return await redisClient.del(key);
+  } catch (error) {
+    throw new Error(error);
+  }
+}
