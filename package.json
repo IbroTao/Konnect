@@ -22,6 +22,7 @@
     "helmet": "^7.1.0",
     "html-to-text": "^9.0.5",
     "http-status": "^1.7.3",
+    "ioredis": "^5.3.2",
     "joi": "^17.12.0",
     "jsonwebtoken": "^9.0.2",
     "mjml": "^4.14.1",
