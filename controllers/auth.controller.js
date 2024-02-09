@@ -67,9 +67,10 @@ const forgotPassword = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
-// const resetPassword = catchAsync(async(req, res) => {
-//    await authService.
-//  })
+const resetPassword = catchAsync(async (req, res) => {
+  await authService.resetPassword(req.body.digits, req.body.password);
+  res.status(httpStatus.NO_CONTENT).send();
+});
 
 const sendVerificationEmail = catchAsync(async (req, res) => {
   const verifyEmailToken = await tokenService.generateVerifyEmailToken(
@@ -101,4 +102,5 @@ module.exports = {
   forgotPassword,
   verifyEmail,
   resendVerificationCode,
+  resetPassword,
 };
