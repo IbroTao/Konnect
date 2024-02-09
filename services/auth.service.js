@@ -7,6 +7,7 @@ const ApiError = require("../utils/ApiError");
 const { User } = require("../models");
 const { uniqueFiveDigits } = require("../utils/generateSixDigits");
 const { defaultEmailSender, sendEmail } = require("./email.service");
+const { getFromRedis } = require("../libs/redis");
 
 const loginWithEmailAndPassword = async (email, password) => {
   const user = await userService.getUserByEmail(email);
@@ -73,8 +74,18 @@ const verifyEmail = async (verifyEmailToken) => {
   }
 };
 
+const verifyAccount = async (digits) => {
+  const value = await getFromRedis(digits);
+  if (!value)
+    throw new Error(
+      "cannot find resource, the 6 digits code might have expired."
+    );
+  return User.findOneAndUpdate({ _id: value }, { isEmailVerified: true });
+};
+
 module.exports = {
   loginWithEmailAndPassword,
+  verifyAccount,
   logout,
   refreshAuth,
   forgetPassword,

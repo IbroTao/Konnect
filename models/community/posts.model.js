@@ -13,7 +13,7 @@ const schema = new mongoose.Schema(
     },
     communityId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: modelNames.group,
+      ref: modelNames.community,
     },
     file: {
       type: mongoose.Schema.Types.Mixed,
@@ -39,7 +39,7 @@ const schema = new mongoose.Schema(
     },
     sharedPostId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: modelNames.group_posts,
+      ref: modelNames.community_posts,
     },
     views: {
       type: Number,

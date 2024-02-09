@@ -15,11 +15,11 @@ const schema = new mongoose.Schema({
   },
   parentId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: modelNames.group_comment,
+    ref: modelNames.community_comment,
   },
   postId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: modelNames.group_posts,
+    ref: modelNames.community_posts,
   },
   replyCount: {
     type: Number,
