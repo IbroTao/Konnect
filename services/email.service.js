@@ -69,6 +69,10 @@ If you did not request to change your password, then ignore this email.`;
 //   });
 // };
 
+const sendVerificationEmail = async (name, to, token) => {
+  const subject = "Email Verification";
+};
+
 // const getVerificationCode = async ({ email, name }) => {
 //   const digits = uniqueSixDigits();
 //   const text = `Thanks creating an account with us at Konnect.
