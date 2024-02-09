@@ -25,6 +25,18 @@ const loginWithEmailAndPassword = async (email, password) => {
   return user;
 };
 
+const resetPassword = async (digits, newPassword) => {
+  const email = await getFromRedis(digits.toString());
+  if (!email)
+    throw new ApiError(
+      httpStatus.NOT_FOUND,
+      "6 digits code has expired or is wrong"
+    );
+  const user = await User.findOne({ email });
+  user.password = newPassword;
+  return user.save();
+};
+
 const logout = async (refreshToken) => {
   const refreshTokenDoc = await Token.findOne({
     token: refreshToken,
@@ -103,4 +115,5 @@ module.exports = {
   getVerificationCode,
   forgetPassword,
   verifyEmail,
+  resetPassword,
 };
