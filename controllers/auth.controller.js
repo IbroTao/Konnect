@@ -22,7 +22,7 @@ const register = catchAsync(async (req, res) => {
     email,
   });
 
-  res.status(httpStatus.CREATED).json({ user, message: "5 digits code sent" });
+  res.status(httpStatus.CREATED).json({ user, message: "6 digits code sent" });
 });
 
 const resendVerificationCode = catchAsync(async (req, res) => {
@@ -30,6 +30,15 @@ const resendVerificationCode = catchAsync(async (req, res) => {
   if (!user) throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
   await emailService.getVerificationCode({ email });
   res.status(httpStatus.OK).json({ message: MESSAGES.SEND_VERIFICATION_CODE });
+});
+
+const verifyAccount = catchAsync(async (req, res) => {
+  const { digits } = req.body;
+  const user = await authService.verifyAccount(digits);
+  if (!user)
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, MESSAGES.CODE_EXPIRED);
+  const token = await tokenService.generateAuthTokens(user);
+  res.status(httpStatus.OK).json(token);
 });
 
 const login = catchAsync(async (req, res) => {
@@ -90,6 +99,7 @@ module.exports = {
   sendVerificationEmail,
   login,
   logout,
+  verifyAccount,
   refreshTokens,
   forgotPassword,
   verifyEmail,
