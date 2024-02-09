@@ -85,22 +85,13 @@ const verifyAccount = async (digits) => {
 
 const getVerificationCode = async (req, user) => {
   const digits = uniqueSixDigits();
+  const link = `https://konnect.com`;
   await addToRedis(digits.toString(), user._id.toString(), 60 * 60 * 3);
 
-  const text = `Thanks creating an account with us at Konnect. 
-  To continue registration, we sent a 6-digits code to you for further verification and authentication.
-
-  Your 6-digit code is <h4>${digits}</h4>
-  
-  Kindly enter the code into your device to continue the registration process. For any help, you can contact us at Konnect.
-
-  Best Wishes,
-  @KonnectICT`;
-
-  return sendEmail({
-    to: user.email,
-    subject: "Account Verification",
-    html: `<h4>Dear ${user.name}</h4> ${text}`,
+  return defaultMailSender(user.email, "Verify Your Account", {
+    digits,
+    link,
+    name: user.name,
   });
 };
 

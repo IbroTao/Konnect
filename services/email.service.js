@@ -131,28 +131,28 @@ const sendFiveDigitsForVerification = async (to) => {
   }
 };
 
-// const defaultEmailSender = (to, subject, payload) => {
-//   const { name, digits, link } = payload;
-//   let html;
+const defaultEmailSender = (to, subject, payload) => {
+  const { name, digits, link } = payload;
+  let html;
 
-//   switch (subject) {
-//     case "Verify Your Account":
-//       html = verifyAccountViaDigitsTemplate({ name, digits, link });
-//       break;
-//     case "Password Reset":
-//       html = forgetPasswordTemplate({ name, digits, link });
-//       break;
-//     case "Password Updated":
-//       html = updatedPasswordTemplate({ name, digits, link });
-//       break;
-//   }
-// };
+  switch (subject) {
+    case "Verify Your Account":
+      html = verifyAccountViaDigitsTemplate({ name, digits, link });
+      break;
+    case "Password Reset":
+      html = forgetPasswordTemplate({ name, digits, link });
+      break;
+    case "Password Updated":
+      html = updatedPasswordTemplate({ name, digits, link });
+      break;
+  }
+};
 
-// module.exports = {
-//   sendEmail,
-//   sendResetPasswordEmail,
-//   sendVerificationEmail,
-//   sendFiveDigitsForVerification,
-//   defaultEmailSender,
-//   getVerificationCode,
-// };
+module.exports = {
+  transport,
+  sendEmail,
+  sendResetPasswordEmail,
+  sendVerificationEmail,
+  sendFiveDigitsForVerification,
+  defaultEmailSender,
+};
