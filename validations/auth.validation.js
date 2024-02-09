@@ -18,4 +18,10 @@ const login = {
   }),
 };
 
-module.exports = { register };
+const validateAcct = {
+  body: Joi.object().keys({
+    digits: Joi.string().min(5).max(6).required(),
+  }),
+};
+
+module.exports = { register, login, validateAcct };
