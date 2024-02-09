@@ -9,6 +9,7 @@ const {
 const ApiError = require("../utils/ApiError");
 const { MESSAGES } = require("../constants/responseMessages");
 const { defaultEmailSender } = require("../services/email.service");
+const { addRedisForCaching } = require("../libs/redis");
 
 const register = catchAsync(async (req, res) => {
   const { username, email, name } = req.body;
@@ -89,6 +90,13 @@ const verifyEmail = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).json({ message: MESSAGES.EMAIL_VERIFIED });
 });
 
+const getMe = catchAsync(async (req, res) => {
+  const user = await userService.getUserById(req.user.id);
+  user.password = "";
+  await addRedisToCaching(req.user.id.toString(), JSON.stringify(user), 30);
+  res.status(httpStatus.OK).json(user);
+});
+
 // This feature is only used when the user is logged in.
 // const updatePassword
 
@@ -96,6 +104,7 @@ module.exports = {
   register,
   sendVerificationEmail,
   login,
+  getMe,
   logout,
   verifyAccount,
   refreshTokens,
