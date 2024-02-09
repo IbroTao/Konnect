@@ -7,3 +7,4 @@ module.exports.notificationInfo = require("./utils/notificationInfo");
 module.exports.communityService = require("./community/community.service");
 module.exports.communityPostService = require("./community/post.service");
 module.exports.communityCommentService = require("./community/comment.service");
+module.exports.groupService = require("./group.service");

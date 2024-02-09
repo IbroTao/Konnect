@@ -144,35 +144,6 @@ const getReportedMessages = async () => {
   return report;
 };
 
-const getRecentGroupMsgs = async (groupIds, group, limit, page) => {
-  const options = {
-    page: +page || 1,
-    limit: +limit || 20,
-  }
-  const recentGroups = await GroupReport.aggregrate(
-    [
-      { $match: {groupId: {$in: groupIds}}},
-      {
-        $project: {
-          unread: {
-            $cond: [{$in: [userId, '$readBy.userId']}, 0, 1]
-          },
-          groupId: 1,
-          message: 1,
-          sender: 1,
-          readBy: 1,
-          createdAt: 1,
-          isDeleted: 1
-        }
-      },
-      $groupkey: "value", {
-        _id: '$groupId',
-        msgId: {$last: '$_id'} 
-      }
-    ]
-  )
-}
-
 module.exports = {
   initiateGroup,
   updateGroupById,
