@@ -5,9 +5,9 @@ const { tokenTypes } = require("../configs/tokenTypes");
 const Token = require("../models/token.model");
 const ApiError = require("../utils/ApiError");
 const { User } = require("../models");
-const { uniqueFiveDigits } = require("../utils/generateSixDigits");
+const { uniqueSixDigits } = require("../utils/generateSixDigits");
 const { defaultEmailSender, sendEmail } = require("./email.service");
-const { getFromRedis } = require("../libs/redis");
+const { getFromRedis, addToRedis } = require("../libs/redis");
 
 const loginWithEmailAndPassword = async (email, password) => {
   const user = await userService.getUserByEmail(email);
@@ -83,11 +83,33 @@ const verifyAccount = async (digits) => {
   return User.findOneAndUpdate({ _id: value }, { isEmailVerified: true });
 };
 
+const getVerificationCode = async (req, user) => {
+  const digits = uniqueSixDigits();
+  await addToRedis(digits.toString(), user._id.toString(), 60 * 60 * 3);
+
+  const text = `Thanks creating an account with us at Konnect. 
+  To continue registration, we sent a 6-digits code to you for further verification and authentication.
+
+  Your 6-digit code is <h4>${digits}</h4>
+  
+  Kindly enter the code into your device to continue the registration process. For any help, you can contact us at Konnect.
+
+  Best Wishes,
+  @KonnectICT`;
+
+  return sendEmail({
+    to: user.email,
+    subject: "Account Verification",
+    html: `<h4>Dear ${user.name}</h4> ${text}`,
+  });
+};
+
 module.exports = {
   loginWithEmailAndPassword,
   verifyAccount,
   logout,
   refreshAuth,
+  getVerificationCode,
   forgetPassword,
   verifyEmail,
 };

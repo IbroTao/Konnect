@@ -21,4 +21,10 @@ router.post(
   authController.sendVerificationEmail
 );
 
+router.post(
+  "/validate-account",
+  validate(authValidation.validateAcct),
+  authController.verifyAccount
+);
+
 module.exports = router;
