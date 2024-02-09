@@ -20,5 +20,13 @@ const createGroup = catchAsync(async (req, res) => {
     const { publicId, url } = await uploadSingle(file.path);
 
     let fileData = {};
+    Object.assign(fileData, data, { logo: { publicId, url } });
+    data = fileData;
   }
+  const result = await groupService.initiateGroup(data);
+  if (!result)
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, MESSAGES.FAILURE);
+  res.status(201).json(result);
 });
+
+module.exports = { createGroup };
