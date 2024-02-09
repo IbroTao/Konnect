@@ -136,10 +136,19 @@ const getReportedMsg = async (reportId) => {
   return report;
 };
 
+const getReportedMessages = async () => {
+  const report = await GroupReport.find()
+    .populate("reporterId", "name avatar")
+    .populate("reportedMsg")
+    .populate("groupId");
+  return report;
+};
+
 module.exports = {
   initiateGroup,
   updateGroupById,
   markMsgDeleted,
+  getReportedMessages,
   getReportedMsg,
   getMsgsByGroupId,
   reportMessage,

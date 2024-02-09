@@ -88,7 +88,7 @@ const getVerificationCode = async (req, user) => {
   const link = `https://konnect.com`;
   await addToRedis(digits.toString(), user._id.toString(), 60 * 60 * 3);
 
-  return defaultMailSender(user.email, "Verify Your Account", {
+  return defaultEmailSender(user.email, "Verify Your Account", {
     digits,
     link,
     name: user.name,
