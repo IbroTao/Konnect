@@ -71,7 +71,19 @@ const sendMessage = catchAsync(async (req, res) => {
       url: file.url,
       publicId: file.publicId,
     }));
-  }
+
+    message = { fileData };
+  } else if (text) {
+    message = { fileData };
+  } else throw new ApiError(httpStatus.BAD_REQUEST, MESSAGES.PROVIDE_BODY);
+
+  const msg = await groupService.postMessage({
+    message,
+    groupId,
+    sender: user.id,
+    readBy: { userId: user.id },
+  });
+  res.status(201).json(msg);
 });
 
 module.exports = {
