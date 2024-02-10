@@ -118,6 +118,16 @@ const removeAdmins = catchAsync(async (req, res) => {
   res.status(200).json({ message: MESSAGES.SUCCESS });
 });
 
+const markMessagesSeen = catchAsync(async (req, res) => {
+  const msg = await groupService.markMessagesSeen(
+    req.params.groupId,
+    req.user.id
+  );
+  if (!msg)
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, MESSAGES.FAILURE);
+  res.status(201).json({ message: MESSAGES.SUCCESS });
+});
+
 module.exports = {
   createGroup,
   getGroupById,
@@ -128,4 +138,6 @@ module.exports = {
   getGroupByName,
   uploadLogo,
   sendMessage,
+  deleteMessage,
+  markMessagesSeen,
 };
