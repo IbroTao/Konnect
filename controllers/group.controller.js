@@ -59,4 +59,15 @@ const uploadLogo = catchAsync(async (req, res) => {
   res.status(200).json({ message: MESSAGES.UPDATED });
 });
 
-module.exports = { createGroup, getGroupById, getGroupByName, uploadLogo };
+const sendMessage = catchAsync(async (req, res) => {
+  const { groupId, text } = req.body;
+  const { user, files } = req;
+});
+
+module.exports = {
+  createGroup,
+  getGroupById,
+  getGroupByName,
+  uploadLogo,
+  sendMessage,
+};
