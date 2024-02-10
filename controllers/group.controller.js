@@ -43,4 +43,20 @@ const getGroupByName = catchAsync(async (req, res) => {
   res.status(200).json(group);
 });
 
-module.exports = { createGroup, getGroupById, getGroupNByName };
+const uploadLogo = catchAsync(async (req, res) => {
+  if (!req.file)
+    throw new ApiError(httpStatus.BAD_REQUEST, MESSAGES.PROVIDE_IMAGE);
+  const { url, publicId } = await uploadSingle(file.path);
+
+  const group = await groupService.updateGroupById(req.params.groupId, {
+    logo: { url, publicId },
+  });
+  if (!group)
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      MESSAGES.UPDATE_FAILED
+    );
+  res.status(200).json({ message: MESSAGES.UPDATED });
+});
+
+module.exports = { createGroup, getGroupById, getGroupByName, uploadLogo };
