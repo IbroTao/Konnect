@@ -17,9 +17,10 @@ const register = catchAsync(async (req, res) => {
     ...req.body,
     username: `@${username}`,
   });
-  console.log(user);
-  const auth = await authService.getVerificationCode(req, user);
-  console.log(auth);
+  await authService.getVerificationCode({
+    name,
+    email,
+  });
   res.status(httpStatus.CREATED).json({ user, message: "6 digits code sent" });
 });
 
@@ -93,7 +94,7 @@ const verifyEmail = catchAsync(async (req, res) => {
 const getMe = catchAsync(async (req, res) => {
   const user = await userService.getUserById(req.user.id);
   user.password = "";
-  await addRedisToCaching(req.user.id.toString(), JSON.stringify(user), 30);
+  await addRedisForCaching(req.user.id.toString(), JSON.stringify(user), 30);
   res.status(httpStatus.OK).json(user);
 });
 

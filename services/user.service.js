@@ -15,7 +15,7 @@ const isUsernameTaken = async (username) => {
 
 const createUser = async (userBody) => {
   if (await User.isEmailTaken(userBody.email))
-    throw new ApiError(httpStatus.BAD_REQUEST);
+    throw new ApiError(httpStatus.BAD_REQUEST, MESSAGES.EMAIL_TAKEN);
   if ((await isUsernameTaken(userBody.username)) === "available")
     return User.create({ ...userBody });
 };

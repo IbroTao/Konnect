@@ -29,4 +29,9 @@ const createGroup = catchAsync(async (req, res) => {
   res.status(201).json(result);
 });
 
+const getGroupById = catchAsync(async (req, res) => {
+  const group = await groupService.findGroupById(req.params.id);
+  if (!group) throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR);
+});
+
 module.exports = { createGroup };

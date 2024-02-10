@@ -67,7 +67,7 @@ const forgetPassword = async (email) => {
   if (user.password === "none")
     throw new ApiError(httpStatus.BAD_REQUEST, "provide your password");
   if (!user) throw new ApiError(httpStatus.NOT_FOUND, "user does not exist");
-  const digits = uniqueFiveDigits();
+  const digits = uniqueSixDigits();
   return { user: user.name, digits };
 };
 
@@ -100,10 +100,20 @@ const getVerificationCode = async (req, user) => {
   const link = `https://konnect.com`;
   await addToRedis(digits.toString(), user._id.toString(), 60 * 60 * 3);
 
-  return defaultEmailSender(user.email, "Verify Your Account", {
-    digits,
-    link,
-    name: user.name,
+  const text = `Thanks creating an account with us at Konnect.
+  To continue registration, we sent a 6-digits code to you for further verification and authentication.
+
+  Your 6-digit code is <h4>${digits}</h4>
+
+  Kindly enter the code into your device to continue the registration process. For any help, you can contact us at Konnect.
+
+  Best Wishes,
+  @KonnectICT`;
+
+  return sendEmail({
+    to: email,
+    subject: "Account Verification",
+    html: `<h4>Dear ${user.name}</h4> ${text}`,
   });
 };
 
