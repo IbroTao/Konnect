@@ -128,8 +128,14 @@ const markMessagesSeen = catchAsync(async (req, res) => {
   res.status(201).json({ message: MESSAGES.SUCCESS });
 });
 
+const deleteMessage = catchAsync(async (req, res) => {
+  await groupService.markMsgDeleted(req.params.msgId);
+  res.status(200).json({ message: MESSAGES.DELETED });
+});
+
 module.exports = {
   createGroup,
+  getMessagesByGroupId,
   getGroupById,
   addMembers,
   addAdmins,
