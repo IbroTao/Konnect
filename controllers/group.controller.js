@@ -62,6 +62,16 @@ const uploadLogo = catchAsync(async (req, res) => {
 const sendMessage = catchAsync(async (req, res) => {
   const { groupId, text } = req.body;
   const { user, files } = req;
+
+  let message;
+  if (text && files.length) {
+    const filePaths = files.map((file) => file.path);
+    const response = await uploadMany(filePaths);
+    const fileData = response.map((file) => ({
+      url: file.url,
+      publicId: file.publicId,
+    }));
+  }
 });
 
 module.exports = {
