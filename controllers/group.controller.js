@@ -102,6 +102,22 @@ const addAdmins = catchAsync(async (req, res) => {
   res.status(200).json({ message: MESSAGES.SUCCESS });
 });
 
+const removeMembers = catchAsync(async (req, res) => {
+  const { body, params } = req;
+  const group = await groupService.removeMembers(params.groupId, body.members);
+  if (!group)
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, MESSAGES.FAILURE);
+  res.status(200).json({ message: MESSAGES.SUCCESS });
+});
+
+const removeAdmins = catchAsync(async (req, res) => {
+  const { body, params } = req;
+  const group = await groupService.removeAdmins(params.groupId, body.admins);
+  if (!group)
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, MESSAGES.FAILURE);
+  res.status(200).json({ message: MESSAGES.SUCCESS });
+});
+
 module.exports = {
   createGroup,
   getGroupById,
