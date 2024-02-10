@@ -94,6 +94,14 @@ const addMembers = catchAsync(async (req, res) => {
   res.status(200).json({ message: MESSAGES.SUCCESS });
 });
 
+const addAdmins = catchAsync(async (req, res) => {
+  const { body, params } = req;
+  const group = await groupService.addAdmins(params.groupId, body.admins);
+  if (!group)
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, MESSAGES.FAILURE);
+  res.status(200).json({ message: MESSAGES.SUCCESS });
+});
+
 module.exports = {
   createGroup,
   getGroupById,
