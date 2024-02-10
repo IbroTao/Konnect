@@ -36,4 +36,11 @@ const getGroupById = catchAsync(async (req, res) => {
   res.status(200).json(group);
 });
 
-module.exports = { createGroup, getGroupById };
+const getGroupByName = catchAsync(async (req, res) => {
+  const group = await groupService.getGroupByName(req.params.name, req.user.id);
+  if (!group)
+    throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.RESOURCE_MISSING);
+  res.status(200).json(group);
+});
+
+module.exports = { createGroup, getGroupById, getGroupNByName };
