@@ -8,6 +8,7 @@ const { User } = require("../models");
 const { uniqueSixDigits } = require("../utils/generateSixDigits");
 const { defaultEmailSender, sendEmail } = require("./email.service");
 const { getFromRedis, addToRedis } = require("../libs/redis");
+const bcrypt = require("bcryptjs");
 
 const loginWithEmailAndPassword = async (email, password) => {
   const user = await userService.getUserByEmail(email);
@@ -18,8 +19,12 @@ const loginWithEmailAndPassword = async (email, password) => {
       httpStatus.UNAUTHORIZED,
       "verify email before you can login"
     );
-  if (!user || !(await user.isPasswordMatch(password)))
-    throw new ApiError(httpStatus.BAD_REQUEST, "password is not correct");
+  const comparePassword = bcrypt.compareSync(password, user.password);
+  if (!comparePassword)
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      "password does not match"
+    );
   user.status = "online";
   await user.save();
   return user;

@@ -70,7 +70,7 @@ const generateAuthTokens = async (user) => {
   await saveToken(
     refreshToken,
     user.id,
-    refreshTokenExpires,
+    refreshTokenExpires.toDate(),
     tokenTypes.REFRESH
   );
 
@@ -119,7 +119,12 @@ const generateVerifyEmailToken = async (user) => {
     expires,
     tokenTypes.VERIFY_EMAIL
   );
-  await saveToken(verifyEmailToken, user.id, expires, tokenTypes.VERIFY_EMAIL);
+  await saveToken(
+    verifyEmailToken,
+    user.id,
+    expires.toDate(),
+    tokenTypes.VERIFY_EMAIL
+  );
   return verifyEmailToken;
 };
 
