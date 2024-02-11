@@ -26,26 +26,26 @@ const transport = nodemailer.createTransport({
   debug: true,
 });
 
-// const sendEmail = async ({ to, subject, html }) => {
-//   const transporter = nodemailer.createTransport({
-//     port: SMTP_PORT,
-//     host: SMTP_HOST,
-//     auth: {
-//       user: sender,
-//       pass: process.env.SMTP_PASSWORD,
-//     },
-//     secure: true,
-//   });
+const sendEmail = async ({ to, subject, html }) => {
+  const transporter = nodemailer.createTransport({
+    port: SMTP_PORT,
+    host: SMTP_HOST,
+    auth: {
+      user: sender,
+      pass: process.env.SMTP_PASSWORD,
+    },
+    secure: true,
+  });
 
-//   return await transporter.sendMail({
-//     from: sender,
-//     to,
-//     subject,
-//     html,
-//   });
-// };
+  return await transporter.sendMail({
+    from: sender,
+    to,
+    subject,
+    html,
+  });
+};
 
-const sendEmail = async (to, subject, text) => {
+const sendEmailConfig = async (to, subject, text) => {
   const msg = { from: config.email.from, to, subject, html: text };
   await transport.sendMail(msg);
 };

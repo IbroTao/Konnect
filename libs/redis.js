@@ -26,7 +26,7 @@ async function delInRedis(key) {
 
 async function getFromRedis(key) {
   try {
-    return await edisClient.get(key);
+    return await redisClient.get(key);
   } catch (error) {
     throw new Error(error);
   }

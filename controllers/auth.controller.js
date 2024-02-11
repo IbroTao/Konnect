@@ -9,7 +9,9 @@ const {
 const ApiError = require("../utils/ApiError");
 const { MESSAGES } = require("../constants/responseMessages");
 const { defaultEmailSender } = require("../services/email.service");
-const { addRedisForCaching } = require("../libs/redis");
+const { addRedisForCaching, addToRedis } = require("../libs/redis");
+const { sendEmail } = require("../services/email.service");
+const { uniqueSixDigits } = require("../utils/generateSixDigits");
 
 const register = catchAsync(async (req, res) => {
   const { username, email, name } = req.body;
@@ -17,9 +19,24 @@ const register = catchAsync(async (req, res) => {
     ...req.body,
     username: `@${username}`,
   });
-  await authService.getVerificationCode({
-    name,
-    email,
+  const digits = uniqueSixDigits();
+  const link = `https://konnect.com`;
+  await addToRedis(digits.toString(), user._id.toString(), 60 * 60 * 3);
+
+  const text = `<p>Thanks creating an account with us at <strong>Konnect</strong>.
+  To continue registration, we sent a 6-digits code to you for further verification and authentication.
+
+  Your 6-digit code is <h4>${digits}</h4>
+
+  Kindly enter the code into your device to continue the registration process. For any help, you can contact us at Konnect.
+
+  Best Wishes,
+  @KonnectICT</p>`;
+
+  await sendEmail({
+    to: email,
+    subject: "Account Verification",
+    html: `<h4>Dear ${name}</h4> ${text}`,
   });
   res.status(httpStatus.CREATED).json({ user, message: "6 digits code sent" });
 });
