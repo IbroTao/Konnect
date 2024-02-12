@@ -15,3 +15,5 @@ router
     validate(userValidation.updateProfile),
     userController.updateProfile
   );
+
+router.get("/:userId", userController.getUser);
