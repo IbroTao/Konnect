@@ -19,10 +19,9 @@ const register = catchAsync(async (req, res) => {
   const user = await userService.createUser({
     ...req.body,
     username: `@${username}`,
-    password: hashSync(password, 10),
+    // password: hashSync(password, 10),
   });
   const digits = uniqueSixDigits();
-  const link = `https://konnect.com`;
   await addToRedis(digits.toString(), user._id.toString(), 60 * 60 * 3);
 
   const text = `<p>Thanks creating an account with us at <strong>Konnect</strong>.

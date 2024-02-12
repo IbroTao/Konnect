@@ -10,5 +10,12 @@ const fileFilter = function (req, file, callback) {
   const fileExtendCheck = allowedFileExtensions.includes(
     path.extname(file.originalname).toLowerCase()
   );
-  if
+  if (!fileExtendCheck && file.originalname !== "blob") {
+    callback(
+      new ApiError(httpStatus.NOT_ACCEPTABLE, "file is not acceptable"),
+      false
+    );
+  } else {
+    callback(null, true);
+  }
 };

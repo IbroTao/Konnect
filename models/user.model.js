@@ -28,16 +28,16 @@ const userSchema = new mongoose.Schema(
     password: {
       type: String,
       trim: true,
-      validate(value) {
-        if (value !== "none") {
-          if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
-            throw new Error(
-              "Password must contain at least one letter and one letter"
-            );
-          }
-        }
-      },
-      private: true,
+      // validate(value) {
+      //   if (value !== "none") {
+      //     if (!value.match(/\d/) || !value.match(/[a-zA-Z]/)) {
+      //       throw new Error(
+      //         "Password must contain at least one letter and one letter"
+      //       );
+      //     }
+      //   }
+      // },
+      // private: true,
     },
     role: {
       type: String,
@@ -131,20 +131,20 @@ userSchema.statics.isEmailTaken = async function (email, excludeUserId) {
   return !!user;
 };
 
-userSchema.methods.isPasswordMatch = async function (password) {
-  const user = this;
-  return bcrypt.compare(password, user.password);
-};
+// userSchema.methods.isPasswordMatch = async function (password) {
+//   const user = this;
+//   return bcrypt.compare(password, user.password);
+// };
 
-userSchema.pre("save", async function (next) {
-  const user = this;
-  if (user.isModified("password")) {
-    if (user.password !== "none") {
-      user.password = await bcrypt.hash(user.password, 11);
-    }
-    next();
-  }
-});
+// userSchema.pre("save", async function (next) {
+//   const user = this;
+//   if (user.isModified("password")) {
+//     if (user.password !== "none") {
+//       user.password = await bcrypt.hash(user.password, 11);
+//     }
+//     next();
+//   }
+// });
 
 const User = mongoose.model(modelNames.user, userSchema);
 module.exports = User;
