@@ -29,3 +29,14 @@ const updateUser = {
     })
     .min(1),
 };
+
+const updateProfile = {
+  body: Joi.object().keys({
+    username: Joi.string(),
+    phoneNumber: Joi.string().trim(),
+    gender: Joi.string(),
+    dob: Joi.date(),
+    location: Joi.string(),
+    bio: Joi.string().min(50).max(250),
+  }),
+};
