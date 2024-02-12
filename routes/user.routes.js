@@ -29,3 +29,5 @@ router.patch(
   singleUpload,
   userController.updateAvatar
 );
+router.post("/follow/:userId", validateAccount, userController.followUser);
+router.patch("/unfollow/:userId", validateAccount, userController.unfollowUser);
