@@ -17,3 +17,9 @@ router
   );
 
 router.get("/:userId", userController.getUser);
+router.post(
+  "/compare-password",
+  validateAccount,
+  userController.comparePassword
+);
+router.get("/by-username/:username", userController.getUserByUsername);
