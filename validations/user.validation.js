@@ -10,3 +10,9 @@ const getUsers = {
     page: Joi.number().integer(),
   }),
 };
+
+const getUser = {
+  params: Joi.object().keys({
+    userId: Joi.string().custom(objectId),
+  }),
+};
