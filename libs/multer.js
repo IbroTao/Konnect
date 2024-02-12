@@ -24,3 +24,13 @@ const singleUpload = multer({
   storage,
   fileFilter,
 }).single("upload");
+
+const multipleUpload = multer({
+  storage,
+  fileFilter,
+}).array("uploads", 10);
+
+module.exports = {
+  singleUpload,
+  multipleUpload,
+};
