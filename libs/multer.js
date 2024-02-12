@@ -19,3 +19,8 @@ const fileFilter = function (req, file, callback) {
     callback(null, true);
   }
 };
+
+const singleUpload = multer({
+  storage,
+  fileFilter,
+}).single("upload");
