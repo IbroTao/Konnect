@@ -23,3 +23,9 @@ router.post(
   userController.comparePassword
 );
 router.get("/by-username/:username", userController.getUserByUsername);
+router.patch(
+  "/upload/avatar",
+  validateAccount,
+  singleUpload,
+  userController.updateAvatar
+);
