@@ -40,3 +40,17 @@ const updateProfile = {
     bio: Joi.string().min(50).max(250),
   }),
 };
+
+const deleteUser = {
+  params: Joi.object().keys({
+    reason: Joi.string().required(),
+  }),
+};
+
+module.exports = {
+  updateProfile,
+  deleteUser,
+  updateUser,
+  getUser,
+  getUsers,
+};
