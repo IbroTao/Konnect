@@ -12,12 +12,14 @@ const { defaultEmailSender } = require("../services/email.service");
 const { addRedisForCaching, addToRedis } = require("../libs/redis");
 const { sendEmail } = require("../services/email.service");
 const { uniqueSixDigits } = require("../utils/generateSixDigits");
+const { hashSync } = require("bcryptjs");
 
 const register = catchAsync(async (req, res) => {
-  const { username, email, name } = req.body;
+  const { username, email, name, password } = req.body;
   const user = await userService.createUser({
     ...req.body,
     username: `@${username}`,
+    password: hashSync(password, 10),
   });
   const digits = uniqueSixDigits();
   const link = `https://konnect.com`;

@@ -12,6 +12,7 @@ const bcrypt = require("bcryptjs");
 
 const loginWithEmailAndPassword = async (email, password) => {
   const user = await userService.getUserByEmail(email);
+  console.log("User:", user);
   if (!user)
     throw new ApiError(httpStatus.BAD_REQUEST, "account does not exist");
   if (!user.isEmailVerified)
@@ -19,7 +20,9 @@ const loginWithEmailAndPassword = async (email, password) => {
       httpStatus.UNAUTHORIZED,
       "verify email before you can login"
     );
-  const comparePassword = bcrypt.compareSync(password, user.password);
+  console.log("User Password:", user.password);
+  const comparePassword = await bcrypt.compare(password, user.password);
+  console.log("password compare:", comparePassword);
   if (!comparePassword)
     throw new ApiError(
       httpStatus.INTERNAL_SERVER_ERROR,
