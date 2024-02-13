@@ -1,8 +1,9 @@
 const jwt = require("jsonwebtoken");
 const { tokenTypes } = require("../configs/tokenTypes");
 const { Token } = require("../models");
+const moment = require("moment");
 
-const generateAccessToken = async (
+const generateToken = async (
   userId,
   type,
   secret = process.env.SESSION_SECRET
@@ -40,4 +41,13 @@ const saveToken = async (token, userId, type, blacklisted = false) => {
   return tokenDoc;
 };
 
-module.exports = { generateAccessToken, generateRefreshToken };
+const generateAuthTokens = async (user) => {
+  const accessTokenExpires = moment().add(30000000, "minutes");
+  const acessToken = generateToken(
+    user.id,
+    accessTokenExpires,
+    tokenTypes.ACCESS
+  );
+};
+
+module.exports = { generateAuthTokens, generateToken, saveToken, verifyToken };
