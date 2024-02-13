@@ -6,4 +6,10 @@ const generateAccessToken = (id) => {
   });
 };
 
-module.exports = { generateAccessToken };
+const generateRefreshToken = (id) => {
+  return jwt.sign({ id }, process.env.SESSION_SECRET, {
+    expiresIn: "3d",
+  });
+};
+
+module.exports = { generateAccessToken, generateRefreshToken };
