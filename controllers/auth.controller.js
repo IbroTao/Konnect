@@ -12,6 +12,7 @@ const { defaultEmailSender } = require("../services/email.service");
 const { addRedisForCaching, addToRedis } = require("../libs/redis");
 const { sendEmail } = require("../services/email.service");
 const { uniqueSixDigits } = require("../utils/generateSixDigits");
+const { generateAuthTokens } = require("../configs/generateTokens");
 const { hashSync } = require("bcryptjs");
 
 const register = catchAsync(async (req, res) => {
@@ -54,14 +55,14 @@ const verifyAccount = catchAsync(async (req, res) => {
   const user = await authService.verifyAccount(digits);
   if (!user)
     throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, MESSAGES.CODE_EXPIRED);
-  const token = await tokenService.generateAuthTokens(user);
+  const token = await generateAuthTokens(user);
   res.status(httpStatus.OK).json(token);
 });
 
 const login = catchAsync(async (req, res) => {
   const { email, password } = req.body;
   const user = await authService.loginWithEmailAndPassword(email, password);
-  const tokens = await tokenService.generateAuthTokens(user);
+  const tokens = await generateAuthTokens(user);
   res.status(httpStatus.OK).json({ user, tokens });
 });
 
