@@ -102,8 +102,21 @@ const generateResetPasswordToken = async (email) => {
 };
 
 const generateVerifyEmailToken = async (email) => {
-  const user = await userService.getUserByEmail(email);
-  if (!user) throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR);
+  const expires = moment().add(10, "minutes");
+  const verifyEmailToken = generateToken(
+    user.id,
+    expires,
+    tokenTypes.VERIFY_EMAIL
+  );
+  await saveToken(verifyEmailToken, user.id, expires, tokenTypes.VERIFY_EMAIL);
+  return verifyEmailToken;
 };
 
-module.exports = { generateAuthTokens, generateToken, saveToken, verifyToken };
+module.exports = {
+  generateAuthTokens,
+  generateToken,
+  saveToken,
+  verifyToken,
+  generateResetPasswordToken,
+  generateVerifyEmailToken,
+};
