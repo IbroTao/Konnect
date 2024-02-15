@@ -5,3 +5,5 @@ const { singleUpload, multipleUpload } = require("../../libs/multer");
 const validateAccount = require("../../middlewares/validateUser");
 
 const router = express.Router();
+
+router.post("/new", validateAccount, validate(communityValidation));

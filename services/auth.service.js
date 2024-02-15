@@ -96,6 +96,7 @@ const verifyEmail = async (verifyEmailToken) => {
 
 const verifyAccount = async (digits) => {
   const value = await getFromRedis(digits);
+  console.log(value);
   if (!value)
     throw new Error(
       "cannot find resource, the 6 digits code might have expired."
