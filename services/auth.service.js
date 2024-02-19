@@ -20,9 +20,7 @@ const loginWithEmailAndPassword = async (email, password) => {
       httpStatus.UNAUTHORIZED,
       "verify email before you can login"
     );
-  console.log("User Password:", user.password);
-  const comparePassword = await bcrypt.compare(password, user.password);
-  console.log("password compare:", comparePassword);
+  const comparePassword = await bcrypt.compare(password, user.password)
   if (!comparePassword)
     throw new ApiError(
       httpStatus.INTERNAL_SERVER_ERROR,
