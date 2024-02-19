@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const { content } = require("pdfkit/js/page");
 
 const createCommunity = {
   body: Joi.object().keys({
@@ -32,6 +33,20 @@ const updateInfo = {
   body: Joi.object().keys({
     info: Joi.string().required(),
   }),
+};
+
+const updateRulesAndType = {
+  body: Joi.object().keys({
+    rules: Joi.string(),
+    type: Joi.string(),
+  }),
+};
+
+const sharePost = {
+  body: Joi.object().keys({
+    content: Joi.string(),
+  }),
+  params: Joi.object().keys({}),
 };
 
 module.exports = {
