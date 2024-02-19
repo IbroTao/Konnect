@@ -46,13 +46,25 @@ const sharePost = {
   body: Joi.object().keys({
     content: Joi.string(),
   }),
-  params: Joi.object().keys({}),
+  params: Joi.object().keys({
+    postId: Joi.string().required(),
+    communityId: Joi.string().required(),
+  }),
+};
+
+const updatePost = {
+  body: Joi.object().keys({
+    content: Joi.string().required(),
+  }),
 };
 
 module.exports = {
   joinOrLeaveCommunity,
   addOrRemoveAdmin,
   createPost,
+  sharePost,
+  updatePost,
   createCommunity,
   updateInfo,
+  updateRulesAndType,
 };
