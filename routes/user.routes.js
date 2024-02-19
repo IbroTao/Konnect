@@ -31,3 +31,21 @@ router.patch(
 );
 router.post("/follow/:userId", validateAccount, userController.followUser);
 router.patch("/unfollow/:userId", validateAccount, userController.unfollowUser);
+router.get(
+  "/followers/:userId",
+  validateAccount,
+  userController.getUserFollowers
+);
+router.get(
+  "/followings/:userId",
+  validateAccount,
+  userController.getUserFollowing
+);
+router.get(
+  "/following/:userId",
+  validateAccount,
+  userController.isUserFollowing
+);
+
+router.get("/me/books/", validateAccount, userController.getUserPosts);
+router.get("/books/:id", userController.getPostsByUserId);

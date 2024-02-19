@@ -1,5 +1,4 @@
 const Joi = require("joi");
-const { content } = require("pdfkit/js/page");
 
 const createCommunity = {
   body: Joi.object().keys({
