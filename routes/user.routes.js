@@ -49,3 +49,14 @@ router.get(
 
 router.get("/me/books/", validateAccount, userController.getUserPosts);
 router.get("/books/:id", userController.getPostsByUserId);
+
+router.patch(
+  "/toggle-mature-content",
+  validateAccount,
+  userController.toggleMatureContents
+);
+router.patch(
+  "/allow-direct-messaging",
+  validateAccount,
+  userController.toggleDirectMessaging
+);
