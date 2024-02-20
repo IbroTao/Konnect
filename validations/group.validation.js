@@ -41,7 +41,9 @@ const updatePost = {
   params: Joi.object().keys({
     bookId: Joi.string().custom(objectId),
   }),
-  body: Joi.object().keys({}),
+  body: Joi.object().keys({
+    title: Joi.string().required(),
+  }),
 };
 
 module.exports = {
@@ -49,4 +51,5 @@ module.exports = {
   getPosts,
   createComment,
   getPost,
+  updatePost,
 };
