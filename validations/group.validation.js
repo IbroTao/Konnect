@@ -1,6 +1,5 @@
 const Joi = require("joi");
 const { objectId } = require("./custom.validation");
-const { query } = require("express");
 
 const createGroup = {
   body: Joi.object().keys({
@@ -36,6 +35,13 @@ const getPost = {
   params: Joi.object().keys({
     bookId: Joi.string().custom(objectId),
   }),
+};
+
+const updatePost = {
+  params: Joi.object().keys({
+    bookId: Joi.string().custom(objectId),
+  }),
+  body: Joi.object().keys({}),
 };
 
 module.exports = {
