@@ -32,8 +32,15 @@ const createComment = {
   }),
 };
 
+const getPost = {
+  params: Joi.object().keys({
+    bookId: Joi.string().custom(objectId),
+  }),
+};
+
 module.exports = {
   createGroup,
   getPosts,
   createComment,
+  getPost,
 };
