@@ -43,7 +43,25 @@ const getComments = catchAsync(async (req, res) => {
   res.status(200).json(comments);
 });
 
+const updateComment = catchAsync(async (req, res) => {
+  const { content } = req.body;
+  const { commentId } = req.params;
+  if (!content)
+    throw new ApiError(httpStatus.BAD_REQUEST, MESSAGES.PROVIDE_BODY);
+  const comment = await communityCommentService.updateComment(
+    content,
+    commentId
+  );
+  if (comment.modifiedCount === 0)
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      MESSAGES.UPDATE_FAILED
+    );
+  res.status(200).json({ message: MESSAGES.UPDATED });
+});
+
 module.exports = {
   submitComment,
   getComments,
+  updateComment,
 };
