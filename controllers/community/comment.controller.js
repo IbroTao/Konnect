@@ -26,6 +26,24 @@ const submitComment = catchAsync(async (req, res) => {
   notificationQueue.senderId = comment.author;
 });
 
+const getComments = catchAsync(async (req, res) => {
+  const { limit, page, sortBy, orderBy } = req.query;
+  const comments = await communityCommentService.queryComments({
+    postId: req.query.postId,
+    limit,
+    page,
+    sortBy,
+    orderBy,
+  });
+  if (!comments)
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      MESSAGES.RESOURCE_MISSING
+    );
+  res.status(200).json(comments);
+});
+
 module.exports = {
   submitComment,
+  getComments,
 };
