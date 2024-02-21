@@ -33,9 +33,18 @@ const addOrRemoveAdmins = {
   }),
 };
 
+const reportMessage = {
+  body: Joi.object().keys({
+    msgId: Joi.string().required(),
+    groupId: Joi.string().required(),
+    reason: Joi.string().required(),
+  }),
+};
+
 module.exports = {
   createGroup,
   sendMessage,
   addOrRemoveMembers,
   addOrRemoveAdmins,
+  reportMessage,
 };
