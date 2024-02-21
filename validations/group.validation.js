@@ -8,6 +8,14 @@ const createGroup = {
   }),
 };
 
+const sendMessage = {
+  body: Joi.object().keys({
+    groupId: Joi.string().required(),
+    text: Joi.string(),
+  }),
+};
+
 module.exports = {
   createGroup,
+  sendMessage,
 };
