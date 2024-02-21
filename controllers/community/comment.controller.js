@@ -60,8 +60,20 @@ const updateComment = catchAsync(async (req, res) => {
   res.status(200).json({ message: MESSAGES.UPDATED });
 });
 
+const deleteComment = catchAsync(async (req, res) => {
+  const { commentId } = req.params;
+  const comment = await communityCommentService.deleteComment(commentId);
+  if (comment.deletedCount === 0)
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      MESSAGES.DELETE_FAILED
+    );
+  res.status(200).json({ message: MESSAGES.DELETED });
+});
+
 module.exports = {
   submitComment,
   getComments,
   updateComment,
+  deleteComment,
 };
