@@ -24,8 +24,18 @@ const addOrRemoveMembers = {
   }),
 };
 
+const addOrRemoveAdmins = {
+  body: Joi.object().keys({
+    admins: Joi.array().required(),
+  }),
+  params: Joi.object().keys({
+    groupId: Joi.string().required(),
+  }),
+};
+
 module.exports = {
   createGroup,
   sendMessage,
   addOrRemoveMembers,
+  addOrRemoveAdmins,
 };
