@@ -135,7 +135,6 @@ const deleteMessage = catchAsync(async (req, res) => {
 
 module.exports = {
   createGroup,
-  getMessagesByGroupId,
   getGroupById,
   addMembers,
   addAdmins,
