@@ -133,11 +133,16 @@ const deleteMessage = catchAsync(async (req, res) => {
   res.status(200).json({ message: MESSAGES.DELETED });
 });
 
+const getGroupRecentMsgs = catchAsync(async (req, res) => {
+  const groups = await groupService.getGroupsByUserId(req.user.id);
+});
+
 module.exports = {
   createGroup,
   getMessagesByGroupId,
   getGroupById,
   addMembers,
+  getGroupRecentMsgs,
   addAdmins,
   removeMembers,
   removeAdmins,
