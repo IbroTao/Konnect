@@ -135,11 +135,15 @@ const deleteMessage = catchAsync(async (req, res) => {
 
 const getGroupRecentMsgs = catchAsync(async (req, res) => {
   const groups = await groupService.getGroupsByUserId(req.user.id);
+  if (!groups.length)
+    throw new ApiError(httpStatus.NOT_FOUND, "user is in no group");
+
+  const groupIds = groups.map((group) => group._id);
+  const recentConversations = await groupService.getR;
 });
 
 module.exports = {
   createGroup,
-  getMessagesByGroupId,
   getGroupById,
   addMembers,
   getGroupRecentMsgs,
