@@ -6,15 +6,14 @@ const ApiError = require("../utils/ApiError");
 const httpStatus = require("http-status");
 const userService = require("../services/user.service");
 
-const generateToken = (
+const generateToken = async (
   userId,
   type,
-  expiresIn = "1d",
   secret = process.env.SESSION_SECRET
 ) => {
   const payload = {
     sub: userId,
-    exp: moment().add(expiresIn, "seconds").unix(),
+    exp: "1d",
     type,
   };
   return jwt.sign(payload, secret);
@@ -34,17 +33,10 @@ const verifyToken = async (token, type) => {
   return verifyTok;
 };
 
-const saveToken = async (
-  token,
-  userId,
-  type,
-  expiresIn,
-  blacklisted = false
-) => {
+const saveToken = async (token, userId, type, blacklisted = false) => {
   const tokenDoc = await Token.create({
     token,
     type,
-    expires: moment().add(expiresIn, "seconds").toDate(), // Save expiration time as Date
     blacklisted,
     user: userId,
   });
@@ -53,26 +45,35 @@ const saveToken = async (
 };
 
 const generateAuthTokens = async (user) => {
-  const accessToken = generateToken(user.id, "5m", tokenTypes.ACCESS);
+  const accessTokenExpires = moment().add(30000000, "minutes");
+  const acessToken = generateToken(
+    user.id,
+    accessTokenExpires,
+    tokenTypes.ACCESS
+  );
 
-  const refreshToken = generateToken(user.id, "30d", tokenTypes.REFRESH);
+  const refreshTokenExpires = moment().add(30, "days");
+  const refreshToken = generateToken(
+    user.id,
+    refreshTokenExpires,
+    tokenTypes.REFRESH
+  );
 
   await saveToken(
     refreshToken,
     user.id,
-    tokenTypes.REFRESH,
-    30 * 24 * 60 * 60, // 30 days in seconds
-    true
+    refreshTokenExpires,
+    tokenTypes.REFRESH
   );
 
   return {
     access: {
       token: accessToken,
-      expires: moment().add("5m").toDate(),
+      expires: accessTokenExpires.toDate(),
     },
     refresh: {
       token: refreshToken,
-      expires: moment().add("30d").toDate(),
+      expires: refreshTokenExpires.toDate(),
     },
   };
 };
@@ -85,7 +86,7 @@ const generateResetPasswordToken = async (email) => {
       "No user found with this email"
     );
 
-  const expires = 10 * 60; // 10 minutes in seconds
+  const expires = moment().add(10, "minutes");
   const resetPasswordToken = generateToken(
     user.id,
     expires,
@@ -94,27 +95,20 @@ const generateResetPasswordToken = async (email) => {
   await saveToken(
     resetPasswordToken,
     user.id,
-    tokenTypes.RESET_PASSWORD,
-    expires
+    expires,
+    tokenTypes.RESET_PASSWORD
   );
   return resetPasswordToken;
 };
 
 const generateVerifyEmailToken = async (email) => {
-  const user = await userService.getUserByEmail(email);
-  if (!user)
-    throw new ApiError(
-      httpStatus.INTERNAL_SERVER_ERROR,
-      "No user found with this email"
-    );
-
-  const expires = 10 * 60; // 10 minutes in seconds
+  const expires = moment().add(10, "minutes");
   const verifyEmailToken = generateToken(
     user.id,
     expires,
     tokenTypes.VERIFY_EMAIL
   );
-  await saveToken(verifyEmailToken, user.id, tokenTypes.VERIFY_EMAIL, expires);
+  await saveToken(verifyEmailToken, user.id, expires, tokenTypes.VERIFY_EMAIL);
   return verifyEmailToken;
 };
 

@@ -13,15 +13,14 @@ const { addRedisForCaching, addToRedis } = require("../libs/redis");
 const { sendEmail } = require("../services/email.service");
 const { uniqueSixDigits } = require("../utils/generateSixDigits");
 const { generateAuthTokens } = require("../configs/generateTokens");
-const bcrypt = require("bcryptjs");
+const { hashSync } = require("bcryptjs");
 
 const register = catchAsync(async (req, res) => {
   const { username, email, name, password } = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10);
   const user = await userService.createUser({
     ...req.body,
     username: `@${username}`,
-    password: hashedPassword,
+    // password: hashSync(password, 10),
   });
   const digits = uniqueSixDigits();
   await addToRedis(digits.toString(), user._id.toString(), 60 * 60 * 3);
@@ -31,10 +30,10 @@ const register = catchAsync(async (req, res) => {
 
   Your 6-digit code is <h4>${digits}</h4>
 
-  Kindly enter the code into your device to continue the registration process. For any help, you can contact us at <strong>Konnect</strong>.
+  Kindly enter the code into your device to continue the registration process. For any help, you can contact us at Konnect.
 
   Best Wishes,
-  <strong>@KonnectICT</strong></p>`;
+  @KonnectICT</p>`;
 
   await sendEmail({
     to: email,
