@@ -1,16 +1,17 @@
-version: "3"
+version: "3.8"
+
 services:
-  web:
-    build: .
-    ports:
-      - "5000:5000"
-    depends_on:
-      - redis
-      - mongodb
+  # web:
+  #   build: .
+  #   ports:
+  #     - "5000:5000"
+  #   depends_on:
+  #     - redis
+  #     - mongodb
   redis:
     image: redis
     ports:
-      - "6379:6379"
+      - "6378:6379"
   mongodb:
     image: mongo:4
     ports:

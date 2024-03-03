@@ -6,14 +6,15 @@ const ApiError = require("../utils/ApiError");
 const httpStatus = require("http-status");
 const userService = require("../services/user.service");
 
-const generateToken = async (
+const generateToken = (
   userId,
+  expiresIn = "1d",
   type,
   secret = process.env.SESSION_SECRET
 ) => {
   const payload = {
     sub: userId,
-    exp: "1d",
+    exp: Math.floor(Date.now() / 1000) + moment.duration(expiresIn).asSeconds(),
     type,
   };
   return jwt.sign(payload, secret);
@@ -33,20 +34,30 @@ const verifyToken = async (token, type) => {
   return verifyTok;
 };
 
-const saveToken = async (token, userId, type, blacklisted = false) => {
+const saveToken = async (
+  token,
+  userId,
+  expiresIn,
+  type,
+  blacklisted = false
+) => {
   const tokenDoc = await Token.create({
     token,
     type,
     blacklisted,
     user: userId,
+    expires: expiresIn.toDate(),
   });
   if (!tokenDoc) throw new Error("Token not saved");
   return tokenDoc;
 };
 
 const generateAuthTokens = async (user) => {
-  const accessTokenExpires = moment().add(30000000, "minutes");
-  const acessToken = generateToken(
+  const currentYear = moment().year();
+  const accessTokenExpires = moment()
+    .add(30000000, "minutes")
+    .year(currentYear);
+  const accessToken = generateToken(
     user.id,
     accessTokenExpires,
     tokenTypes.ACCESS
