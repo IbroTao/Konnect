@@ -30,4 +30,10 @@ const email = {
   }),
 };
 
-module.exports = { register, login, validateAcct, email };
+const refreshTokens = {
+  body: Joi.object().keys({
+    refreshToken: Joi.string().required(),
+  }),
+};
+
+module.exports = { register, login, validateAcct, email, refreshTokens };

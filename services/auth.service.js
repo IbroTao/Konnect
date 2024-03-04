@@ -56,18 +56,19 @@ const logout = async (refreshToken) => {
 };
 
 const refreshAuth = async (refreshToken) => {
-  try {
-    const refreshTokenDoc = await tokenService.verifyToken(
-      refreshToken,
-      tokenTypes.REFRESH
-    );
-    const user = await userService.getUserById(refreshTokenDoc.user);
-    if (!user) throw new Error();
-    await refreshTokenDoc.remove();
-    return tokenService.generateAuthTokens(user);
-  } catch (error) {
-    throw new ApiError(httpStatus.UNAUTHORIZED, "please authenticate");
-  }
+  // try {
+  const refreshTokenDoc = await tokenService.verifyToken(
+    refreshToken,
+    tokenTypes.REFRESH
+  );
+  console.log(refreshTokenDoc);
+  const user = await userService.getUserById(refreshTokenDoc.user);
+  if (!user) throw new Error("Error");
+  await refreshTokenDoc.remove();
+  return tokenService.generateAuthTokens(user);
+  // } catch (error) {
+  //   throw new ApiError(httpStatus.UNAUTHORIZED, "please authenticate");
+  // }
 };
 
 const forgetPassword = async (email) => {
@@ -96,7 +97,6 @@ const verifyEmail = async (verifyEmailToken) => {
 
 const verifyAccount = async (digits) => {
   const value = await getFromRedis(digits);
-  console.log(value);
   if (!value)
     throw new Error(
       "cannot find resource, the 6 digits code might have expired."
@@ -106,8 +106,7 @@ const verifyAccount = async (digits) => {
 
 const getVerificationCode = async (req, user) => {
   const digits = uniqueSixDigits();
-  const link = `https://konnect.com`;
-  await addToRedis(digits.toString(), user.id.toString(), 60 * 60 * 3);
+  await addToRedis(digits.toString(), user._id.toString(), 60 * 60 * 3);
 
   const text = `Thanks creating an account with us at Konnect.
   To continue registration, we sent a 6-digits code to you for further verification and authentication.
@@ -120,7 +119,7 @@ const getVerificationCode = async (req, user) => {
   @KonnectICT`;
 
   return sendEmail({
-    to: email,
+    to: user.email,
     subject: "Account Verification",
     html: `<h4>Dear ${user.name}</h4> ${text}`,
   });

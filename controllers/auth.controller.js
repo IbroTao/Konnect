@@ -20,7 +20,7 @@ const register = catchAsync(async (req, res) => {
   const user = await userService.createUser({
     ...req.body,
     username: `@${username}`,
-    // password: hashSync(password, 10),
+    password: hashSync(password, 10),
   });
   const digits = uniqueSixDigits();
   await addToRedis(digits.toString(), user._id.toString(), 60 * 60 * 3);
@@ -46,7 +46,7 @@ const register = catchAsync(async (req, res) => {
 const resendVerificationCode = catchAsync(async (req, res) => {
   const user = await userService.getUserByEmail(req.body.email);
   if (!user) throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.USER_NOT_FOUND);
-  await authService.getVerificationCode({ email });
+  await authService.getVerificationCode(req, user);
   res.status(httpStatus.OK).json({ message: MESSAGES.SEND_VERIFICATION_CODE });
 });
 

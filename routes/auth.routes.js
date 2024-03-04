@@ -27,4 +27,16 @@ router.post(
   authController.verifyAccount
 );
 
+router.post(
+  "/refresh-tokens",
+  validate(authValidation.refreshTokens),
+  authController.refreshTokens
+);
+
+router.post(
+  "/resend-verification-code",
+  validate(authValidation.email),
+  authController.resendVerificationCode
+);
+
 module.exports = router;
