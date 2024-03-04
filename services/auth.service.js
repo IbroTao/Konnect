@@ -9,7 +9,10 @@ const { uniqueSixDigits } = require("../utils/generateSixDigits");
 const { defaultEmailSender, sendEmail } = require("./email.service");
 const { getFromRedis, addToRedis } = require("../libs/redis");
 const bcrypt = require("bcryptjs");
-const { verifyToken } = require("../configs/generateTokens");
+const {
+  verifyToken,
+  generateAuthTokens,
+} = require("../configs/generateTokens");
 
 const loginWithEmailAndPassword = async (email, password) => {
   const user = await userService.getUserByEmail(email);
@@ -62,11 +65,11 @@ const refreshAuth = async (refreshToken) => {
   if (!(refreshTokenDoc instanceof Token)) {
     throw new Error("Invalid token document");
   }
-  await refreshTokenDoc.remove();
-
   const user = await userService.getUserById(refreshTokenDoc.user);
   if (!user) throw new Error("User not found");
-  return tokenService.generateAuthTokens(user);
+
+  await Token.deleteOne({ _id: refreshTokenDoc._id });
+  return generateAuthTokens(user);
   // } catch (error) {
   //   throw new ApiError(httpStatus.UNAUTHORIZED, "please authenticate");
   // }

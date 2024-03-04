@@ -17,17 +17,20 @@ const generateToken = (
     exp: Math.floor(Date.now() / 1000) + moment.duration(expiresIn).asSeconds(),
     type,
   };
+  console.log(payload);
   return jwt.sign(payload, secret);
 };
 
 const verifyToken = async (token, type) => {
   const payload = jwt.verify(token, process.env.SESSION_SECRET);
+  console.log(payload);
   const verifyTok = await Token.findOne({
     token,
     type,
     user: payload.sub,
     blacklisted: false,
   });
+  console.log(verifyTok);
   if (!verifyTok) {
     throw new Error("Token not found");
   }
@@ -41,12 +44,13 @@ const saveToken = async (
   type,
   blacklisted = false
 ) => {
+  const expirationDate = moment().add(expiresIn);
   const tokenDoc = await Token.create({
     token,
     type,
     blacklisted,
     user: userId,
-    expires: expiresIn.toDate(),
+    expires: expirationDate.toDate(),
   });
   if (!tokenDoc) throw new Error("Token not saved");
   return tokenDoc;
@@ -59,14 +63,16 @@ const generateAuthTokens = async (user) => {
     .year(currentYear);
   const accessToken = generateToken(
     user.id,
-    accessTokenExpires,
+    "30m",
+    //accessTokenExpires,
     tokenTypes.ACCESS
   );
 
   const refreshTokenExpires = moment().add(30, "days");
   const refreshToken = generateToken(
     user.id,
-    refreshTokenExpires,
+    "30d",
+    //refreshTokenExpires,
     tokenTypes.REFRESH
   );
 
