@@ -21,7 +21,7 @@ const generateToken = (
 };
 
 const verifyToken = async (token, type) => {
-  const payload = jwt.verify(token, process.env.SECRET);
+  const payload = jwt.verify(token, process.env.SESSION_SECRET);
   const verifyTok = await Token.findOne({
     token,
     type,

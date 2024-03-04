@@ -2,13 +2,14 @@ const httpStatus = require("http-status");
 const tokenService = require("./token.service");
 const userService = require("./user.service");
 const { tokenTypes } = require("../configs/tokenTypes");
-const Token = require("../models/token.model");
+const { Token } = require("../models");
 const ApiError = require("../utils/ApiError");
 const { User } = require("../models");
 const { uniqueSixDigits } = require("../utils/generateSixDigits");
 const { defaultEmailSender, sendEmail } = require("./email.service");
 const { getFromRedis, addToRedis } = require("../libs/redis");
 const bcrypt = require("bcryptjs");
+const { verifyToken } = require("../configs/generateTokens");
 
 const loginWithEmailAndPassword = async (email, password) => {
   const user = await userService.getUserByEmail(email);
@@ -57,14 +58,14 @@ const logout = async (refreshToken) => {
 
 const refreshAuth = async (refreshToken) => {
   // try {
-  const refreshTokenDoc = await tokenService.verifyToken(
-    refreshToken,
-    tokenTypes.REFRESH
-  );
-  console.log(refreshTokenDoc);
-  const user = await userService.getUserById(refreshTokenDoc.user);
-  if (!user) throw new Error("Error");
+  const refreshTokenDoc = await verifyToken(refreshToken, tokenTypes.REFRESH);
+  if (!(refreshTokenDoc instanceof Token)) {
+    throw new Error("Invalid token document");
+  }
   await refreshTokenDoc.remove();
+
+  const user = await userService.getUserById(refreshTokenDoc.user);
+  if (!user) throw new Error("User not found");
   return tokenService.generateAuthTokens(user);
   // } catch (error) {
   //   throw new ApiError(httpStatus.UNAUTHORIZED, "please authenticate");
