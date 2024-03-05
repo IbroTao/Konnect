@@ -16,13 +16,13 @@ router.post(
 router.post("/login", validate(authValidation.login), authController.login);
 
 router.post(
-  "/verify",
+  "/verify-email",
   validate(authValidation),
   authController.sendVerificationEmail
 );
 
 router.post(
-  "/validate-account",
+  "/verify-otp",
   validate(authValidation.validateAcct),
   authController.verifyAccount
 );

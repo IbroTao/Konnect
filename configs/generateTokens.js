@@ -17,7 +17,6 @@ const generateToken = (
     exp: Math.floor(Date.now() / 1000) + moment.duration(expiresIn).asSeconds(),
     type,
   };
-  console.log(payload);
   return jwt.sign(payload, secret);
 };
 
@@ -57,31 +56,29 @@ const saveToken = async (
 };
 
 const generateAuthTokens = async (user) => {
-  const currentYear = moment().year();
-  const accessTokenExpires = moment()
-    .add(30000000, "minutes")
-    .year(currentYear);
+  const accessTokenExpiration = "1d"; // 1 day
+  const refreshTokenExpiration = "30d"; // 30 days
+
   const accessToken = generateToken(
     user.id,
-    "30m",
-    //accessTokenExpires,
+    accessTokenExpiration,
     tokenTypes.ACCESS
   );
-
-  const refreshTokenExpires = moment().add(30, "days");
   const refreshToken = generateToken(
     user.id,
-    "30d",
-    //refreshTokenExpires,
+    refreshTokenExpiration,
     tokenTypes.REFRESH
   );
 
   await saveToken(
     refreshToken,
     user.id,
-    refreshTokenExpires,
+    refreshTokenExpiration,
     tokenTypes.REFRESH
   );
+
+  const accessTokenExpires = moment().add(1, "day");
+  const refreshTokenExpires = moment().add(30, "days");
 
   return {
     access: {

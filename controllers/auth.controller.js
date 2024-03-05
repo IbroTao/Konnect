@@ -12,7 +12,10 @@ const { defaultEmailSender } = require("../services/email.service");
 const { addRedisForCaching, addToRedis } = require("../libs/redis");
 const { sendEmail } = require("../services/email.service");
 const { uniqueSixDigits } = require("../utils/generateSixDigits");
-const { generateAuthTokens } = require("../configs/generateTokens");
+const {
+  generateAuthTokens,
+  generateVerifyEmailToken,
+} = require("../configs/generateTokens");
 const { hashSync } = require("bcryptjs");
 
 const register = catchAsync(async (req, res) => {
@@ -94,9 +97,7 @@ const resetPassword = catchAsync(async (req, res) => {
 });
 
 const sendVerificationEmail = catchAsync(async (req, res) => {
-  const verifyEmailToken = await tokenService.generateVerifyEmailToken(
-    req.user
-  );
+  const verifyEmailToken = await generateVerifyEmailToken(req.user);
   await emailService.sendVerificationEmail({
     name: req.user.name,
     email: req.user.email,
