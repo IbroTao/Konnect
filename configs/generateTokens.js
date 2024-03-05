@@ -22,14 +22,12 @@ const generateToken = (
 
 const verifyToken = async (token, type) => {
   const payload = jwt.verify(token, process.env.SESSION_SECRET);
-  console.log(payload);
   const verifyTok = await Token.findOne({
     token,
     type,
     user: payload.sub,
     blacklisted: false,
   });
-  console.log(verifyTok);
   if (!verifyTok) {
     throw new Error("Token not found");
   }

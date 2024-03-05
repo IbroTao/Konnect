@@ -119,7 +119,7 @@ const getMe = catchAsync(async (req, res) => {
 });
 
 // This feature is only used when the user is logged in.
-// const updatePassword
+const updatePassword = catchAsync(async (req, res) => {});
 
 module.exports = {
   register,
