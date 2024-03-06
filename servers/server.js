@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 //const redis = require("redis");
 const app = express();
+const swaggerUI = require("swagger-ui-express");
 
 const { mongoConnection } = require("../configs/mongo");
 const config = require("../configs/config");
