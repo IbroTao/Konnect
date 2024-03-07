@@ -8,6 +8,8 @@ const { mongoConnection } = require("../configs/mongo");
 const config = require("../configs/config");
 const { errorConverter, errorHandler } = require("../middlewares/errorHandler");
 const authRouter = require("../routes/auth.routes");
+const userRouter = require("../routes/user.routes");
+const groupRouter = require("../routes/group.routes");
 
 // const redisClient = redis.createClient(6379);
 
@@ -26,6 +28,8 @@ app.use(express.json());
 app.use(express.urlencoded());
 
 app.use("/konnect/auth", authRouter);
+app.use("/konnect/user", userRouter);
+app.use("/konnect/group", groupRouter);
 
 app.use(errorConverter);
 app.use(errorHandler);
