@@ -3,13 +3,34 @@ const mongoose = require("mongoose");
 //const redis = require("redis");
 const app = express();
 const swaggerUI = require("swagger-ui-express");
+const swaggerJsDoc = require("swagger-jsdoc");
+
+const options = {
+  swaggerDefinition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Konnect",
+      version: "1.0.0",
+      description:
+        "A web social platform designed to connect people in real-time, fostering seamless communication and interaction within groups.",
+    },
+    servers: [
+      {
+        url: "http://localhost:9090",
+      },
+    ],
+  },
+  apis: ["../routes/*.js"],
+};
+
+const specs = swaggerJsDoc(options);
 
 const { mongoConnection } = require("../configs/mongo");
 const config = require("../configs/config");
 const { errorConverter, errorHandler } = require("../middlewares/errorHandler");
 const authRouter = require("../routes/auth.routes");
-const userRouter = require("../routes/user.routes");
-const groupRouter = require("../routes/group.routes");
+//const userRouter = require("../routes/user.routes");
+//const groupRouter = require("../routes/group.routes");
 
 // const redisClient = redis.createClient(6379);
 
@@ -28,8 +49,10 @@ app.use(express.json());
 app.use(express.urlencoded());
 
 app.use("/konnect/auth", authRouter);
-app.use("/konnect/user", userRouter);
-app.use("/konnect/group", groupRouter);
+//app.use("/konnect/user", userRouter);
+//app.use("/konnect/group", groupRouter);
+
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 
 app.use(errorConverter);
 app.use(errorHandler);
