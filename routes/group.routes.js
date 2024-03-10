@@ -63,11 +63,28 @@ router.purge(
   validate(groupValidation.addOrRemoveAdmins),
   groupController.removeAdmins
 );
-router.get("/:groupId/msgs", validateAccount, groupController);
+router.get(
+  "/:groupId/msgs",
+  validateAccount,
+  groupController.getMessagesByGroupId
+);
 router.post(
   "/report",
   validateAccount,
   validate(groupValidation.reportMessage),
   groupController.reportMessage
 );
-router.get("/report");
+router.get(
+  "/report/:reportId",
+  validateAccount,
+  isAdmin,
+  adminPermitter(["read"]),
+  groupController.getReportedMessageById
+);
+router.get(
+  "/reports",
+  validateAccount,
+  isAdmin,
+  adminPermitter(["read"]),
+  groupController.getReportedMessages
+);
