@@ -17,22 +17,31 @@ const router = express.Router();
 
 /**
  * @swagger
- * /auth/register
- *  post:
- *    summary: Register a new user
- *    description: Register a new user with the provided details and information
- *    tags: [Authentication]
- *  requestBody:
- *    required: true
- *    content:
- *      application/json:
- *        schema:
- *          $ref: modelNames.user
- *  responses:
- *    '201':
- *      'description': Successfully registrated
- *    '401':
- *      ''
+/auth/register:
+  post:
+    summary: Register a new user
+    description: Register a new user with the provided details and information
+    tags: 
+      - Authentication
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/User'
+    components:
+      schemas:
+        Welcome:
+          type: object
+      properties:
+        message:
+          type: string
+    responses:
+      '201':
+        description: Successfully registered
+      '400':
+        description: Bad Request - User already exists
+
  */
 
 router.post(
@@ -40,6 +49,14 @@ router.post(
   validate(authValidation.register),
   authController.register
 );
+
+/**
+ * @swagger
+ * /auth/login
+ *  post:
+ *    summary: Log in a registered user
+ *    description:
+ */
 
 router.post("/login", validate(authValidation.login), authController.login);
 
