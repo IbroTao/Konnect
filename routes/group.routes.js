@@ -45,3 +45,29 @@ router.put(
   validate(groupValidation.addOrRemoveMembers),
   groupController.addMembers
 );
+router.purge(
+  "/:groupId/remove-members",
+  validateAccount,
+  validate(groupValidation.addOrRemoveMembers),
+  groupController.removeMembers
+);
+router.put(
+  "/:groupId/add-admins",
+  validateAccount,
+  validate(groupValidation.addOrRemoveAdmins),
+  groupController.addAdmins
+);
+router.purge(
+  "/:groupId/remove-admins",
+  validateAccount,
+  validate(groupValidation.addOrRemoveAdmins),
+  groupController.removeAdmins
+);
+router.get("/:groupId/msgs", validateAccount, groupController);
+router.post(
+  "/report",
+  validateAccount,
+  validate(groupValidation.reportMessage),
+  groupController.reportMessage
+);
+router.get("/report");
