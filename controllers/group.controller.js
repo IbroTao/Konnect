@@ -158,10 +158,24 @@ const getReportedMessages = catchAsync(async (req, res) => {
   res.status(200).json(reportedMsgs);
 });
 
+const getMessagesByGroupId = catchAsync(async (req, res) => {
+  const filter = pick(req.params, ["groupId"]);
+  const options = pick(req.query, ["limit", "page"]);
+  options.populate = [
+    { path: "sender", select: "username name avatar" },
+    { path: "readBy.userId", select: "username name" },
+  ];
+  const msgs = await groupService.getMsgsByGroupId(filter, options);
+  if (!msgs)
+    throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.RESOURCE_MISSING);
+  res.status(200).json(msgs);
+});
+
 module.exports = {
   createGroup,
   getGroupById,
   addMembers,
+  getMessagesByGroupId,
   getReportedMessageById,
   getReportedMessages,
   deleteGroup,
