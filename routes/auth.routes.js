@@ -55,7 +55,16 @@ router.post(
  * /auth/login
  *  post:
  *    summary: Log in a registered user
- *    description:
+ *    description: Log in a registered user with the required details or information
+ *    tags:
+ *     - Authentication
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref:
+ *     responses:
  */
 
 router.post("/login", validate(authValidation.login), authController.login);
