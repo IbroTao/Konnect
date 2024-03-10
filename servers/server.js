@@ -12,7 +12,7 @@ const options = {
       title: "Konnect",
       version: "1.0.0",
       description:
-        "A web social platform designed to connect people in real-time, fostering seamless communication and interaction within groups.",
+        "A web social platform designed to connect people in real-time, fostering seamless communication and interaction within groups and communities.",
     },
     servers: [
       {
