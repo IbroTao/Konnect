@@ -39,3 +39,9 @@ router.patch(
   groupController.markMessagesSeen
 );
 router.delete("/msg/:msgId", validateAccount, groupController.deleteMessage);
+router.put(
+  "/:groupId/add-members",
+  validateAccount,
+  validate(groupValidation.addOrRemoveMembers),
+  groupController.addMembers
+);
