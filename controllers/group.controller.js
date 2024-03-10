@@ -138,10 +138,32 @@ const deleteGroup = catchAsync(async (req, res) => {
   res.status(200).json({ message: MESSAGES.DELETED });
 });
 
+const getReportedMessageById = catchAsync(async (req, res) => {
+  const reportedMsg = await groupService.getReportedMsg(req.params.reportedId);
+  if (!reportedMsg)
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      MESSAGES.RESOURCE_MISSING
+    );
+  res.status(200).json(reportedMsg);
+});
+
+const getReportedMessages = catchAsync(async (req, res) => {
+  const reportedMsgs = await groupService.getReportedMessages();
+  if (!reportedMsgs)
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      MESSAGES.RESOURCE_MISSING
+    );
+  res.status(200).json(reportedMsgs);
+});
+
 module.exports = {
   createGroup,
   getGroupById,
   addMembers,
+  getReportedMessageById,
+  getReportedMessages,
   deleteGroup,
   addAdmins,
   removeMembers,
