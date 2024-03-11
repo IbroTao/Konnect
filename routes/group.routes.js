@@ -88,3 +88,5 @@ router.get(
   adminPermitter(["read"]),
   groupController.getReportedMessages
 );
+
+module.exports = router;

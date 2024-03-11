@@ -17,6 +17,30 @@ const router = express.Router();
 
 /**
  * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *         email:
+ *           type: string
+ *           format: email
+ *         name:
+ *           type: string
+ *         role:
+ *           type: string
+ *           enum: [user, admin]
+ *       example:
+ *         id: 5ebac534954b54139806c112
+ *         email: johnsmith@gmail.com
+ *         name: John Smith
+ *         role: user
+ */
+
+/**
+ * @swagger
 /auth/register:
   post:
     summary: Register a new user
