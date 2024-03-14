@@ -1,6 +1,5 @@
 const express = require("express");
 const app = express();
-const port = process.env.PORT;
 const swaggerUI = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
 const { version } = require("../package.json");
@@ -33,6 +32,8 @@ const options = {
 
 const swaggerSpecs = swaggerJsDoc(options);
 
+const port = process.env.PORT;
+
 function swaggerDocs(app, port) {
   // Swagger Format
   app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerSpecs));
@@ -42,7 +43,6 @@ function swaggerDocs(app, port) {
     res.setHeader("Content-Type", "application/json");
     res.send(swaggerSpecs);
   });
-
   log.info(`Docs available at http://localhost:${port}/docs`);
 }
 

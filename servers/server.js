@@ -2,7 +2,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 //const redis = require("redis");
 const app = express();
-const port = process.env.PORT;
 
 const { swaggerDocs } = require("../docs/swaggerDocs");
 const { mongoConnection } = require("../configs/mongo");
@@ -34,6 +33,8 @@ app.use("/konnect/auth", authRouter);
 
 app.use(errorConverter);
 app.use(errorHandler);
+
+const port = process.env.PORT;
 
 const runApp = (port) => {
   mongoose

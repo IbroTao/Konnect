@@ -9,63 +9,15 @@ const modelNames = require("../constants/modelNames");
 const router = express.Router();
 
 /**
- * @swagger
- * tags:
- *  name: Authentication
- *  description: API endpoints for user authentication
- */
-
-/**
- * @swagger
- * components:
- *   schemas:
- *     User:
- *       type: object
- *       properties:
- *         id:
- *           type: string
- *         email:
- *           type: string
- *           format: email
- *         name:
- *           type: string
- *         role:
- *           type: string
- *           enum: [user, admin]
- *       example:
- *         id: 5ebac534954b54139806c112
- *         email: johnsmith@gmail.com
- *         name: John Smith
- *         role: user
- */
-
-/**
- * @swagger
-/auth/register:
-  post:
-    summary: Register a new user
-    description: Register a new user with the provided details and information
-    tags: 
-      - Authentication
-    requestBody:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/User'
-    components:
-      schemas:
-        Welcome:
-          type: object
-      properties:
-        message:
-          type: string
-    responses:
-      '201':
-        description: Successfully registered
-      '400':
-        description: Bad Request - User already exists
-
+ * @openapi
+ * /register:
+ *  get:
+ *    tag:
+ *     - Registration
+ *     description: Register a new user
+ *     responses:
+ *        200:
+ *          description: Registration of new user onboard
  */
 
 router.post(
