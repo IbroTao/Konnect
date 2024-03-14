@@ -2,46 +2,9 @@ const express = require("express");
 const mongoose = require("mongoose");
 //const redis = require("redis");
 const app = express();
-const swaggerUI = require("swagger-ui-express");
-const swaggerJsDoc = require("swagger-jsdoc");
-const { version } = require("../package.json");
 const port = process.env.PORT;
 
-const options = {
-  definition: {
-    openapi: "3.0.0",
-    info: {
-      title: "Konnect API Docs",
-      version,
-    },
-    components: {
-      securitySchemas: {
-        bearerAuth: {
-          type: "http",
-          scheme: "bearer",
-          bearerFormat: "JWT",
-        },
-      },
-    },
-    security: [
-      {
-        bearerAuth: [],
-      },
-    ],
-  },
-  apis: ["../routes/*.js", "..routes/community/*.js"],
-};
-
-const swaggerSpecs = swaggerJsDoc(options);
-
-function swaggerDocs(app, port) {
-  // Swagger Format
-  app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerSpecs));
-
-  // Docs in JSON Format
-  app.use;
-}
-
+const { swaggerDocs } = require("../docs/swaggerDocs");
 const { mongoConnection } = require("../configs/mongo");
 const config = require("../configs/config");
 const { errorConverter, errorHandler } = require("../middlewares/errorHandler");
@@ -82,5 +45,7 @@ const runApp = (port) => {
     .catch((err) => {
       console.log(err);
     });
+
+  swaggerDocs(app, port);
 };
 runApp(port);
