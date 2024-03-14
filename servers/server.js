@@ -5,6 +5,7 @@ const app = express();
 const swaggerUI = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
 const { version } = require("../package.json");
+const port = process.env.PORT;
 
 const options = {
   definition: {
@@ -30,6 +31,16 @@ const options = {
   },
   apis: ["../routes/*.js", "..routes/community/*.js"],
 };
+
+const swaggerSpecs = swaggerJsDoc(options);
+
+function swaggerDocs(app, port) {
+  // Swagger Format
+  app.use("/docs", swaggerUI.serve, swaggerUI.setup(swaggerSpecs));
+
+  // Docs in JSON Format
+  app.use;
+}
 
 const { mongoConnection } = require("../configs/mongo");
 const config = require("../configs/config");
@@ -58,12 +69,8 @@ app.use("/konnect/auth", authRouter);
 //app.use("/konnect/user", userRouter);
 //app.use("/konnect/group", groupRouter);
 
-app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
-
 app.use(errorConverter);
 app.use(errorHandler);
-
-const port = process.env.PORT;
 
 const runApp = (port) => {
   mongoose
