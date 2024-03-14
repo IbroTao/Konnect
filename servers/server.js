@@ -4,26 +4,21 @@ const mongoose = require("mongoose");
 const app = express();
 const swaggerUI = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
+const {version} = require('../package.json')
 
-const options = {
-  swaggerDefinition: {
-    openapi: "3.0.0",
+const options: swaggerJsDoc.Options = {
+  definition: {
+    openapi: '3.0.0',
     info: {
-      title: "Konnect",
-      version: "1.0.0",
-      description:
-        "A web social platform designed to connect people in real-time, fostering seamless communication and interaction within groups and communities.",
+      title: 'Konnect API Docs',
+      version
     },
-    servers: [
-      {
-        url: "http://localhost:9090",
-      },
-    ],
-  },
-  apis: ["./routes/*.routes.js"],
-};
+    components:{
+      securitySchemas:
+    }
+  }
+}
 
-const specs = swaggerJsDoc(options);
 
 const { mongoConnection } = require("../configs/mongo");
 const config = require("../configs/config");
