@@ -4,21 +4,32 @@ const mongoose = require("mongoose");
 const app = express();
 const swaggerUI = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
-const {version} = require('../package.json')
+const { version } = require("../package.json");
 
-const options: swaggerJsDoc.Options = {
+const options = {
   definition: {
-    openapi: '3.0.0',
+    openapi: "3.0.0",
     info: {
-      title: 'Konnect API Docs',
-      version
+      title: "Konnect API Docs",
+      version,
     },
-    components:{
-      securitySchemas:
-    }
-  }
-}
-
+    components: {
+      securitySchemas: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
+  },
+  apis: ["../routes/*.js", "..routes/community/*.js"],
+};
 
 const { mongoConnection } = require("../configs/mongo");
 const config = require("../configs/config");
