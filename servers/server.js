@@ -1,40 +1,42 @@
 const express = require("express");
 const mongoose = require("mongoose");
-//const redis = require("redis");
+const swaggerJsDoc = require("swagger-jsdoc");
+const swaggerUI = require("swagger-ui-express");
 const app = express();
 
-const { swaggerDocs } = require("../docs/swaggerDocs");
-const { mongoConnection } = require("../configs/mongo");
 const config = require("../configs/config");
 const { errorConverter, errorHandler } = require("../middlewares/errorHandler");
 const authRouter = require("../routes/auth.routes");
-//const userRouter = require("../routes/user.routes");
-//const groupRouter = require("../routes/group.routes");
-
-// const redisClient = redis.createClient(6379);
-
-// (async () => {
-//   redisClient.on("error", (err) => {
-//     console.log("Redis Client Error", err);
-//   });
-//   redisClient.on("ready", () => console.log("Redis is ready"));
-
-//   await redisClient.connect();
-
-//   await redisClient.ping();
-// })();
 
 app.use(express.json());
 app.use(express.urlencoded());
-
-app.use("/konnect/auth", authRouter);
-//app.use("/konnect/user", userRouter);
-//app.use("/konnect/group", groupRouter);
-
 app.use(errorConverter);
 app.use(errorHandler);
 
+app.use("/konnect/auth", authRouter);
+
 const port = process.env.PORT;
+
+const swaggerOptions = {
+  swaggerDefinition: {
+    openapi: "3.0.0",
+    info: {
+      version: "1.0.0",
+      title: "Konnect API Docs",
+      description:
+        "A web social platform that ensure seamless communication between people",
+      contact: {
+        name: "Taofeek",
+      },
+      servers: ["http://localhost:9090"],
+    },
+    schemes: ["http", "https"],
+  },
+  apis: ["../routes/auth.routes.js"],
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 const runApp = (port) => {
   mongoose
@@ -46,7 +48,5 @@ const runApp = (port) => {
     .catch((err) => {
       console.log(err);
     });
-
-  swaggerDocs(app, port);
 };
 runApp(port);
