@@ -32,7 +32,7 @@ const swaggerOptions = {
     },
     schemes: ["http", "https"],
   },
-  apis: ["../routes/auth.routes.js"],
+  apis: ["../routes/*.routes.js"],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
