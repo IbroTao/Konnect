@@ -84,12 +84,40 @@ router.post(
   authController.sendVerificationEmail
 );
 
+/**
+ * @swagger
+ * /konnect/auth/verify-otp
+ *  post:
+ *    summary: Verify the OTP code sent to the user for verification
+ *    description: Confirmation of the authenticity of the email the user used for registration
+ *    tags:
+ *    - User Authentication
+ *    responses:
+ *      '200':
+ *         description: Email has been verified
+ *      '500':
+ *         description: OTP has expired
+ */
 router.post(
   "/verify-otp",
   validate(authValidation.validateAcct),
   authController.verifyAccount
 );
 
+/**
+ * @swagger
+ * /konnect/auth/refresh-tokens:
+ *  post:
+ *    summary: Generate new tokens(access & refresh)
+ *    description: After old tokens has expired. New tokens would be generated
+ *    tags:
+ *    - User Authentication
+ *    responses:
+ *      '200':
+ *         description: Tokens has been generated
+ *      '400':
+ *         description: Tokens failed to be generated
+ */
 router.post(
   "/refresh-tokens",
   validate(authValidation.refreshTokens),
