@@ -31,6 +31,16 @@ router.get("/profile", (req, res) => {
 /**
  * @swagger
  * /konnect/auth/register:
+ *  post:
+ *    summary: Registration of new user
+ *    description: Register a new user for the first time
+ *    tags:
+ *      - User Authentication
+ *    responses:
+ *       '201':
+ *          description: User registered successfully
+ *       '400':
+ *          description: Failed to register a user
  */
 router.post(
   "/register",
