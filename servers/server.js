@@ -1,20 +1,21 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const swaggerJsDoc = require("swagger-jsdoc");
 const swaggerUI = require("swagger-ui-express");
 const app = express();
 
 const config = require("../configs/config");
 const { errorConverter, errorHandler } = require("../middlewares/errorHandler");
-const authRouter = require("../routes/auth.routes");
-const indexRoutes = require('../routes/index')
+//const authRouter = require("../routes/auth.routes");
+const indexRoutes = require("../routes/index");
 
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(errorConverter);
 app.use(errorHandler);
 
-app.use("/konnect/auth", authRouter);
-app.use('/api', indexRoutes)
+//app.use("/konnect/auth", authRouter);
+app.use("/api", indexRoutes);
 
 const port = process.env.PORT;
 
@@ -33,7 +34,7 @@ const swaggerOptions = {
     },
     schemes: ["http", "https"],
   },
-  apis: ["../routes/*.js", "../routes/*.routes.js"],
+  apis: ["../routes/*.js"],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
