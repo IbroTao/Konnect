@@ -48,6 +48,20 @@ router.post(
   authController.register
 );
 
+/**
+ * @swagger
+ * /konnect/auth/login:
+ *  post:
+ *     summary: Logging a registered user
+ *     description: After a user has registered, the user can now login
+ *     tags:
+ *     - User Authentication
+ *     responses:
+ *         '200':
+ *           description: User logged in successfully
+ *         '400':
+ *            description: User unable to log in
+ */
 router.post("/login", validate(authValidation.login), authController.login);
 
 router.post(
