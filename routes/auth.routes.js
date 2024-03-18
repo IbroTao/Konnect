@@ -124,6 +124,20 @@ router.post(
   authController.refreshTokens
 );
 
+/**
+ * @swagger
+ * /konnect/auth/resend-verification-code:
+ *  post:
+ *    summary: Resend verification code for user authentication
+ *    description: Get another verification before logging in
+ *    tags:
+ *    - User Authentication
+ *    responses:
+ *      '200':
+ *         description: Verification code sent
+ *      '500':
+ *         description: Failed to send, try again later
+ */
 router.post(
   "/resend-verification-code",
   validate(authValidation.email),
