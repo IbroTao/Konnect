@@ -33,6 +33,20 @@ const swaggerOptions = {
       servers: ["http://localhost:9090"],
     },
     schemes: ["http", "https"],
+    components: {
+      securitySchemas: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
   },
   apis: ["./routes/*.js"],
 };

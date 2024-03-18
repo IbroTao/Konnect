@@ -64,6 +64,20 @@ router.post(
  */
 router.post("/login", validate(authValidation.login), authController.login);
 
+/**
+ * @swagger
+ * /konnect/auth/verify-email:
+ *  post:
+ *    summary: Send verification email to a user during registration
+ *    description: A 6-digits code would be sent to the user for verification
+ *    tags:
+ *    - User Authentication
+ *    responses:
+ *        '200':
+ *           description: Verification email sent to the user
+ *        '400':
+ *           description: Unable to send verification email
+ */
 router.post(
   "/verify-email",
   validate(authValidation),
