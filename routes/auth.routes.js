@@ -6,20 +6,20 @@ const modelNames = require("../constants/modelNames");
 
 const router = express.Router();
 
-// /**
-//  * @swagger
-//  * /konnect/auth/profile:
-//  *  get:
-//  *    summary: Fetch user details
-//  *    description: Fetch user details
-//  *    tags:
-//  *      - Profile
-//  *    responses:
-//  *      '200':
-//  *        description: User profile fetched successfully
-//  *      '400':
-//  *         description: Unable to fetch user details
-//  */
+/**
+ * @swagger
+ * /konnect/auth/profile:
+ *  get:
+ *    summary: Fetch user details
+ *    description: Fetch user details
+ *    tags:
+ *      - Profile
+ *    responses:
+ *      '200':
+ *        description: User profile fetched successfully
+ *      '400':
+ *         description: Unable to fetch user details
+ */
 router.get("/profile", (req, res) => {
   const demoUser = {
     name: "Jacob Ramsey",
@@ -28,6 +28,10 @@ router.get("/profile", (req, res) => {
   res.status(200).json(demoUser);
 });
 
+/**
+ * @swagger
+ * /konnect/auth/register:
+ */
 router.post(
   "/register",
   validate(authValidation.register),
