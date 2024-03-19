@@ -32,15 +32,34 @@ router.get("/profile", (req, res) => {
  * @swagger
  * /konnect/auth/register:
  *  post:
- *    summary: Registration of new user
- *    description: Register a new user for the first time
  *    tags:
  *      - User Authentication
+ *    summary: Create a new user
+ *    description: Create a new user with the provided details
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              username:
+ *                type: string
+ *              email:
+ *                type: string
+ *              password:
+ *                type: string
+ *            examples:
+ *              username: Paul Smith
+ *              email: paulsmith@gmail.com
+ *              password: password123
  *    responses:
  *       '201':
  *          description: User registered successfully
  *       '400':
- *          description: Failed to register a user
+ *          description: Bad Request - Invalid Request
+ *       '500':
+ *          description: Internal server error
  */
 router.post(
   "/register",
@@ -52,7 +71,7 @@ router.post(
  * @swagger
  * /konnect/auth/login:
  *  post:
- *     summary: Logging a registered user
+ *     summary: Logging in a registered user
  *     description: After a user has registered, the user can now login
  *     tags:
  *     - User Authentication
@@ -86,7 +105,7 @@ router.post(
 
 /**
  * @swagger
- * /konnect/auth/verify-otp
+ * /konnect/auth/verify-otp:
  *  post:
  *    summary: Verify the OTP code sent to the user for verification
  *    description: Confirmation of the authenticity of the email the user used for registration
