@@ -16,9 +16,9 @@ const router = express.Router();
  *      - Profile
  *    responses:
  *      '200':
- *        description: User profile fetched successfully
+ *          description: User profile fetched successfully
  *      '400':
- *         description: Unable to fetch user details
+ *          description: Unable to fetch user details
  */
 router.get("/profile", (req, res) => {
   const demoUser = {

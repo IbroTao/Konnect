@@ -7,6 +7,17 @@ const { singleUpload } = require("../libs/multer");
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /konnect/auth/
+ *  get:
+ *    summary: Get all users
+ *    description: Get all registrated users
+ *    tags:
+ *    - User Profile
+ *    requestBody:
+ *        required: true
+ */
 router
   .route("/")
   .get(validateAccount, userController.getUsers)
