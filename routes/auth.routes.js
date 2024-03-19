@@ -71,10 +71,23 @@ router.post(
  * @swagger
  * /konnect/auth/login:
  *  post:
- *     summary: Logging in a registered user
- *     description: After a user has registered, the user can now login
  *     tags:
  *     - User Authentication
+ *     summary: Login a registered user
+ *     description: After a user has registered, login the user
+ *     requestBody:
+ *       content:
+ *          application/json:
+ *             schema:
+ *                type: object
+ *                properties:
+ *                   email:
+ *                      type: string
+ *                   password:
+ *                      type: string
+ *                examples:
+ *                    email: paulsmith@gmail.com
+ *                    password: paul123
  *     responses:
  *         '200':
  *           description: User logged in successfully
