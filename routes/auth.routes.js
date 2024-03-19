@@ -53,6 +53,33 @@ router.get("/profile", (req, res) => {
  *              username: Paul Smith
  *              email: paulsmith@gmail.com
  *              password: password123
+ *        application/x-www-form-urlencoded:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *           examples:
+ *             username: Paul Smith
+ *             email: paulsmith@gmail.com
+ *             password: paul123
+ *        multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *           examples:
+ *             email: paulsmith@gmail.com
+ *             password: paul123
  *    responses:
  *       '201':
  *          description: User registered successfully
@@ -88,11 +115,35 @@ router.post(
  *                examples:
  *                    email: paulsmith@gmail.com
  *                    password: paul123
+ *          application/x-www-form-urlencoded:
+ *              schema:
+ *                 type: object
+ *                 properties:
+ *                    email:
+ *                       type: string
+ *                    password:
+ *                       type: string
+ *                examples:
+ *                    email: paulsmith@gmail.com
+ *                    password: paul123
+ *          multipart/form-data:
+ *              schema:
+ *                 type: object
+ *                 properties:
+ *                     email:
+ *                        type: string
+ *                     password:
+ *                        type: string
+ *                 examples:
+ *                     email: paulsmith@gmail.com
+ *                     password: paul123
  *     responses:
  *         '200':
  *           description: User logged in successfully
  *         '400':
- *            description: User unable to log in
+ *            description: Bad Request - Invalid Request
+ *         '500':
+ *            description: Internal server error
  */
 router.post("/login", validate(authValidation.login), authController.login);
 
@@ -100,10 +151,17 @@ router.post("/login", validate(authValidation.login), authController.login);
  * @swagger
  * /konnect/auth/verify-email:
  *  post:
- *    summary: Send verification email to a user during registration
- *    description: A 6-digits code would be sent to the user for verification
  *    tags:
  *    - User Authentication
+ *    summary: Send verification email to a user during registration
+ *    description: A 6-digits code would be sent to the user for verification
+ *    requestBody:
+ *      content:
+ *        application/json:
+ *          schema:
+ *            type: object
+ *            properties:
+ *
  *    responses:
  *        '200':
  *           description: Verification email sent to the user
@@ -120,15 +178,43 @@ router.post(
  * @swagger
  * /konnect/auth/verify-otp:
  *  post:
- *    summary: Verify the OTP code sent to the user for verification
- *    description: Confirmation of the authenticity of the email the user used for registration
  *    tags:
  *    - User Authentication
+ *    summary: Verify the OTP code sent to the user for verification
+ *    description: Confirmation of the authenticity of the email the user used for registration
+ *    requestBody:
+ *        content:
+ *           application/json:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                    digits:
+ *                        type: string
+ *                examples:
+ *                    digits: "239012"
+ *           application/x-www-urlencoded:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                    digits:
+ *                        type: string
+ *                examples:
+ *                    digits: "239012"
+ *           multipart/form-data:
+ *              schema:
+ *                type: object
+ *                properties:
+ *                    digits:
+ *                        type: string
+ *                examples:
+ *                    digits: "239012"
  *    responses:
  *      '200':
- *         description: Email has been verified
+ *         description: Account has been verified
+ *      '400':
+ *         description: Bad Request - Invalid Request
  *      '500':
- *         description: OTP has expired
+ *         description: Internal Server Error
  */
 router.post(
   "/verify-otp",
@@ -140,10 +226,36 @@ router.post(
  * @swagger
  * /konnect/auth/refresh-tokens:
  *  post:
- *    summary: Generate new tokens(access & refresh)
- *    description: After old tokens has expired. New tokens would be generated
  *    tags:
  *    - User Authentication
+ *    summary: Generate new tokens(access & refresh)
+ *    description: After old tokens has expired. New tokens would be generated
+ *    requestBody:
+ *         content:
+ *            application/json:
+ *                schema:
+ *                  type: object
+ *                  properties:
+ *                     refreshToken:
+ *                        type: string
+ *                  examples:
+ *                      refreshToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJzdWIiOiI2NWU2MDk0ODQyOWYxYmJkNzQ5OTNlY2YiLCJleHAiOjE3MDk2NjAxOTYsInR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3MDk2NjAxOTZ9.yEKTUi3AdUg3coULLg7nHlpZBvL7i-udH89DcRJGukE
+ *            application/x-www-url-encoded:
+ *                schema:
+ *                  type: object
+ *                  properties:
+ *                     refreshToken:
+ *                        type: string
+ *                  examples:
+ *                      refreshToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJzdWIiOiI2NWU2MDk0ODQyOWYxYmJkNzQ5OTNlY2YiLCJleHAiOjE3MDk2NjAxOTYsInR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3MDk2NjAxOTZ9.yEKTUi3AdUg3coULLg7nHlpZBvL7i-udH89DcRJGukE
+ *            multipart/form-data:
+ *                schema:
+ *                  type: object
+ *                  properties:
+ *                     refreshToken:
+ *                        type: string
+ *                  examples:
+ *                      refreshToken: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9eyJzdWIiOiI2NWU2MDk0ODQyOWYxYmJkNzQ5OTNlY2YiLCJleHAiOjE3MDk2NjAxOTYsInR5cGUiOiJhY2Nlc3MiLCJpYXQiOjE3MDk2NjAxOTZ9.yEKTUi3AdUg3coULLg7nHlpZBvL7i-udH89DcRJGukE
  *    responses:
  *      '200':
  *         description: Tokens has been generated
@@ -160,10 +272,20 @@ router.post(
  * @swagger
  * /konnect/auth/resend-verification-code:
  *  post:
- *    summary: Resend verification code for user authentication
- *    description: Get another verification before logging in
  *    tags:
  *    - User Authentication
+ *    summary: Resend verification code for user authentication
+ *    description: Get another verification before logging in
+ *    requestBody:
+ *         content:
+ *            application/json:
+ *                schema:
+ *                  type: object
+ *                  properties:
+ *                      email:
+ *                        type: string
+ *                  examples:
+ *                      email: paulsimth123@gmail.com
  *    responses:
  *      '200':
  *         description: Verification code sent
