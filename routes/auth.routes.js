@@ -49,10 +49,11 @@ router.get("/profile", (req, res) => {
  *                type: string
  *              password:
  *                type: string
+ *              name:
+ *                type: string
  *          examples:
- *            example:
- *              value:
- *                username: Paul Smith
+ *                username: Paul_Smith1
+ *                name: Paul Smith
  *                email: paulsmith@gmail.com
  *                password: password123
  *        application/x-www-form-urlencoded:
@@ -65,10 +66,11 @@ router.get("/profile", (req, res) => {
  *                type: string
  *              password:
  *                type: string
+ *              name:
+ *                type: string
  *          examples:
- *            example:
- *              value:
  *                username: Paul Smith
+ *                name: Paul_Smith1
  *                email: paulsmith@gmail.com
  *                password: paul123
  *        multipart/form-data:
@@ -81,10 +83,11 @@ router.get("/profile", (req, res) => {
  *                type: string
  *              password:
  *                type: string
+ *              name:
+ *                type: string
  *          examples:
- *            example:
- *              value:
  *                username: Paul Smith
+ *                name: Paul_Smith1
  *                email: paulsmith@gmail.com
  *                password: paul123
  *    responses:
