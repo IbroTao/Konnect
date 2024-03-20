@@ -42,16 +42,22 @@ const queryCommunities = catchAsync(async (req, res) => {
 const uploadImage = catchAsync(async (req, res) => {
   const { file } = req;
   const { publicId, url } = await uploadSingle(file.path);
-  const group = await groupService.uploadImage(req.params.id, url, publicId);
-  if (group.modifiedCount !== 1)
+  const community = await communityService.uploadImage(
+    req.params.id,
+    url,
+    publicId
+  );
+  if (community.modifiedCount !== 1)
     throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, MESSAGES.FAILURE);
   res.status(200).json({ message: MESSAGES.SUCCESS });
 });
 
 const updateInfo = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const group = await groupService.updateGroup(id, { info: req.body.info });
-  if (!group)
+  const community = await communityService.updateCommunity(id, {
+    info: req.body.info,
+  });
+  if (!community)
     throw new ApiError(
       httpStatus.INTERNAL_SERVER_ERROR,
       MESSAGES.UPDATE_FAILED
@@ -62,20 +68,24 @@ const updateInfo = catchAsync(async (req, res) => {
 const updateRulesAndType = catchAsync(async (req, res) => {
   const { id } = req.params;
 
-  let group;
+  let community;
 
   if (req.body.rules && req.body.type) {
-    group = await groupService.updateGroup(id, {
+    community = await communityService.updateCommunity(id, {
       rules: req.body.rules,
       type: req.body.type,
     });
   } else if (req.body.rules) {
-    group = await groupService.updateGroup(id, { rules: req.body.rules });
+    community = await communityService.updateCommunity(id, {
+      rules: req.body.rules,
+    });
   } else if (req.body.type) {
-    group = await groupService.updateGroup(id, { type: req.body.type });
+    community = await communityService.updateCommunity(id, {
+      type: req.body.type,
+    });
   }
 
-  if (!group)
+  if (!community)
     throw new ApiError(
       httpStatus.INTERNAL_SERVER_ERROR,
       MESSAGES.UPDATE_FAILED
@@ -83,59 +93,42 @@ const updateRulesAndType = catchAsync(async (req, res) => {
   res.status(200).json({ message: MESSAGES.SUCCESS });
 });
 
-const getGroupByName = catchAsync(async (req, res) => {
+const getCommunityByName = catchAsync(async (req, res) => {
   const { name } = req.params;
-  const group = await groupService.getGroupByName(name);
-  if (!group)
+  const community = await communityService.getCommunityByName(name);
+  if (!community)
     throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.RESOURCE_MISSING);
-  res.status(200).json(group);
+  res.status(200).json(community);
 });
 
-const getGroupById = catchAsync(async (req, res) => {
+const getCommunityById = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const group = await groupService.getAGroupById(id);
-  if (!group)
+  const community = await communityService.getACommunityById(id);
+  if (!community)
     throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.RESOURCE_MISSING);
-  res.status(200).json(group);
+  res.status(200).json(community);
 });
 
 const addMember = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const group = await groupService.updateGroup(id, {
+  const community = await communityService.updateCommunity(id, {
     $addToSet: { members: { id: req.body.member } },
     $inc: { membersCount: 1 },
   });
-  if (!group)
+  if (!community)
     throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.RESOURCE_MISSING);
   res.status(200).json({ message: MESSAGES.SUCCESS });
 });
 
 const removeMember = catchAsync(async (req, res) => {
   const { id } = req.params;
-  const group = await groupService.updateGroup(id, {
+  const community = await communityService.updateCommunity(id, {
     $pull: { members: { id: req.body.member } },
     $inc: { membersCount: -1 },
   });
-  if (!group)
+  if (!community)
     throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.RESOURCE_MISSING);
   res.status(200).json({ message: MESSAGES.SUCCESS });
-});
-
-// UNFINISHED
-const addAdmin = catchAsync(async (req, res) => {
-  const { id } = req.params;
-  const admins = [];
-
-  re.body.admin.map((id) => {
-    admins.push({ id });
-  });
-
-  const group = await groupService.updateGroup(id, {
-    $push: { admins },
-    $inc: { adminCount: admins.length },
-  });
-
-  if (!group) throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.NOT_FOUND);
 });
 
 module.exports = {
@@ -144,8 +137,8 @@ module.exports = {
   uploadImage,
   updateInfo,
   updateRulesAndType,
-  getGroupByName,
-  getGroupById,
+  getCommunityByName,
+  getCommunityById,
   addMember,
   removeMember,
 };
