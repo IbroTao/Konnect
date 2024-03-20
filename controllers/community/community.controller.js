@@ -131,14 +131,34 @@ const removeMember = catchAsync(async (req, res) => {
   res.status(200).json({ message: MESSAGES.SUCCESS });
 });
 
+const getMembers = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const community = await communityService.getMembers(id);
+  if (!community)
+    throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.RESOURCE_MISSING);
+  res.status(200).json(community);
+});
+
+const getRequests = catchAsync(async (req, res) => {
+  const { id } = req.params;
+  const { limit, page } = req.query;
+  const requests = await communityService.getAllRequests({ id, limit, page });
+  if (!requests)
+    throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.RESOURCE_MISSING);
+  res.status(200).json(requests);
+});
+
 module.exports = {
   createCommunity,
   queryCommunities,
   uploadImage,
+  rejectRequest,
   updateInfo,
   updateRulesAndType,
+  getRequests,
   getCommunityByName,
   getCommunityById,
   addMember,
   removeMember,
+  getMembers,
 };
