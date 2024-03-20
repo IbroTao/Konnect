@@ -17,4 +17,11 @@ router.post(
 router.get("/", communityController.queryCommunities);
 router.get("/:id", communityController.getCommunityById);
 router.get("/:name", communityController.getCommunityByName);
-router.get("/:id/members");
+router.get("/:id/members", validateAccount, communityController.getMembers);
+router.get("/:id/requests", validateAccount, communityController.getRequests);
+router.put(
+  "/:id/add-member",
+  validateAccount,
+  validate(communityValidation.joinOrLeaveCommunity),
+  communityController.addMember
+);
