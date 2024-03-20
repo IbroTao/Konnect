@@ -114,6 +114,12 @@ const generateResetPasswordToken = async (email) => {
 };
 
 const generateVerifyEmailToken = async (email) => {
+  const user = await userService.getUserByEmail(email);
+  if (!user)
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      "No user with this email"
+    );
   const expires = moment().add(10, "minutes");
   const verifyEmailToken = generateToken(
     user.id,

@@ -49,10 +49,10 @@ router.get("/profile", (req, res) => {
  *                type: string
  *              password:
  *                type: string
- *              name:
- *                type: string
  *          examples:
- *                username: Paul_Smith1
+ *            example:
+ *              value:
+ *                username: paul_smith1
  *                name: Paul Smith
  *                email: paulsmith@gmail.com
  *                password: password123
@@ -66,11 +66,11 @@ router.get("/profile", (req, res) => {
  *                type: string
  *              password:
  *                type: string
- *              name:
- *                type: string
  *          examples:
- *                username: Paul Smith
- *                name: Paul_Smith1
+ *            example:
+ *              value:
+ *                name: Paul Smith
+ *                username: paul_smith1
  *                email: paulsmith@gmail.com
  *                password: paul123
  *        multipart/form-data:
@@ -83,11 +83,11 @@ router.get("/profile", (req, res) => {
  *                type: string
  *              password:
  *                type: string
- *              name:
- *                type: string
  *          examples:
- *                username: Paul Smith
- *                name: Paul_Smith1
+ *            example:
+ *              value:
+ *                name: Paul Smith
+ *                username: paul_smith1
  *                email: paulsmith@gmail.com
  *                password: paul123
  *    responses:
@@ -159,27 +159,43 @@ router.post("/login", validate(authValidation.login), authController.login);
 
 /**
  * @swagger
- * /konnect/auth/verify-email:
- *  post:
- *    tags:
- *    - User Authentication
- *    summary: Send verification email to a user during registration
- *    description: A 6-digits code would be sent to the user for verification
- *    requestBody:
- *      content:
- *        application/json:
- *          schema:
- *            type: object
- *            properties:
- *
- *    responses:
- *        '200':
- *           description: Verification email sent to the user
- *        '400':
- *           description: Unable to send verification email
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         name:
+ *           type: string
+ *         email:
+ *           type: string
  */
+
+/**
+ * @swagger
+ * /konnect/auth/send-verification-email:
+ *   post:
+ *     summary: Send verification email
+ *     description: Send a verification email to the user
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               user:
+ *                 $ref: '#/components/schemas/User'
+ *     responses:
+ *       '204':
+ *         description: Email sent successfully
+ *       '400':
+ *         description: Bad Request
+ *       '500':
+ *         description: Internal Server Error
+ */
+
 router.post(
-  "/verify-email",
+  "/send-verification-email",
   validate(authValidation),
   authController.sendVerificationEmail
 );
