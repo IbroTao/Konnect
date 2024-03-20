@@ -148,8 +148,26 @@ const getRequests = catchAsync(async (req, res) => {
   res.status(200).json(requests);
 });
 
+const rejectRequest = catchAsync(async(req, res) => {
+  const {id} = req.params;
+  const request = await communityService.deleteRequest(id);
+  if(request.modifiedCount === 0) throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, MESSAGES.DELETE_FAILED);
+  res.status(200).json({message: MESSAGES.DELETED})
+});
+
+const deleteCommunity = catchAsync(async(req, res) => {
+  const {id} = req.params;
+  const community = await communityService.getACommunityById(id);
+  if(!community) throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.RESOURCE_MISSING);
+  const result = await deleteSingle(community.coverImage.url);
+  if(!result) throw new ApiError(httpStatus.EXPECTATION_FAILED, MESSAGES.DELETE_FAILED);
+  await communityService.deleteCommunity(community._id);
+  res.status(200).json({message: MESSAGES.DELETED})
+})
+
 module.exports = {
   createCommunity,
+  deleteCommunity,
   queryCommunities,
   uploadImage,
   rejectRequest,

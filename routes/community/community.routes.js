@@ -11,5 +11,10 @@ router.post(
   "/new",
   validateAccount,
   validate(communityValidation),
-  communityController.createGroup
+  communityController.createCommunity
 );
+
+router.get("/", communityController.queryCommunities);
+router.get("/:id", communityController.getCommunityById);
+router.get("/:name", communityController.getCommunityByName);
+router.get("/:id/members");
