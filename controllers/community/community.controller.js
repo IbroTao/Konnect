@@ -3,15 +3,19 @@ const ApiError = require("../../utils/ApiError");
 const catchAsync = require("../../utils/catchAsync");
 const { MESSAGES } = require("../../constants/responseMessages");
 const { uploadSingle, deleteSingle } = require("../../libs/cloudinary");
-const { groupService, notificationInfo } = require("../../services");
+const {
+  groupService,
+  notificationInfo,
+  communityService,
+} = require("../../services");
 const { notificationQueue } = require("../../schemas");
 
-const createGroup = catchAsync(async (req, res) => {
+const createCommunity = catchAsync(async (req, res) => {
   const { body } = req;
-  const isName = await groupService.getGroupByName(body.name);
+  const isName = await communityService.createCommunity(body.name);
   if (isName) throw new ApiError(httpStatus.BAD_REQUEST, "name already taken");
 
-  await groupService.createGroup({
+  await communityService.createCommunity({
     ...body,
     admins: { id: [req.user._id] },
     adminCount: 1,
@@ -21,13 +25,13 @@ const createGroup = catchAsync(async (req, res) => {
   res.status(201).json({ message: MESSAGES.SUCCESS });
 });
 
-const queryGroups = catchAsync(async (req, res) => {
+const queryCommunities = catchAsync(async (req, res) => {
   const { search, limit, page, filter, sortedBy, orderBy } = req.query;
-  const groups = await groupService.queryGroups(
+  const communities = await communityService.queryCommunities(
     { page, limit, orderBy, sortedBy },
     { search, filter }
   );
-  if (!groups)
+  if (!communities)
     throw new ApiError(
       httpStatus.INTERNAL_SERVER_ERROR,
       MESSAGES.RESOURCE_MISSING
@@ -135,8 +139,8 @@ const addAdmin = catchAsync(async (req, res) => {
 });
 
 module.exports = {
-  createGroup,
-  queryGroups,
+  createCommunity,
+  queryCommunities,
   uploadImage,
   updateInfo,
   updateRulesAndType,

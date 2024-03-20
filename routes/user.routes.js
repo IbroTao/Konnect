@@ -77,6 +77,16 @@ router
  *           description: Internal server error
  */
 router.get("/:userId", userController.getUser);
+
+/**
+ * @swagger
+ * /konnect/auth/compare-password:
+ *  post:
+ *    tags:
+ *    - User Profile
+ *    summary: Compare user's old and new password
+ *    description:
+ */
 router.post(
   "/compare-password",
   validateAccount,

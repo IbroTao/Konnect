@@ -40,7 +40,7 @@ router.get("/profile", (req, res) => {
  *      required: true
  *      content:
  *        application/json:
- *          schema:
+ *         schema:
  *            type: object
  *            properties:
  *              username:
