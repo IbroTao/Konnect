@@ -9,12 +9,19 @@ const router = express.Router();
 
 /**
  * @swagger
- * /konnect/auth/:
+ * securityDefinitions:
+ *    BearerAuth:
+ *      type: apiKey
+ *      name: Authorization
+ *      in: header
+ * /konnect/users/:
  *  get:
  *    tags:
  *      - User Profile
  *    summary: Get all users
  *    description: Retrieve a list of all registered users.
+ *    security:
+ *    - BearerAuth: []
  *    parameters:
  *      - name: search
  *        in: query
@@ -26,6 +33,8 @@ const router = express.Router();
  *        description: Filter users by role.
  *        required: false
  *        type: string
+ *      - name: token
+ *        in: query
  *    responses:
  *        '200':
  *          description: A list of users
@@ -57,7 +66,7 @@ router
 
 /**
  * @swagger
- * /konnect/auth/{userId}:
+ * /konnect/users/{userId}:
  *  get:
  *    tags:
  *      - User Profile
@@ -80,7 +89,7 @@ router.get("/:userId", userController.getUser);
 
 /**
  * @swagger
- * /konnect/auth/compare-password:
+ * /konnect/users/compare-password:
  *  post:
  *    tags:
  *    - User Profile
@@ -101,3 +110,5 @@ router.patch(
 );
 router.post("/follow/:userId", validateAccount, userController.followUser);
 router.patch("/unfollow/:userId", validateAccount, userController.unfollowUser);
+
+module.exports = router;

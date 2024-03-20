@@ -7,7 +7,7 @@ const app = express();
 const config = require("./configs/config");
 const { errorConverter, errorHandler } = require("./middlewares/errorHandler");
 const authRouter = require("./routes/auth.routes");
-//const indexRoutes = require("./routes/index");
+const userRouter = require("./routes/user.routes");
 
 app.use(express.json());
 app.use(express.urlencoded());
@@ -15,7 +15,7 @@ app.use(errorConverter);
 app.use(errorHandler);
 
 app.use("/konnect/auth", authRouter);
-//app.use("/api", indexRoutes);
+app.use("/konnect/users", userRouter);
 
 const port = process.env.PORT;
 

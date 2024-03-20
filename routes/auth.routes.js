@@ -193,7 +193,6 @@ router.post("/login", validate(authValidation.login), authController.login);
  *       '500':
  *         description: Internal Server Error
  */
-
 router.post(
   "/send-verification-email",
   validate(authValidation),
