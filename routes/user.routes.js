@@ -9,7 +9,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /konnect/auth/
+ * /konnect/auth/:
  *  get:
  *    tags:
  *      - User Profile
@@ -27,19 +27,19 @@ const router = express.Router();
  *        required: false
  *        type: string
  *    responses:
- *       '200':
+ *        '200':
  *          description: A list of users
  *          schema:
  *            type: array
  *            items:
  *              type: object
  *              properties:
- *                  id:
- *                    type: string
- *                  name:
- *                    type: string
- *                  role:
- *                    type: string
+ *                id:
+ *                  type: string
+ *                name:
+ *                  type: string
+ *                role:
+ *                  type: string
  *        '400':
  *            description: Bad request
  *        '500':
@@ -57,7 +57,7 @@ router
 
 /**
  * @swagger
- * /konnect/auth/:userId
+ * /konnect/auth/{userId}:
  *  get:
  *    tags:
  *      - User Profile
@@ -68,7 +68,6 @@ router
  *        in: path
  *        required: true
  *        type: integer
- *        format: int64
  *    responses:
  *        '200':
  *           description: Successful Operation

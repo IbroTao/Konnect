@@ -49,44 +49,51 @@ router.get("/profile", (req, res) => {
  *                type: string
  *              password:
  *                type: string
- *            examples:
- *              username: Paul Smith
- *              email: paulsmith@gmail.com
- *              password: password123
+ *          examples:
+ *            example:
+ *              value:
+ *                username: Paul Smith
+ *                email: paulsmith@gmail.com
+ *                password: password123
  *        application/x-www-form-urlencoded:
- *           schema:
- *             type: object
- *             properties:
- *               username:
- *                 type: string
- *               email:
- *                 type: string
- *               password:
- *                 type: string
- *           examples:
- *             username: Paul Smith
- *             email: paulsmith@gmail.com
- *             password: paul123
+ *          schema:
+ *            type: object
+ *            properties:
+ *              username:
+ *                type: string
+ *              email:
+ *                type: string
+ *              password:
+ *                type: string
+ *          examples:
+ *            example:
+ *              value:
+ *                username: Paul Smith
+ *                email: paulsmith@gmail.com
+ *                password: paul123
  *        multipart/form-data:
- *           schema:
- *             type: object
- *             properties:
- *               username:
- *                 type: string
- *               email:
- *                 type: string
- *               password:
- *                 type: string
- *           examples:
- *             email: paulsmith@gmail.com
- *             password: paul123
+ *          schema:
+ *            type: object
+ *            properties:
+ *              username:
+ *                type: string
+ *              email:
+ *                type: string
+ *              password:
+ *                type: string
+ *          examples:
+ *            example:
+ *              value:
+ *                username: Paul Smith
+ *                email: paulsmith@gmail.com
+ *                password: paul123
  *    responses:
- *       '201':
- *          description: User registered successfully
- *       '400':
- *          description: Bad Request - Invalid Request
- *       '500':
- *          description: Internal server error
+ *      '201':
+ *        description: User registered successfully
+ *      '400':
+ *        description: Bad Request - Invalid Request
+ *      '500':
+ *        description: Internal server error
  */
 router.post(
   "/register",
