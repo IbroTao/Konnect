@@ -97,8 +97,13 @@ const resetPassword = catchAsync(async (req, res) => {
 });
 
 const sendVerificationEmail = catchAsync(async (req, res) => {
-  const email = req.user.email;
-  const verifyEmailToken = await generateVerifyEmailToken(email);
+  if (!req.user) {
+    return res
+      .status(httpStatus.UNAUTHORIZED)
+      .json({ message: "User not authenticated" });
+  }
+  const verifyEmailToken = await generateVerifyEmailToken(req.user);
+
   await emailService.sendVerificationEmail({
     name: req.user.name,
     email: req.user.email,
