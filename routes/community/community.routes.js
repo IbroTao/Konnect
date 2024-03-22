@@ -25,9 +25,11 @@ router.put(
   validate(communityValidation.joinOrLeaveCommunity),
   communityController.addMember
 );
-router.put(
+router.purge(
   "/:id/remove-member",
   validateAccount,
   validate(communityValidation.joinOrLeaveCommunity),
   communityController.removeMember
 );
+
+module.exports = router;

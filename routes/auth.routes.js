@@ -196,6 +196,7 @@ router.post("/login", validate(authValidation.login), authController.login);
 router.post(
   "/send-verification-email",
   validate(authValidation),
+  authenticateUser,
   authController.sendVerificationEmail
 );
 

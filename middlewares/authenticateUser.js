@@ -7,7 +7,7 @@ const authenticateUser = async (req, res, next) => {
   if (!token) {
     return res
       .status(httpStatus.UNAUTHORIZED)
-      .json({ message: "Unauthorized" });
+      .json({ message: "Token is unauthorized" });
   }
 
   try {
@@ -16,7 +16,7 @@ const authenticateUser = async (req, res, next) => {
     if (!user) {
       return res
         .status(httpStatus.UNAUTHORIZED)
-        .json({ message: "Unauthorized" });
+        .json({ message: "User not found" });
     }
     req.user = user;
     next();
