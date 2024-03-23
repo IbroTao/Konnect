@@ -5,7 +5,7 @@ const { MESSAGES } = require("../../constants/responseMessages");
 const { uploadSingle, deleteSingle } = require("../../libs/cloudinary");
 const {
   groupService,
-  notificationInfo,
+  notificationService,
   communityService,
 } = require("../../services");
 const { notificationQueue } = require("../../schemas");
@@ -148,38 +148,65 @@ const getRequests = catchAsync(async (req, res) => {
   res.status(200).json(requests);
 });
 
-const rejectRequest = catchAsync(async(req, res) => {
-  const {id} = req.params;
+const rejectRequest = catchAsync(async (req, res) => {
+  const { id } = req.params;
   const request = await communityService.deleteRequest(id);
-  if(request.modifiedCount === 0) throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, MESSAGES.DELETE_FAILED);
-  res.status(200).json({message: MESSAGES.DELETED})
+  if (request.modifiedCount === 0)
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      MESSAGES.DELETE_FAILED
+    );
+  res.status(200).json({ message: MESSAGES.DELETED });
 });
 
-const deleteCommunity = catchAsync(async(req, res) => {
-  const {id} = req.params;
+const deleteCommunity = catchAsync(async (req, res) => {
+  const { id } = req.params;
   const community = await communityService.getACommunityById(id);
-  if(!community) throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.RESOURCE_MISSING);
+  if (!community)
+    throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.RESOURCE_MISSING);
   const result = await deleteSingle(community.coverImage.url);
-  if(!result) throw new ApiError(httpStatus.EXPECTATION_FAILED, MESSAGES.DELETE_FAILED);
+  if (!result)
+    throw new ApiError(httpStatus.EXPECTATION_FAILED, MESSAGES.DELETE_FAILED);
   await communityService.deleteCommunity(community._id);
-  res.status(200).json({message: MESSAGES.DELETED})
-})
+  res.status(200).json({ message: MESSAGES.DELETED });
+});
 
-const addAdmin = catchAsync(async(req, res) => {
-  const {id} = req.params;
+const addAdmin = catchAsync(async (req, res) => {
+  const { id } = req.params;
   const admins = [];
 
   req.body.admin.map((id) => {
-    admins.push({id})
+    admins.push({ id });
   });
 
   const community = await communityService.updateCommunity(id, {
-    $push: {admins},
-    $inc: {adminCount: admins.length}
+    $push: { admins },
+    $inc: { adminCount: admins.length },
+  });
+  if (!community)
+    throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.RESOURCE_MISSING);
+
+  const notificationData = [];
+  req.body.admin.forEach((admin) => {
+    notificationQueue.msg = `You have been made an admin in ${community.name}`;
+    notificationQueue.link = `localhost:9090/konnect/community/${community._id}`;
+    notificationQueue.timestamp = new Date().toISOString();
+    notificationQueue.recipientId = admin;
+    notificationData.push(notificationQueue);
   });
 
-  if(!commmunity)
-})
+  const notifications = [];
+  notificationData.forEach((notification) => {
+    const data = {
+      image: notification.type,
+      message: notification.msg,
+      link: notification.link,
+      userId: notification.recipientId,
+    };
+    notifications.push(data);
+  });
+  // <============ UNFINISHED ===============>
+});
 
 module.exports = {
   createCommunity,
@@ -195,4 +222,6 @@ module.exports = {
   addMember,
   removeMember,
   getMembers,
+  addAdmin,
+  removeAdmin,
 };

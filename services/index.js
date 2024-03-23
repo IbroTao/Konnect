@@ -3,6 +3,7 @@ module.exports.emailService = require("./email.service");
 module.exports.authService = require("./auth.service");
 module.exports.tokenService = require("./token.service");
 module.exports.userFeed = require("./utils/userFeed");
+module.exports.notificationService = require("./notifications.service");
 module.exports.notificationInfo = require("./utils/notificationInfo");
 module.exports.communityService = require("./community/community.service");
 module.exports.communityPostService = require("./community/post.service");
