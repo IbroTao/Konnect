@@ -18,6 +18,16 @@ const createNotification = async ({ image, link, message, userId }) => {
   });
 };
 
+const saveManyNotifications = async (data) => {
+  if (!data.length)
+    throw new ApiError(
+      httpStatus.INTERNAL_SERVER_ERROR,
+      "notifications can not be null"
+    );
+  return Notification.insertMany(data);
+};
+
 module.exports = {
   createNotification,
+  saveManyNotifications,
 };
