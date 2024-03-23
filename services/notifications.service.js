@@ -27,7 +27,28 @@ const saveManyNotifications = async (data) => {
   return Notification.insertMany(data);
 };
 
+const findAllNotifications = async (userId, limit, page, orderBy, sortedBy) => {
+  const options = {
+    lean: true,
+    customLabels: myCustomLabels,
+  };
+
+  const notifications = await Notification.paginate(
+    {
+      userId,
+    },
+    {
+      ...(limit ? { limit } : { limit: 10 }),
+      page,
+      sort: { [orderBy]: sortedBy === "asc" ? 1 : -1 },
+      ...options,
+    }
+  );
+  return notifications;
+};
+
 module.exports = {
   createNotification,
   saveManyNotifications,
+  findAllNotifications,
 };
