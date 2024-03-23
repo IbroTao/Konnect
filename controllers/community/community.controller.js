@@ -165,6 +165,22 @@ const deleteCommunity = catchAsync(async(req, res) => {
   res.status(200).json({message: MESSAGES.DELETED})
 })
 
+const addAdmin = catchAsync(async(req, res) => {
+  const {id} = req.params;
+  const admins = [];
+
+  req.body.admin.map((id) => {
+    admins.push({id})
+  });
+
+  const community = await communityService.updateCommunity(id, {
+    $push: {admins},
+    $inc: {adminCount: admins.length}
+  });
+
+  if(!commmunity)
+})
+
 module.exports = {
   createCommunity,
   deleteCommunity,
