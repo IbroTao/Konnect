@@ -11,3 +11,4 @@ module.exports.SuspendedAccounts = require("./suspendedAccounts");
 module.exports.Groups = require("./groups/group");
 module.exports.GroupMsg = require("./groups/msg");
 module.exports.GroupReports = require("./reports/group.model");
+module.exports.Notification = require("./notifications.model");
