@@ -265,7 +265,17 @@ const sendRequestToCommunity = catchAsync(async (req, res) => {
   notificationData.push(notificationQueue);
 
   const notifications = [];
-  notificationData.forEach((notification) => {});
+  notificationData.forEach((notification) => {
+    const data = {
+      image: notification.type,
+      message: notification.msg,
+      link: notification.link,
+      userId: notification.recipientId,
+    };
+  });
+  notifications.push(data);
+  // <============ UNFINISHED ============>
+  // <==== rabbitMqServer needs to be implemented ====>
 });
 
 module.exports = {
