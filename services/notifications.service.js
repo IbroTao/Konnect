@@ -47,8 +47,13 @@ const findAllNotifications = async (userId, limit, page, orderBy, sortedBy) => {
   return notifications;
 };
 
+const findOneNotification = async (notificationId) => {
+  return Notification.findOne({ _id: notificationId }).lean();
+};
+
 module.exports = {
   createNotification,
   saveManyNotifications,
   findAllNotifications,
+  findOneNotification,
 };
