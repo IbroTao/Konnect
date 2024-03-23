@@ -51,9 +51,14 @@ const findOneNotification = async (notificationId) => {
   return Notification.findOne({ _id: notificationId }).lean();
 };
 
+const deleteOneNotification = async (notificationId) => {
+  return Notification.deleteOne({ _id: notificationId });
+};
+
 module.exports = {
   createNotification,
   saveManyNotifications,
   findAllNotifications,
+  deleteOneNotification,
   findOneNotification,
 };
