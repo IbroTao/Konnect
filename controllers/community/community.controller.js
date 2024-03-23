@@ -244,6 +244,17 @@ const removeAdmin = catchAsync(async (req, res) => {
   // <==== rabbitMqServer needs to be implemented ====>
 });
 
+const sendRequestToCommunity = catchAsync(async (req, res) => {
+  const { communityId } = req.params;
+
+  const request = await communityService.sendRequestTo(
+    req.user._id,
+    communityId
+  );
+  if (!request)
+    throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, MESSAGES.FAILURE);
+});
+
 module.exports = {
   createCommunity,
   deleteCommunity,
@@ -260,4 +271,5 @@ module.exports = {
   getMembers,
   addAdmin,
   removeAdmin,
+  sendRequestToCommunity,
 };
