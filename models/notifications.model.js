@@ -34,3 +34,14 @@ const notificationSchema = new mongoose.Schema(
 );
 
 notificationSchema.plugin(mongoosePaginate);
+
+notificationSchema.methods.seen = function () {
+  this.isSeen = true;
+  return this.save;
+};
+
+const notificationModel = mongoose.model(
+  modelNames.notification,
+  notificationSchema
+);
+module.exports = notificationModel;
