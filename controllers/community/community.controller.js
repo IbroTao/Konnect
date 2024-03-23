@@ -190,7 +190,7 @@ const addAdmin = catchAsync(async (req, res) => {
   req.body.admin.forEach((admin) => {
     notificationQueue.msg = `You have been made an admin in ${community.name}`;
     notificationQueue.link = `localhost:9090/konnect/community/${community._id}`;
-    notificationQueue.type = 'role-assign';
+    notificationQueue.type = "role-assign";
     notificationQueue.timestamp = new Date().toISOString();
     notificationQueue.recipientId = admin;
     notificationData.push(notificationQueue);
@@ -214,7 +214,7 @@ const removeAdmin = catchAsync(async (req, res) => {
   const { id } = req.params;
 
   const community = await communityService.updateCommunity(id, {
-    $pull: { admins: {id: req.body.admin} },
+    $pull: { admins: { id: req.body.admin } },
     $inc: { adminCount: -1 },
   });
   if (!community)
@@ -236,12 +236,13 @@ const removeAdmin = catchAsync(async (req, res) => {
       image: notification.type,
       link: notification.link,
       message: notification.msg,
-      userId: 
-    }
-  })
+      userId: notification.recipientId,
+    };
+    notifications.push(data);
+  });
+  // <============ UNFINISHED ============>
+  // <==== rabbitMqServer needs to be implemented ====>
 });
-
-
 
 module.exports = {
   createCommunity,
