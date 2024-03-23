@@ -253,6 +253,15 @@ const sendRequestToCommunity = catchAsync(async (req, res) => {
   );
   if (!request)
     throw new ApiError(httpStatus.INTERNAL_SERVER_ERROR, MESSAGES.FAILURE);
+
+  const notificationData = [];
+  req.body.admin.forEach((admin) => {
+    notificationQueue.msg = `${req.user.username} has requested to join this community ${request.name}`;
+    notificationQueue.link = `localhost:9090/konnect/community/${request._id}/requests`;
+    notificationQueue.type = "community-requests";
+    notificationQueue.timestamp = new Date().toISOString();
+    notificationQueue.recipientId = admin;
+  });
 });
 
 module.exports = {
