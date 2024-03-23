@@ -262,6 +262,10 @@ const sendRequestToCommunity = catchAsync(async (req, res) => {
     notificationQueue.timestamp = new Date().toISOString();
     notificationQueue.recipientId = admin;
   });
+  notificationData.push(notificationQueue);
+
+  const notifications = [];
+  notificationData.forEach((notification) => {});
 });
 
 module.exports = {
