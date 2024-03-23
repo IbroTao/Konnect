@@ -55,10 +55,20 @@ const deleteOneNotification = async (notificationId) => {
   return Notification.deleteOne({ _id: notificationId });
 };
 
+const updateNotification = async (notificationId) => {
+  return Notification.updateOne({ _id: notificationId }, { isSeen: true });
+};
+
+const setNotificationAsSeen = async (userId) => {
+  return Notification.updateMany({ _id: userId }, { isSeen: true });
+};
+
 module.exports = {
   createNotification,
+  updateNotification,
   saveManyNotifications,
   findAllNotifications,
   deleteOneNotification,
   findOneNotification,
+  setNotificationAsSeen,
 };
