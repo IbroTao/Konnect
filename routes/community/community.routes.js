@@ -7,6 +7,12 @@ const { communityController } = require("../../controllers");
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * /konnect/community/new
+ *  post:
+ *    content:
+ */
 router.post(
   "/new",
   validateAccount,
