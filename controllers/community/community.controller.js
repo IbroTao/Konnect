@@ -190,6 +190,7 @@ const addAdmin = catchAsync(async (req, res) => {
   req.body.admin.forEach((admin) => {
     notificationQueue.msg = `You have been made an admin in ${community.name}`;
     notificationQueue.link = `localhost:9090/konnect/community/${community._id}`;
+    notificationQueue.type = 'role-assign';
     notificationQueue.timestamp = new Date().toISOString();
     notificationQueue.recipientId = admin;
     notificationData.push(notificationQueue);
@@ -205,8 +206,42 @@ const addAdmin = catchAsync(async (req, res) => {
     };
     notifications.push(data);
   });
-  // <============ UNFINISHED ===============>
+  // <============ UNFINISHED ============>
+  // <==== rabbitMqServer needs to be implemented ====>
 });
+
+const removeAdmin = catchAsync(async (req, res) => {
+  const { id } = req.params;
+
+  const community = await communityService.updateCommunity(id, {
+    $pull: { admins: {id: req.body.admin} },
+    $inc: { adminCount: -1 },
+  });
+  if (!community)
+    throw new ApiError(httpStatus.NOT_FOUND, MESSAGES.RESOURCE_MISSING);
+
+  const notificationData = [];
+  req.body.admin.forEach((admin) => {
+    notificationQueue.msg = `You have been removed as an admin from ${community.name}`;
+    notificationQueue.link = `localhost:9090/konnect/community/${community._id}`;
+    notificationQueue.type = "role-assign";
+    notificationQueue.timestamp = new Date().toISOString();
+    notificationQueue.recipientId = admin;
+  });
+  notificationData.push(notificationQueue);
+
+  const notifications = [];
+  notificationData.forEach((notification) => {
+    const data = {
+      image: notification.type,
+      link: notification.link,
+      message: notification.msg,
+      userId: 
+    }
+  })
+});
+
+
 
 module.exports = {
   createCommunity,
