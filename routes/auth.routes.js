@@ -174,6 +174,8 @@ router.post("/login", validate(authValidation.login), authController.login);
  * @swagger
  * /konnect/auth/send-verification-email:
  *   post:
+ *     tags:
+ *     - User Authentication
  *     summary: Send verification email
  *     description: Send a verification email to the user
  *     requestBody:
@@ -323,5 +325,63 @@ router.post(
   validate(authValidation.email),
   authController.resendVerificationCode
 );
+
+/**
+ * @swagger
+ * /forgot-password:
+ *   post:
+ *     tags:
+ *     - User Authentication
+ *     summary: Forgot password
+ *     description: Initiates the process of resetting the password by sending an email with reset details.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *     responses:
+ *       204:
+ *         description: Email sent for password reset
+ *       400:
+ *         description: Bad request - Invalid input
+ *       500:
+ *         description: Internal Server Error
+ */
+router.post("/forget-password", authController.forgotPassword);
+
+/**
+ * @swagger
+ * /reset-password:
+ *   post:
+ *     tags:
+ *     - User Authentication
+ *     summary: Reset user password
+ *     description: Resets the user password using the provided digits and new password.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               digits:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       204:
+ *         description: Password reset successful
+ *       400:
+ *         description: Bad request - Invalid input
+ *       401:
+ *         description: Unauthorized - Invalid token or expired token
+ *       500:
+ *         description: Internal Server Error
+ */
+router.post("/reset-password", authenticateUser, authController.resetPassword);
 
 module.exports = router;

@@ -120,7 +120,7 @@ const generateVerifyEmailToken = async (email) => {
       httpStatus.INTERNAL_SERVER_ERROR,
       "No user with this email"
     );
-  const expires = moment().add(10, "minutes");
+  const expires = "10m";
   const verifyEmailToken = generateToken({
     email: user.email,
     userId: user.id,
