@@ -278,6 +278,8 @@ const sendRequestToCommunity = catchAsync(async (req, res) => {
   // <==== rabbitMqServer needs to be implemented ====>
 });
 
+const acceptRequest = catchAsync(async (req, res) => {});
+
 module.exports = {
   createCommunity,
   deleteCommunity,
@@ -295,4 +297,5 @@ module.exports = {
   addAdmin,
   removeAdmin,
   sendRequestToCommunity,
+  acceptRequest,
 };

@@ -1,6 +1,4 @@
 const jwt = require("jsonwebtoken");
-const { userService } = require("../services");
-const httpStatus = require("http-status");
 
 const authenticateUser = async (req, res, next) => {
   const token = req.headers.authorization;
@@ -11,8 +9,10 @@ const authenticateUser = async (req, res, next) => {
   }
 
   try {
-    const payload = jwt.verify(token, process.env.SESSION_SECRET);
+    const payload = jwt.verify(token.split(" ")[1], process.env.SESSION_SECRET);
+    console.log(payload);
     const user = await userService.getUserById(payload.sub);
+    console.log(user);
     if (!user) {
       return res
         .status(httpStatus.UNAUTHORIZED)
@@ -21,10 +21,15 @@ const authenticateUser = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
+    if (error instanceof jwt.TokenExpiredError) {
+      return res
+        .status(httpStatus.UNAUTHORIZED)
+        .json({ message: "Token expired" });
+    }
     return res
       .status(httpStatus.UNAUTHORIZED)
       .json({ message: "Unauthorized" });
   }
 };
 
-module.exports = { authenticateUser };
+module.exports = {authenticateUser}
